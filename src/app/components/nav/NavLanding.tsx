@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { switchTab } from "./nav/switchTab"
+import { switchTab } from "./switchTab"
 
 export const NavLanding = () => {
     return (
