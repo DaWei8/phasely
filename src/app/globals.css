@@ -1,123 +1,129 @@
-@import "tailwindcss";
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    font-family: "Funnel Display", system-ui, sans-serif;
+  }
+  
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Funnel Display", Arial, Helvetica, sans-serif;
-}
-
-.gradient-bg {
-  background: linear-gradient(135deg, #3559fa 0%, #4846f7 100%);
-}
-
-.calendar-item-preview {
-  max-height: 600px;
-}
-
-.phase-1 {
-  border-left: 4px solid #10b981;
-}
-
-.phase-2 {
-  border-left: 4px solid #3b82f6;
-}
-
-.phase-3 {
-  border-left: 4px solid #8b5cf6;
-}
-
-.phase-4 {
-  border-left: 4px solid #f59e0b;
-}
-
-.phase-5 {
-  border-left: 4px solid #ef4444;
-}
-
-.tab-active {
-  border-bottom: 2px solid #3b82f6;
-  color: #3b82f6;
-}
-
-.calendar-item {
-  transition: all 0.3s ease;
-}
-
-.calendar-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.edit-mode {
-  border: 2px dashed #3b82f6;
-}
-
-.loading-spinner {
-  animation: spin 1s linear infinite;
-}
-
-.hamburger-menu span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background-color: #333;
-  /* Dark grey for the lines */
-  margin: 5px 0;
-  transition: all 0.3s ease-in-out;
-}
-
-.hamburger-menu.open span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.hamburger-menu.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger-menu.open span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+@layer components {
+  .gradient-bg {
+    background: linear-gradient(135deg, #3559fa 0%, #4846f7 100%);
   }
-
-  to {
-    transform: rotate(360deg);
+  
+  .phase-1 {
+    @apply border-l-4 border-emerald-500;
   }
-}
-
-@keyframes fillProgress {
-  from {
-    width: 0%;
+  
+  .phase-2 {
+    @apply border-l-4 border-blue-500;
   }
-
-  to {
-    width: 100%;
+  
+  .phase-3 {
+    @apply border-l-4 border-purple-500;
+  }
+  
+  .phase-4 {
+    @apply border-l-4 border-amber-500;
+  }
+  
+  .phase-5 {
+    @apply border-l-4 border-red-500;
+  }
+  
+  .calendar-item {
+    @apply transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg;
+  }
+  
+  .edit-mode {
+    @apply border-2 border-dashed border-blue-500;
+  }
+  
+  .tab-active {
+    @apply border-b-2 border-blue-500 text-blue-600;
+  }
+  
+  .progress-bar-fill {
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .loading-spinner {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes fillProgress {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+  
+  .hamburger-menu span {
+    @apply block w-6 h-0.5 bg-gray-800 my-1 transition-all duration-300 ease-in-out;
+  }
+  
+  .hamburger-menu.open span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  
+  .hamburger-menu.open span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger-menu.open span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-blue-600 border-2 border-blue-600 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-all duration-300;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
+  }
+  
+  .select-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white cursor-pointer;
   }
 }
 
-.progress-bar-fill {
-  width: 0%;
-  animation: fillProgress var(--load-duration, 5s) linear forwards;
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
