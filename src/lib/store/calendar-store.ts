@@ -17,11 +17,11 @@ export interface Resources {
 
 export interface CalendarSettings {
   duration: number
-  startDate: string // Changed to string to match the component usage
+  startDate: string 
   startTime: string
   skipWeekends: boolean
-  timeCommitment: string // Added missing property
-  learningStyle: string // Added missing property
+  timeCommitment: string
+  learningStyle: string 
 }
 
 export interface CalendarStore {
@@ -29,8 +29,8 @@ export interface CalendarStore {
   isEditMode: boolean
   editIndex: number | null
   isLoading: boolean
-  calendarSettings: CalendarSettings // Added missing property
-  isGenerating: boolean // Added missing property
+  calendarSettings: CalendarSettings 
+  isGenerating: boolean
 
   // Actions
   toggleItemCompletion: (day: number) => void
@@ -42,9 +42,9 @@ export interface CalendarStore {
   setEditIndex: (index: number | null) => void
   setLoading: (loading: boolean) => void
   clearCalendar: () => void
-  updateSettings: (settings: Partial<CalendarSettings>) => void // Added missing method
-  saveToHistory: () => void // Added missing method
-  setGenerating: (state: boolean) => void // Added missing method
+  updateSettings: (settings: Partial<CalendarSettings>) => void 
+  saveToHistory: () => void 
+  setGenerating: (state: boolean) => void
 
   // Progress tracking
   toggleProgress: (day: number) => void
@@ -60,7 +60,7 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   isGenerating: false,
   calendarSettings: {
     duration: 14,
-    startDate: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
+    startDate: new Date().toISOString().split('T')[0],
     startTime: '09:00',
     skipWeekends: false,
     timeCommitment: '2',
@@ -69,7 +69,6 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
 
   setCalendarData: (data) => {
     set({ currentCalendarData: data })
-    // Save to localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('aiCalendarData', JSON.stringify(data))
     }
@@ -99,7 +98,7 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
     const { currentCalendarData } = get()
     const newData = currentCalendarData
       .filter((_, i) => i !== index)
-      .map((item, i) => ({ ...item, day: i + 1 })) // Renumber days
+      .map((item, i) => ({ ...item, day: i + 1 })) 
     set({ currentCalendarData: newData })
     if (typeof window !== 'undefined') {
       localStorage.setItem('aiCalendarData', JSON.stringify(newData))

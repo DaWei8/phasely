@@ -60,7 +60,7 @@ export default function AICalendarSection() {
     <>
       {isGenerating && <LoadingOverlay />}
       
-      <div className="space-y-8">
+      <div className="space-y-8 pt-6">
         {/* Header */}
         <div className="text-center">
           <motion.h2 

@@ -1,12 +1,16 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Poppins } from "next/font/google";
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import Link from 'next/link'
 import type { Viewport } from 'next';
 
 
-const inter = Inter({ subsets: ['latin'] })
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -41,7 +45,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
       </head>
-      <body className={`${inter.className} font-funnel bg-gray-50 min-h-screen`}>
+      <body className={`${poppins.className} font-funnel bg-gray-50 min-h-screen`}>
         {children}
         <Toaster
           position="top-right"

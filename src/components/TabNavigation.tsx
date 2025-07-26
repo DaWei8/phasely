@@ -43,7 +43,7 @@ const tabs = [
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   return (
-    <div className="flex border-b border-gray-200">
+    <div className="flex overflow-hidden overflow-x-auto border-b border-gray-200">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id
         const Icon = tab.icon
@@ -53,20 +53,20 @@ export default function TabNavigation({ activeTab, setActiveTab }: TabNavigation
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`
-              relative flex-1 px-4 py-4 text-sm font-medium transition-all duration-200
+              relative flex-1 px-2 py-4 text-sm font-medium transition-all duration-200
               ${isActive 
                 ? 'text-blue-600 border-b-2 border-blue-600' 
                 : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
               }
             `}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Icon className="h-5 w-5" />
-              <div className="hidden sm:block">
-                <div className="font-semibold">{tab.label}</div>
-                <div className="text-xs text-gray-400">{tab.description}</div>
+            <div className="flex items-start justify-center gap-1">
+              <Icon className="h-8 w-8 p-2 rounded-md bg-blue-50" />
+              <div className="hidden text-nowrap sm:block">
+                <div className="font-semibold text-nowrap ">{tab.label}</div>
+                <div className="text-xs text-nowrap text-gray-400">{tab.description}</div>
               </div>
-              <div className="sm:hidden font-semibold">{tab.label}</div>
+              <div className="sm:hidden text-nowrap font-semibold">{tab.label}</div>
             </div>
             
             {/* Active indicator */}

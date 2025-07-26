@@ -80,7 +80,7 @@ export default function Header() {
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
                 <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.2"/>
                 </pattern>
               </defs>
               <rect width="100" height="100" fill="url(#grid)" />
@@ -95,7 +95,7 @@ export default function Header() {
             >
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 <span className="block">AI-Powered</span>
-                <span className="text-gradient bg-white">Learning Planner</span>
+                <span className="">Learning Planner</span>
               </h1>
               
               <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl">
@@ -104,7 +104,7 @@ export default function Header() {
             </motion.div>
 
             <motion.div
-              className="flex flex-wrap justify-center gap-4 text-sm"
+              className="flex text-nowrap flex-wrap justify-center gap-4 text-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -117,7 +117,7 @@ export default function Header() {
               ].map((feature, index) => (
                 <motion.span
                   key={feature.text}
-                  className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white/30 transition-colors"
+                  className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-nowrap flex items-center gap-2 hover:bg-white/30 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}

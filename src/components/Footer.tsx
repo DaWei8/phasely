@@ -1,17 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 w-full text-white p-6 mt-8">
+    <footer className="bg-gray-900 w-full text-white p-6 pt-12 mt-8">
       <div className="container mx-auto">
-        <div className="grid md:grid-cols-4 gap-8 mb-6">
+        <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                <i className="fas fa-calendar-alt text-white text-sm"></i>
-              </div>
-              <span className="text-xl font-bold">Phasely</span>
+              <Image
+                src="/assets/phasely-logo.svg"
+                alt="Phasely Logo"
+                width={96}
+                height={32}
+                className="h-8 w-auto"
+                />
             </div>
             <p className="text-gray-300 text-sm mb-4 max-w-md">
               Create personalized learning schedules with AI assistance. Transform your learning goals into structured, actionable calendars that fit your lifestyle.
@@ -85,7 +89,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 pt-6">
+        <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
               &copy; 2025 Phasely. All rights reserved.
@@ -108,7 +112,7 @@ export default function Footer() {
         </div>
 
         {/* Version Info */}
-        <div className="mt-4 text-center">
+        <div className="mt-8 text-center">
           <p className="text-xs text-gray-500">
             Phase Planner V2.0 | Built with ❤️ for learners worldwide
           </p>

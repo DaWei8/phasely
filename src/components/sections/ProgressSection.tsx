@@ -23,7 +23,7 @@ export default function ProgressSection() {
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center">
-        <motion.h2 
+        <motion.h2
           className="text-2xl md:text-3xl font-bold text-gray-900 mb-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export default function ProgressSection() {
       </div>
 
       {/* Progress Stats */}
-      <motion.div 
+      <motion.div
         className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -70,8 +70,8 @@ export default function ProgressSection() {
             key={item.day}
             className={`
               flex items-start space-x-4 p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer
-              ${item.completed 
-                ? 'bg-green-50 border-green-200' 
+              ${item.completed
+                ? 'bg-green-50 border-green-200'
                 : 'bg-white border-gray-200 hover:border-blue-200 hover:shadow-md'
               }
             `}
@@ -89,7 +89,7 @@ export default function ProgressSection() {
                 <CheckCircleIcon className="h-6 w-6 text-gray-300" />
               )}
             </div>
-            
+
             <div className="flex-grow">
               <div className={`
                 font-semibold transition-colors
@@ -133,7 +133,7 @@ export default function ProgressSection() {
             {stats.percentage === 100 && "🎉 Congratulations! You've completed your learning journey!"}
           </div>
           <div className="text-orange-600">
-            {stats.percentage === 100 
+            {stats.percentage === 100
               ? "Time to celebrate and plan your next learning adventure!"
               : "Consistency is key to mastering new skills. Keep going!"
             }

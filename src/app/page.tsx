@@ -40,7 +40,7 @@ export default function Home() {
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
           
           {/* Tab Content */}
-          <div className="p-6">
+          <div className="p-4 lg:p-6">
             <AnimatePresence mode="wait">
               {activeTab === 'custom' && (
                 <motion.div key="custom" {...fadeInUp}>
