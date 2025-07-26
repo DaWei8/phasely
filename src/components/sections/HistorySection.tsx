@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { CalendarItem, Resources, useCalendarStore } from '@/lib/store/calendar-store'
+import { Info } from 'lucide-react'
 
 export interface HistoryItem {
     id: string
@@ -124,7 +125,7 @@ export default function HistorySection() {
 
             <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <div className="flex items-center mb-2">
-                    <i className="fas fa-info-circle text-blue-600 mr-2"></i>
+                    <Info className='text-blue-800 mr-1 w-4 h-4 ' />
                     <span className="font-medium text-blue-900">History Feature</span>
                 </div>
                 <p className="text-sm text-blue-800">

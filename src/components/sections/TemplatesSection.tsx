@@ -10,10 +10,6 @@ interface Template {
   prompt: string
 }
 
-// interface TemplatesSectionProps {
-//   onTemplateLoad: (prompt: string, duration: number) => void
-// }
-
 export default function TemplatesSection(
     // { onTemplateLoad }: TemplatesSectionProps
 ) {

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import { Brain, BrainCircuit, Calendar, Edit, Edit2, Video } from 'lucide-react'
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -18,8 +19,8 @@ export default function Header() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-gray-200/50">
         <div className="px-4 md:px-6 lg:px-8 py-4 mx-auto flex justify-between items-center">
-          <motion.a 
-            href="#" 
+          <motion.a
+            href="#"
             className="text-2xl font-bold text-gray-800"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -32,7 +33,7 @@ export default function Header() {
               className="h-8 w-auto"
             />
           </motion.a>
-          
+
           <button
             onClick={toggleMobileMenu}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors lg:hidden"
@@ -80,13 +81,13 @@ export default function Header() {
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
                 <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.2"/>
+                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.2" />
                 </pattern>
               </defs>
               <rect width="100" height="100" fill="url(#grid)" />
             </svg>
           </div>
-          
+
           <div className="container mx-auto px-4 text-center flex flex-col items-center relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -97,7 +98,7 @@ export default function Header() {
                 <span className="block">AI-Powered</span>
                 <span className="">Learning Planner</span>
               </h1>
-              
+
               <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl">
                 Create personalized learning schedules with AI assistance
               </p>
@@ -110,20 +111,20 @@ export default function Header() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               {[
-                { icon: 'fas fa-brain', text: 'AI-Generated' },
-                { icon: 'fas fa-edit', text: 'Fully Editable' },
-                { icon: 'fas fa-calendar-alt', text: 'ICS Export' },
-                { icon: 'fas fa-video', text: 'Resource Links' }
+                { icon: <BrainCircuit className='w-4 h-4' />, text: 'AI-Generated' },
+                { icon: <Edit className='w-4 h-4'  />, text: 'Fully Editable' },
+                { icon: <Calendar className='w-4 h-4'  />, text: 'ICS Export' },
+                { icon: <Video className='w-4 h-4'  />, text: 'Resource Links' }
               ].map((feature, index) => (
                 <motion.span
                   key={feature.text}
-                  className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-nowrap flex items-center gap-2 hover:bg-white/30 transition-colors"
+                  className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-nowrap flex items-center gap-1 hover:bg-white/30 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 * index }}
                 >
-                  <i className={`${feature.icon} text-white/90`} />
+                  {feature.icon}
                   {feature.text}
                 </motion.span>
               ))}

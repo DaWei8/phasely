@@ -53,14 +53,14 @@ export default function TabNavigation({ activeTab, setActiveTab }: TabNavigation
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`
-              relative flex-1 px-2 py-4 text-sm font-medium transition-all duration-200
+              relative flex-1 px-2 pr-6 py-4 text-sm font-medium transition-all duration-200
               ${isActive 
                 ? 'text-blue-600 border-b-2 border-blue-600' 
-                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
               }
             `}
           >
-            <div className="flex items-start justify-center gap-1">
+            <div className="flex items-start justify-center gap-2">
               <Icon className="h-8 w-8 p-2 rounded-md bg-blue-50" />
               <div className="hidden text-nowrap sm:block">
                 <div className="font-semibold text-nowrap ">{tab.label}</div>

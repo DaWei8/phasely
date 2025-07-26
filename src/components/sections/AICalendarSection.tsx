@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { SparklesIcon, AcademicCapIcon, CalendarIcon } from '@heroicons/react/24/outline'
-// import { useCalendarStore } from '@/lib/store/calendar-store'
 import { generateAICalendar } from '@/lib/api/calendar-api'
 import toast from 'react-hot-toast'
 import LoadingOverlay from '../LoadingOverlay'
@@ -84,8 +83,8 @@ export default function AICalendarSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label className="block text-lg font-semibold text-gray-700">
-            <AcademicCapIcon className="inline h-5 w-5 mr-2" />
+          <label className="block text-xl font-semibold text-gray-700">
+            <AcademicCapIcon className="inline text-blue-600 h-6 w-6 mr-2" />
             Describe Your Learning Goals
           </label>
           

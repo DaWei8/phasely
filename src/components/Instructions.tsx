@@ -1,8 +1,10 @@
+import { InfoIcon, LightbulbIcon, Rocket } from "lucide-react";
+
 export default function Instructions() {
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-8">
       <h3 className="text-xl font-semibold text-blue-700 mb-4 flex items-center">
-        <i className="fas fa-info-circle mr-2"></i>
+        <InfoIcon className="mr-2 w-5 h-5" />
         How to Use Phasely
       </h3>
 
@@ -33,10 +35,9 @@ export default function Instructions() {
           </ol>
         </div>
       </div>
-
       <div className="mt-6 p-4 bg-white rounded-lg border border-blue-200">
         <h4 className="font-semibold text-blue-700 mb-3 flex items-center">
-          <i className="fas fa-lightbulb mr-2"></i>
+          <LightbulbIcon className="mr-2 w-4 h-4 " />
           Pro Tips
         </h4>
         <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-800">
@@ -63,7 +64,7 @@ export default function Instructions() {
 
       <div className="mt-4 p-3 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg border border-green-200">
         <div className="flex items-center text-green-800">
-          <i className="fas fa-rocket mr-2 text-green-600"></i>
+          <Rocket className="text-green-800 w-4 h-4 mr-2" />
           <span className="font-medium">Ready to start your learning journey?</span>
         </div>
         <p className="text-sm text-green-700 mt-1">

@@ -4,21 +4,21 @@ import { HistoryItem } from "@/components/sections/HistorySection"
 import { CalendarItem, CalendarSettings, Resources } from "../store/calendar-store"
 
 // Use correct API base for local and production
-function getApiBase(): string {
-  if (typeof window !== 'undefined') {
-    // Client-side
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://127.0.0.1:5501'
-    }
-  }
-  return 'https://phaseplanner-v2.onrender.com'
-}
+// function getApiBase(): string {
+//   if (typeof window !== 'undefined') {
+//     // Client-side
+//     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+//       return 'http://127.0.0.1:5501'
+//     }
+//   }
+//   return 'https://phaseplanner-v2.onrender.com'
+// }
 
 export async function generateAICalendar(
   prompt: string, 
   settings: CalendarSettings
 ): Promise<CalendarItem[]> {
-  const API_BASE = getApiBase()
+  const API_BASE = 'localhost'
   
   try {
     let allCalendar: CalendarItem[] = []
@@ -41,7 +41,7 @@ export async function generateAICalendar(
         - "calendar" (array, for days ${startDay} to ${endDay} only, each entry as described previously)
         Do NOT include any extra text or markdown.`
 
-      const response = await fetch(`${API_BASE}/api/generate-plan`, {
+      const response = await fetch(`${API_BASE}/app/api/generate-plan`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -56,12 +56,6 @@ export async function generateAICalendar(
       }
 
       const data = await response.json()
-
-      // First chunk: get intro and plan
-      // if (i === 0) {
-      //   if (data.plan && data.plan.introduction) introduction = data.plan.introduction
-      //   if (data.plan && data.plan.plan) allPhases = data.plan.plan
-      // }
       
       // Always append calendar
       if (data.plan && data.plan.calendar) {
@@ -95,7 +89,7 @@ export async function generateAICalendar(
 }
 
 export async function loadHistory(): Promise<CalendarItem[][]> {
-  const API_BASE = getApiBase()
+  const API_BASE = 'localhost'
   
   try {
     const response = await fetch(`${API_BASE}/api/history`)

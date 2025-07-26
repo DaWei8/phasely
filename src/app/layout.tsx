@@ -11,6 +11,8 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -36,11 +38,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <Link
+        <a
           href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        <Link
+        <a
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />

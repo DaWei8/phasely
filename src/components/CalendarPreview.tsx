@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useCalendarStore } from '@/lib/store/calendar-store'
+import Link from 'next/link'
 
 export default function CalendarPreview() {
   const {
@@ -292,7 +293,7 @@ END:VEVENT`
               </p>
               <div className="flex flex-wrap gap-2">
                 {item.resources?.map((resource, resIndex) => (
-                  <a
+                  <Link
                     key={resIndex}
                     href={resource.link}
                     target="_blank"
@@ -300,7 +301,7 @@ END:VEVENT`
                     className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hover:bg-blue-200 transition-colors"
                   >
                     <i className="fas fa-external-link-alt mr-1"></i>Resource
-                  </a>
+                  </Link>
                 ))}
                 <span className="text-sm lg:hidden text-gray-500">{item.time}</span>
               </div>

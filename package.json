@@ -9,10 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.17",
-    "@heroicons/react": "^2.0.18",
+    "@headlessui/react": "^1.7.19",
+    "@heroicons/react": "^2.2.0",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/auth-helpers-shared": "^0.7.0",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.52.1",
     "axios": "^1.11.0",
-    "clsx": "^2.0.0",
+    "clsx": "^2.1.1",
     "date-fns": "^3.0.0",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.298.0",
@@ -21,6 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.5.2",
+    "recharts": "^3.1.0",
     "tailwind-merge": "^2.2.0",
     "zustand": "^4.4.7"
   },

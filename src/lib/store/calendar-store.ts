@@ -176,13 +176,13 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   if (typeof window !== 'undefined') {
     localStorage.setItem('aiCalendarData', JSON.stringify(newData));
   }
-},
+  },
 
-getProgressStats: () => {
-  const { currentCalendarData } = get();
-  const total = currentCalendarData.length;
-  const completed = currentCalendarData.filter((item) => item.completed).length;
-  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-  return { completed, total, percentage };
-}
+  getProgressStats: () => {
+    const { currentCalendarData } = get();
+    const total = currentCalendarData.length;
+    const completed = currentCalendarData.filter((item) => item.completed).length;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return { completed, total, percentage };
+  }
 }))
