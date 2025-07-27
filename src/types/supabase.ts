@@ -6,6 +6,22 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface Habit {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string | null;
+  category: "learning" | "health" | "productivity" | "personal";
+  frequency: "daily" | "weekly" | "custom";
+  target_frequency: number | null;
+  target_duration_minutes: number | null;
+  reminder_time: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  habit_entries: HabitEntry[]; // Add this line
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -212,7 +228,6 @@ export type Resource = Database['public']['Tables']['resources']['Row']
 export type ProgressEntry = Database['public']['Tables']['progress_entries']['Row']
 export type Achievement = Database['public']['Tables']['achievements']['Row']
 export type UserAchievement = Database['public']['Tables']['user_achievements']['Row']
-export type Habit = Database['public']['Tables']['habits']['Row']
 export type HabitEntry = Database['public']['Tables']['habit_entries']['Row']
 export type ScheduledNotification = Database['public']['Tables']['scheduled_notifications']['Row']
 export type Template = Database['public']['Tables']['templates']['Row']
