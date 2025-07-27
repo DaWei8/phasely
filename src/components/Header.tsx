@@ -33,7 +33,9 @@ export default function Header() {
               className="h-8 w-auto"
             />
           </motion.a>
-
+          <Link href="/dashboard" className="hidden lg:block border border-blue-600 bg-blue-50 rounded-md py-3 px-3 text-sm text-blue-600 hover:text-white hover:bg-blue-600">
+            Go to Dashboard
+          </Link>
           <button
             onClick={toggleMobileMenu}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors lg:hidden"
@@ -57,6 +59,9 @@ export default function Header() {
               className="lg:hidden bg-white border-t border-gray-200"
             >
               <div className="px-4 py-4 space-y-2">
+                <Link href="/dashboard" className="block py-2 text-gray-700 hover:text-blue-600">
+                  Go to Dashboard
+                </Link>
                 <Link href="#features" className="block py-2 text-gray-700 hover:text-blue-600">
                   Features
                 </Link>
@@ -112,9 +117,9 @@ export default function Header() {
             >
               {[
                 { icon: <BrainCircuit className='w-4 h-4' />, text: 'AI-Generated' },
-                { icon: <Edit className='w-4 h-4'  />, text: 'Fully Editable' },
-                { icon: <Calendar className='w-4 h-4'  />, text: 'ICS Export' },
-                { icon: <Video className='w-4 h-4'  />, text: 'Resource Links' }
+                { icon: <Edit className='w-4 h-4' />, text: 'Fully Editable' },
+                { icon: <Calendar className='w-4 h-4' />, text: 'ICS Export' },
+                { icon: <Video className='w-4 h-4' />, text: 'Resource Links' }
               ].map((feature, index) => (
                 <motion.span
                   key={feature.text}

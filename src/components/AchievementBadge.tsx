@@ -30,13 +30,13 @@ export const AchievementBadge = ({
   }, [badge.unlocked, badge, onUnlock]);
 
   const getBadgeGradient = () => {
-    if (!badge.unlocked) return "from-gray-300 to-gray-400";
+    if (!badge.unlocked) return "";
     
     switch (badge.rarity || "common") {
-      case "legendary": return "from-yellow-400 via-orange-500 to-red-500";
+      case "legendary": return "from-blue-400 via-orange-500 to-red-500";
       case "epic": return "from-purple-400 via-pink-500 to-red-500";
       case "rare": return "from-blue-400 via-blue-500 to-blue-600";
-      default: return "from-yellow-400 via-yellow-500 to-yellow-600";
+      default: return "from-green-400 via-green-500 to-green-600";
     }
   };
 
@@ -44,10 +44,10 @@ export const AchievementBadge = ({
     if (!badge.unlocked) return "";
     
     switch (badge.rarity || "common") {
-      case "legendary": return "shadow-yellow-500/50";
-      case "epic": return "shadow-purple-500/50";
-      case "rare": return "shadow-blue-500/50";
-      default: return "shadow-yellow-500/30";
+      case "legendary": return "shadow-blue-300/50";
+      case "epic": return "shadow-purple-300/50";
+      case "rare": return "shadow-blue-300/30";
+      default: return "shadow-blue-300/30";
     }
   };
 
@@ -55,12 +55,11 @@ export const AchievementBadge = ({
     <div
       className={twMerge(`
         group relative overflow-hidden
-        bg-gradient-to-br from-white/95 to-white/80
         backdrop-blur-sm border-2 rounded-2xl p-6
         transform transition-all duration-500 ease-out
         cursor-pointer select-none
         ${badge.unlocked 
-          ? `border-transparent shadow-2xl ${getBorderGlow()} hover:scale-105 hover:shadow-3xl` 
+          ? `border-transparent shadow-xl ${getBorderGlow()} hover:scale-105 hover:shadow-xl` 
           : 'border-gray-200 hover:border-gray-300 hover:scale-102'
         }
         ${isFlipping ? 'animate-pulse scale-110' : ''}
@@ -74,7 +73,7 @@ export const AchievementBadge = ({
       {/* Particle celebration effect */}
       <ParticleSystem
         isActive={showCelebration} 
-        color={badge.unlocked ? "bg-yellow-400" : "bg-gray-400"} 
+        color={badge.unlocked ? "bg-blue-400" : "bg-gray-400"} 
       />
 
       {/* Animated background rays */}
@@ -84,7 +83,7 @@ export const AchievementBadge = ({
             <div
               key={i}
               className={`
-                absolute w-0.5 bg-gradient-to-t from-transparent via-yellow-400/30 to-transparent
+                absolute w-0.5 bg-gradient-to-t from-transparent via-blue-400/30 to-transparent
                 transform origin-bottom transition-all duration-1000
                 ${isHovered ? 'opacity-100 scale-y-150' : 'opacity-0 scale-y-100'}
               `}
@@ -111,8 +110,8 @@ export const AchievementBadge = ({
             <div className={`
               relative p-4 rounded-full
               bg-gradient-to-br ${getBadgeGradient()}
-              shadow-2xl transform transition-all duration-300
-              ${isHovered ? 'shadow-3xl rotate-12' : ''}
+              shadow-xl transform transition-all duration-300
+              ${isHovered ? 'shadow-xl rotate-12' : ''}
             `}>
               {/* Glowing ring effect */}
               <div className={`
@@ -131,7 +130,7 @@ export const AchievementBadge = ({
               {badge.unlocked && (
                 <>
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-ping opacity-60" />
-                  <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-yellow-200 rounded-full animate-pulse" />
+                  <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-blue-200 rounded-full animate-pulse" />
                   <div className="absolute top-1/2 -right-2 w-1 h-1 bg-white rounded-full animate-bounce" />
                 </>
               )}
@@ -168,7 +167,7 @@ export const AchievementBadge = ({
           <h3 className={`
             font-bold text-lg transition-all duration-300
             ${badge.unlocked 
-              ? 'text-gray-800 group-hover:text-yellow-600' 
+              ? 'text-gray-800 group-hover:text-blue-600' 
               : 'text-gray-500'
             }
           `}>
@@ -202,7 +201,7 @@ export const AchievementBadge = ({
           {badge.unlocked && badge.rarity && (
             <div className={`
               inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-              ${badge.rarity === 'legendary' ? 'bg-yellow-100 text-yellow-800' :
+              ${badge.rarity === 'legendary' ? 'bg-blue-100 text-blue-800' :
                 badge.rarity === 'epic' ? 'bg-purple-100 text-purple-800' :
                 badge.rarity === 'rare' ? 'bg-blue-100 text-blue-800' :
                 'bg-gray-100 text-gray-800'}

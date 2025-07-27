@@ -1,29 +1,20 @@
-// import { CalendarItem, CalendarSettings } from '@/lib/store/calendar-store'
-
 import { HistoryItem } from "@/components/sections/HistorySection"
 import { CalendarItem, CalendarSettings, Resources } from "../store/calendar-store"
 
-// Use correct API base for local and production
-// function getApiBase(): string {
-//   if (typeof window !== 'undefined') {
-//     // Client-side
-//     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-//       return 'http://127.0.0.1:5501'
-//     }
-//   }
-//   return 'https://phaseplanner-v2.onrender.com'
-// }
+// Get correct API base URL for Next.js
+function getApiBase(): string {
+  // For Next.js API routes, use relative URLs
+  return ''
+}
 
 export async function generateAICalendar(
   prompt: string, 
   settings: CalendarSettings
 ): Promise<CalendarItem[]> {
-  const API_BASE = 'localhost'
+  const API_BASE = getApiBase()
   
   try {
     let allCalendar: CalendarItem[] = []
-    // const allPhases: any[] = []
-    // const introduction: string = ""
     const chunkSize = 30
     const numChunks = Math.ceil(settings.duration / chunkSize)
 
@@ -32,96 +23,153 @@ export async function generateAICalendar(
       const endDay = Math.min((i + 1) * chunkSize, settings.duration)
       const chunkDuration = endDay - startDay + 1
 
-      // Compose a chunked prompt
-      const chunkRequestPrompt = `For a total learning plan of ${settings.duration} days, generate ONLY the content calendar for days ${startDay} to ${endDay} (inclusive) for the goal: "${prompt}". 
-        If this is the first chunk (days 1-${chunkSize}), also include the introduction and the 7-phase plan as described below. 
-        The response MUST be a single JSON object with these keys:
-        - "introduction" (object, only in the first chunk)
-        - "plan" (array, only in the first chunk)
-        - "calendar" (array, for days ${startDay} to ${endDay} only, each entry as described previously)
-        Do NOT include any extra text or markdown.`
+      console.log(`Processing chunk ${i + 1}/${numChunks}: days ${startDay}-${endDay}`);
 
-      const response = await fetch(`${API_BASE}/app/api/generate-plan`, {
+      console.log("Sending request to Next.js API route...");
+
+      const response = await fetch(`${API_BASE}/api/generate-plan`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          prompt: chunkRequestPrompt,
+          prompt: prompt,
           duration: chunkDuration,
         }),
       })
 
       if (!response.ok) {
         const errText = await response.text()
+        console.error(`API Error (${response.status}):`, errText)
         throw new Error(`Failed to fetch data from the server (status ${response.status}): ${errText}`)
       }
 
       const data = await response.json()
+      console.log("Received response from API:", data)
       
-      // Always append calendar
+      // Handle the response structure from Next.js API
       if (data.plan && data.plan.calendar) {
-        // Adjust day numbers to global
+        // Adjust day numbers to global sequence
         const offset = startDay - 1
-        const chunkCalendar = data.plan.calendar.map((entry: CalendarItem) => ({
+        const chunkCalendar = data.plan.calendar.map((entry: any) => ({
           ...entry,
           day: entry.day + offset,
         }))
         allCalendar = allCalendar.concat(chunkCalendar)
+      } else {
+        console.warn("Unexpected response structure:", data)
       }
     }
 
-    // Map Gemini API calendar format to frontend format
-    const calendarData = allCalendar.map((entry : CalendarItem) => ({
+    // Map API response format to frontend CalendarItem format
+    const calendarData: CalendarItem[] = allCalendar.map((entry: any) => ({
       day: entry.day,
-      phase: entry.phase,
-      title: entry.title,
-      time: entry.time,
-      description: entry.description,
-      resources: entry.resources.map((r: Resources) =>r
-          ),
+      phase: entry.phaseNumber || entry.phase || 1,
+      title: entry.taskName || entry.title || 'Untitled Task',
+      time: entry.timeCommitment || entry.time || '1 hour',
+      description: entry.taskDescription || entry.description || 'No description provided',
+      resources: Array.isArray(entry.resources) 
+        ? entry.resources.map((r: any) => {
+            if (typeof r === 'object' && r.link) {
+              return r.link
+            } else if (typeof r === 'string') {
+              return r
+            }
+            return ''
+          }).filter(Boolean)
+        : [],
       completed: false
     }))
 
+    console.log(`Successfully processed ${calendarData.length} calendar items`)
     return calendarData
+
   } catch (error) {
     console.error('Error generating calendar:', error)
     throw error
   }
 }
 
-export async function loadHistory(): Promise<CalendarItem[][]> {
-  const API_BASE = 'localhost'
+export async function loadHistory(): Promise<HistoryItem[]> {
+  const API_BASE = getApiBase()
   
   try {
-    const response = await fetch(`${API_BASE}/api/history`)
+    console.log("Loading history from Next.js API...")
+    
+    const response = await fetch(`${API_BASE}/api/history`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
     if (!response.ok) {
       const errText = await response.text()
+      console.error(`History API Error (${response.status}):`, errText)
       throw new Error(`Failed to fetch history (status ${response.status}): ${errText}`)
     }
     
     const data = await response.json()
+    console.log("Received history data:", data)
     
     if (!data || data.length === 0) {
       return []
     }
 
     // Map history data to frontend format
-    return data.map((item: HistoryItem) => 
-      item.calendar ? item.calendar.map((entry: CalendarItem) => ({
+    const historyItems: HistoryItem[] = data.map((item: any) => ({
+      id: item.id,
+      user_goal: item.user_goal,
+      duration: item.duration,
+      created_at: item.created_at,
+      calendar: item.calendar ? item.calendar.map((entry: any) => ({
         day: entry.day,
-        phase: entry.phase,
-        title: entry.title,
-        time: entry.time,
-        description: entry.description,
+        phase: entry.phaseNumber || entry.phase || 1,
+        title: entry.taskName || entry.title || 'Untitled Task',
+        time: entry.timeCommitment || entry.time || '1 hour',
+        description: entry.taskDescription || entry.description || 'No description provided',
         resources: Array.isArray(entry.resources)
-          ? entry.resources.map((r: Resources) =>
-              r.link ? r.link : typeof r === 'string' ? r : ''
-            )
+          ? entry.resources.map((r: any) => {
+              if (typeof r === 'object' && r.link) {
+                return r.link
+              } else if (typeof r === 'string') {
+                return r
+              }
+              return ''
+            }).filter(Boolean)
           : [],
         completed: false
       })) : []
-    )
+    }))
+
+    return historyItems
+
   } catch (error) {
     console.error('Error loading history:', error)
+    throw error
+  }
+}
+
+export async function deleteHistoryItem(id: number): Promise<void> {
+  const API_BASE = getApiBase()
+  
+  try {
+    const response = await fetch(`${API_BASE}/api/history?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      const errText = await response.text()
+      throw new Error(`Failed to delete history item (status ${response.status}): ${errText}`)
+    }
+
+    console.log(`Successfully deleted history item ${id}`)
+
+  } catch (error) {
+    console.error('Error deleting history item:', error)
     throw error
   }
 }

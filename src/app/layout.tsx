@@ -2,21 +2,18 @@ import type { Metadata } from 'next'
 import { Poppins } from "next/font/google";
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import Link from 'next/link'
 import type { Viewport } from 'next';
-
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+  variable: '--font-poppins'
 });
-
-
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#3b82f6',        // or dynamic per route
+  themeColor: '#3b82f6',
 };
 
 export const metadata: Metadata = {
@@ -36,18 +33,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`scroll-smooth ${poppins.variable}`}>
       <head>
-        <a
-          href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <a
+        <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          crossOrigin="anonymous"
         />
       </head>
-      <body className={`${poppins.className} font-funnel bg-gray-50 min-h-screen`}>
+      <body className="font-funnel max-w-screen bg-gray-50 min-h-screen antialiased">
         {children}
         <Toaster
           position="top-right"

@@ -17,11 +17,11 @@ export default function Footer() {
                 className="h-8 w-auto"
                 />
             </div>
-            <p className="text-gray-300 text-sm mb-4 max-w-md">
+            <p className="text-gray-300 leading-relaxed text-sm mb-4 max-w-md">
               Create personalized learning schedules with AI assistance. Transform your learning goals into structured, actionable calendars that fit your lifestyle.
             </p>
-            <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+            {/* <div className="flex space-x-4">
+              <Link href="" className="text-gray-400 hover:text-white transition-colors">
                 <i className="fab fa-twitter"></i>
               </Link>
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -30,7 +30,7 @@ export default function Footer() {
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
                 <i className="fab fa-linkedin"></i>
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}
@@ -65,22 +65,22 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/support/help-center" className="text-gray-300 hover:text-white transition-colors">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/support/contact-us" className="text-gray-300 hover:text-white transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/support/privacy-policy" className="text-gray-300 hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/support/terms-of-service" className="text-gray-300 hover:text-white transition-colors">
                   Terms of Service
                 </Link>
               </li>

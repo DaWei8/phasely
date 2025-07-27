@@ -22,8 +22,8 @@ export default function StreakWidget() {
   }, []);
 
   return (
-    <div className="rounded-xl bg-white p-4 shadow">
-      <h2 className="mb-2 text-sm font-semibold text-gray-600">Streak</h2>
+    <div className="rounded-xl w-full bg-white p-4 shadow">
+      <h2 className="mb-2 text-lg font-semibold text-gray-600">Streak</h2>
       <p className="text-3xl font-bold text-blue-600">{streak}</p>
     </div>
   );

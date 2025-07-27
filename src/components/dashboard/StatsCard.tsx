@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface StatsCardProps {
-  icon: React.ReactNode;
+  icon: React.ReactNode | string;
   title: string;
   value: string | number;
   color: string;
@@ -78,18 +78,12 @@ export function StatsCard({
     <div 
       className={twMerge(`
         group relative overflow-hidden
+        bg-white/10 rounded-2xl border
         bg-gradient-to-br from-white/90 to-white/60
-        backdrop-blur-xl border border-white/20
-        rounded-2xl p-4 shadow-xl
+        backdrop-blur-xl  border-white/20 p-4 shadow-xl
         transform transition-all duration-500 ease-out
-        hover:scale-102 hover:shadow-2xl hover:shadow-blue-500/20
-        cursor-pointer
-        before:absolute before:inset-0 before:bg-gradient-to-br 
-        before:from-transparent before:via-white/5 before:to-transparent
-        before:opacity-0 before:transition-opacity before:duration-500
-        hover:before:opacity-100
-        after:absolute after:inset-0 after:bg-gradient-to-br
-        after:from-blue-500/5 after:via-blue-500/5 after:to-green-500/5
+        hover:scale-102 hover:shadow-xl hover:shadow-blue-500/20
+        cursor-pointer hover:before:opacity-100
         after:opacity-0 after:transition-opacity after:duration-500
         hover:after:opacity-100
       `, className)}
@@ -97,7 +91,7 @@ export function StatsCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-blue-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl" />
+      <div className="absolute inset-0 bg-gradient-to-br bg-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl" />
       
       {/* Floating particles effect */}
       <div className="absolute inset-0 overflow-hidden rounded-2xl">

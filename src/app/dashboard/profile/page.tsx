@@ -2,14 +2,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Achievement } from "@/types/supabase";
 import Image from "next/image";
 import { User } from "@supabase/supabase-js";
 
 export default function ProfilePage() {
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<any>(null);
-    const [achievements, setAchievements] = useState<Achievement[]>([]);
     const [activeTab, setActiveTab] = useState("overview");
 
     useEffect(() => {
@@ -31,7 +29,6 @@ export default function ProfilePage() {
                 .eq("user_id", user.id);
 
             setProfile(profileData);
-            setAchievements(achievementsData?.map((a) => a.achievements) || []);
         })();
     }, []);
 
@@ -64,15 +61,7 @@ export default function ProfilePage() {
                         >
                             Overview
                         </button>
-                        <button
-                            onClick={() => setActiveTab("achievements")}
-                            className={`px-4 py-2 ${activeTab === "achievements"
-                                ? "border-b-2 border-blue-600 font-medium"
-                                : ""
-                                }`}
-                        >
-                            Achievements
-                        </button>
+                        
                     </div>
                 </div>
             </div>
@@ -91,28 +80,6 @@ export default function ProfilePage() {
                                 {profile?.weekly_commitment_hours} hours
                             </p>
                         </div>
-                    </div>
-                </div>
-            )}
-
-            {activeTab === "achievements" && (
-                <div className="mt-6 bg-white p-4 rounded-lg shadow space-y-4">
-                    <h3 className="text-lg font-semibold mb-4">Your Achievements</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {achievements.map((achievement) => (
-                            <div
-                                key={achievement.id}
-                                className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm"
-                            >
-                                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                                    <span className="text-blue-600 font-bold">🏆</span>
-                                </div>
-                                <h4 className="text-center font-medium">{achievement.name}</h4>
-                                <p className="text-center text-sm text-gray-500 mt-1">
-                                    {achievement.description}
-                                </p>
-                            </div>
-                        ))}
                     </div>
                 </div>
             )}

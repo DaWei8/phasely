@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import AICalendarSection from "@/components/dashboard/AICalendarSection";
+import { motion } from "framer-motion";
+import { SparklesIcon } from "lucide-react";
 
 
 export default function CalendarPage() {
@@ -44,8 +46,21 @@ export default function CalendarPage() {
 
     return (
         <div className="p-6">
+            <div className="text-left mb-8">
+                <motion.h2
+                    className="text-2xl md:text-3xl font-bold text-gray-900 mb-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
+                    <SparklesIcon className="inline h-8 w-8 text-blue-600 mr-2" />
+                    Create Your Custom Learning Plan
+                </motion.h2>
+                <p className="text-gray-600 max-w-2xl">
+                    Describe what you want to learn and we&apos;ll generate a structured calendar with resources,
+                    timelines, and actionable tasks tailored to your goals.
+                </p>
+            </div>
             <h1 className="text-2xl font-bold mb-6">My Learning Calendars</h1>
-
             {calendars.length ? (<div className="mb-6">
                 <button
                     className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
@@ -53,9 +68,9 @@ export default function CalendarPage() {
                 >
                     Create New Calendar
                 </button>
-            </div>): (
+            </div>) : (
                 <div></div>
-            ) }
+            )}
 
             {loading ? (
                 <p className="text-gray-500">Loading...</p>
@@ -106,7 +121,7 @@ export default function CalendarPage() {
 
             {showCreateModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="w-full max-w-2xl bg-white rounded-lg p-6">
+                    <div className="w-full fixed max-w-2xl overflow-y-scroll h-[85dvh] bg-white rounded-lg mx-3 p-6 pt-2">
                         <AICalendarSection
                             onCancel={() => setShowCreateModal(false)}
                         />

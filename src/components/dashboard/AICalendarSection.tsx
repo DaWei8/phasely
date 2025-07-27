@@ -19,15 +19,15 @@ const examplePrompts = {
 
 export default function AICalendarSection({ onCancel }: { onCancel?: () => void }) {
   const [prompt, setPrompt] = useState('')
-  const { 
-    calendarSettings, 
-    updateSettings, 
-    setCalendarData, 
+  const {
+    calendarSettings,
+    updateSettings,
+    setCalendarData,
     setGenerating,
     isGenerating,
-    saveToHistory 
+    saveToHistory
   } = useCalendarStore()
-  
+
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast.error('Please describe your learning goals first.')
@@ -59,38 +59,26 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
   }
 
   return (
-    <>
+    <div className='relative w-full'>
+      <div className=' w-full sticky z-30 top-0 flex justify-end' >
+        <X className='w-7 h-7 cursor-pointer text-red-700' onClick={onCancel} />
+      </div>
       {isGenerating && <LoadingOverlay />}
-      <X className='w-7 h-7 cursor-pointer float-right text-red-700' onClick={onCancel} />
-      <div className="space-y-8 pt-6">
+      <div className="space-y-8 relative">
         {/* Header */}
-        <div className="text-center">
-          <motion.h2 
-            className="text-2xl md:text-3xl font-bold text-gray-900 mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            {/* <SparklesIcon className="inline h-8 w-8 text-blue-600 mr-2" /> */}
-            Create Your Custom Learning Plan
-          </motion.h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Describe what you want to learn and we'll generate a structured calendar with resources, 
-            timelines, and actionable tasks tailored to your goals.
-          </p>
-        </div>
-
         {/* Prompt Input */}
-        <motion.div 
+        <motion.div
           className="space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label className="block text-xl font-semibold text-gray-700">
-            <AcademicCapIcon className="inline text-blue-600 h-6 w-6 mr-2" />
-            Describe Your Learning Goals
+          <label className="flex text-xl font-semibold text-gray-700">
+            <AcademicCapIcon className="inline text-blue-600 h-6 w-6 mr-2 " />
+            <p className='w-full' >
+              Describe Your Learning Goals
+            </p>
           </label>
-          
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -122,9 +110,57 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
             </div>
           </div>
         </motion.div>
-
         {/* Settings Grid */}
-        <motion.div 
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <h3 className="text-xl font-semibold text-gray-700">
+            <CalendarIcon className="inline h-6 w-6 text-blue-600 mr-2" />
+            Calendar Settings
+          </h3>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={calendarSettings.startDate}
+                onChange={(e) => updateSettings({ startDate: e.target.value })}
+                className="input-field"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Daily Start Time
+              </label>
+              <input
+                type="time"
+                value={calendarSettings.startTime}
+                onChange={(e) => updateSettings({ startTime: e.target.value })}
+                className="input-field"
+              />
+            </div>
+
+            <div className="flex items-center pt-6">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={calendarSettings.skipWeekends}
+                  onChange={(e) => updateSettings({ skipWeekends: e.target.checked })}
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">Skip weekends</span>
+              </label>
+            </div>
+          </div>
+        </motion.div>
+        <motion.div
           className="grid md:grid-cols-3 gap-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -179,60 +215,11 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
           </div>
         </motion.div>
 
-        {/* Calendar Configuration */}
-        <motion.div 
-          className="space-y-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h3 className="text-xl font-semibold text-gray-900">
-            <CalendarIcon className="inline h-6 w-6 text-blue-600 mr-2" />
-            Calendar Settings
-          </h3>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Start Date
-              </label>
-              <input
-                type="date"
-                value={calendarSettings.startDate}
-                onChange={(e) => updateSettings({ startDate: e.target.value })}
-                className="input-field"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Daily Start Time
-              </label>
-              <input
-                type="time"
-                value={calendarSettings.startTime}
-                onChange={(e) => updateSettings({ startTime: e.target.value })}
-                className="input-field"
-              />
-            </div>
-
-            <div className="flex items-center pt-6">
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={calendarSettings.skipWeekends}
-                  onChange={(e) => updateSettings({ skipWeekends: e.target.checked })}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-700">Skip weekends</span>
-              </label>
-            </div>
-          </div>
-        </motion.div>
 
         {/* Generate Button */}
-        <motion.div 
-          className="text-center pt-4"
+        <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -256,6 +243,6 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
           </button>
         </motion.div>
       </div>
-    </>
+    </div>
   )
 }

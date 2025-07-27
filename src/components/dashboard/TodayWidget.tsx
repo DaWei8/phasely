@@ -26,8 +26,11 @@ export default function TodayWidget() {
     }, []);
 
     return (
-        <div className="rounded-xl bg-white p-4 shadow">
-            <h2 className="mb-2 text-sm font-semibold text-gray-600">Today</h2>
+
+        <div className="relative rounded-xl w-full bg-white p-4 shadow">
+            {/* Animated background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br bg-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl" />
+            <h2 className="mb-2 text-lg font-semibold text-gray-600">Today</h2>
             {tasks.length ? (
                 <ul className="space-y-2 text-sm">
                     {tasks.map((t) => (
@@ -37,6 +40,14 @@ export default function TodayWidget() {
             ) : (
                 <p className="text-sm text-gray-400">Nothing scheduled</p>
             )}
+            <div className={`
+        absolute inset-0 rounded-2xl
+        bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20
+        opacity-0 group-hover:opacity-100
+        transition-opacity duration-500
+        blur-sm -z-10
+        transform scale-105
+      `} />
         </div>
     );
 }

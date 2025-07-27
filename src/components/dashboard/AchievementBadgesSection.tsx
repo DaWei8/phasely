@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AchievementBadge } from "../AchievementBadge";
 import { AchievementBadgeData, CelebrationItem } from "@/types/global";
 
-export default function EnhancedAchievementBadges() {
+export default function AchievementBadges() {
   const [celebrationQueue, setCelebrationQueue] = useState<CelebrationItem[]>([]);
   const [stats, setStats] = useState({
     activeHabits: 3,
@@ -80,15 +80,15 @@ export default function EnhancedAchievementBadges() {
       timestamp: Date.now(),
       type: "unlock"
     };
-    
+
     setCelebrationQueue(prev => [...prev, celebrationItem]);
-    
+
     // Remove from queue after celebration
     setTimeout(() => {
       setCelebrationQueue(prev => prev.filter(item => item.badge.name !== badge.name));
     }, 3000);
-};
-  const getProgress = (badge : AchievementBadgeData, index : number) => {
+  };
+  const getProgress = (badge: AchievementBadgeData, index: number) => {
     if (badge.name === "Productivity Pro") return (stats.activeHabits / 5) * 100;
     if (badge.name === "Unstoppable") return (stats.longestStreak / 100) * 100;
     return Math.min(100, (index + 1) * 15); // Mock progress
@@ -98,25 +98,25 @@ export default function EnhancedAchievementBadges() {
   const totalCount = achievementBadges.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="h-fit bg-white rounded-2xl shadow-xl p-5">
+      <div className="">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-yellow-200 to-yellow-400 bg-clip-text text-transparent mb-4">
-            Achievement Gallery
+        <div className="text-center w-full flex justify-between items-center mb-12">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Achievement Badges
           </h1>
-          <p className="text-gray-300 text-xl mb-8">
+          {/* <p className="text-gray-300 text-xl mb-8">
             Celebrate your learning journey with these prestigious badges
-          </p>
-          
+          </p> */}
+
           {/* Progress Summary */}
-          <div className="inline-flex items-center bg-white/10 backdrop-blur-lg rounded-full px-8 py-4 border border-white/20">
-            <div className="text-3xl mr-4">🏆</div>
+          <div className="inline-flex text-gray-800 items-center bg-blue-200/10 backdrop-blur-lg rounded-full pl-5 pr-7 py-4 border border-blue-700/20">
+            <div className="text-3xl mr-3">🏆</div>
             <div className="text-left">
-              <div className="text-white font-bold text-lg">
+              <div className="text-gray-700 font-bold text-md">
                 {unlockedCount} / {totalCount} Badges Earned
               </div>
-              <div className="text-gray-300 text-sm">
+              <div className="text-gray-600 text-sm">
                 {Math.round((unlockedCount / totalCount) * 100)}% Complete
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function EnhancedAchievementBadges() {
         </div>
 
         {/* Achievement Badges Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
           {achievementBadges.map((badge, index) => (
             <AchievementBadge
               key={index}
@@ -137,7 +137,7 @@ export default function EnhancedAchievementBadges() {
         </div>
 
         {/* Achievement Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* <div className="grid bg-black grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { label: "Badges Earned", value: unlockedCount, icon: "🏅" },
             { label: "Learning Streak", value: `${stats.longestStreak} days`, icon: "🔥" },
@@ -149,7 +149,7 @@ export default function EnhancedAchievementBadges() {
               <div className="text-gray-300 text-sm">{stat.label}</div>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Celebration Toast */}
         {celebrationQueue.length > 0 && (
@@ -157,7 +157,7 @@ export default function EnhancedAchievementBadges() {
             {celebrationQueue.map((item, idx) => (
               <div
                 key={idx}
-                className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-lg shadow-2xl mb-4 animate-bounce"
+                className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-lg shadow-xl mb-4 animate-bounce"
               >
                 <div className="flex items-center">
                   <span className="text-2xl mr-3">🎉</span>

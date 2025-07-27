@@ -14,6 +14,7 @@ import clsx from "clsx";
 import { AwardIcon, BookOpenIcon, MedalIcon, RepeatIcon, Rocket, Stars, UsersIcon, Weight } from "lucide-react";
 import { CircularProgressBar } from "@/components/CircularProgressBar";
 import { StatsCard } from "@/components/dashboard/StatsCard";
+import AchievementBadges from "@/components/dashboard/AchievementBadgesSection";
 
 export default function AchievementsPage() {
     const [achievements, setAchievements] = useState<any[]>([]);
@@ -155,11 +156,11 @@ export default function AchievementsPage() {
     ];
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-8">Achievements</h1>
+        <div className="p-6 flex flex-col w-full gap-8 ">
+            <h1 className="text-2xl font-bold ">Achievements</h1>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <StatsCard
                     icon={<BookOpenIcon className="w-6 h-6" />}
                     title="Completed Calendars"
@@ -167,13 +168,13 @@ export default function AchievementsPage() {
                     color="text-blue-600"
                 />
                 <StatsCard
-                    icon={<MedalIcon className="w-6 h-6" />}
+                    icon={"⚡"}
                     title="Active Habits"
                     value={stats.activeHabits}
                     color="text-yellow-500"
                 />
                 <StatsCard
-                    icon={<RepeatIcon className="w-6 h-6" />}
+                    icon={"🔥"}
                     title="Longest Streak"
                     value={stats.longestStreak}
                     unit=" days"
@@ -188,7 +189,7 @@ export default function AchievementsPage() {
             </div>
 
             {/* Achievement Badges */}
-            <div className="mb-8">
+            {/* <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">Your Badges</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {achievementBadges.map((badge, index) => (
@@ -223,10 +224,10 @@ export default function AchievementsPage() {
                         </div>
                     ))}
                 </div>
-            </div>
-
+            </div> */}
+            <AchievementBadges />
             {/* Achievement History */}
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-white p-6 rounded-2xl shadow">
                 <h2 className="text-xl font-semibold mb-4">Achievement History</h2>
                 {loading ? (
                     <p className="text-gray-500">Loading achievements...</p>

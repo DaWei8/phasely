@@ -57,7 +57,7 @@ export default function DashboardLayout({
     };
 
     return (
-        <div className="flex h-screen bg-gray-50">
+        <div className="flex w-screen h-screen bg-gray-50">
             <aside className="w-64 h-full flex flex-col items-start gap-10 shrink-0 bg-white p-4 shadow">
                 <Link href={"/dashboard/"}>
                     <Image
@@ -82,7 +82,7 @@ export default function DashboardLayout({
                                 href={item.href}
                                 className={clsx(
                                     "flex gap-2 items-center rounded-md px-3 py-4 text-sm font-medium hover:bg-blue-100",
-                                    pathname === item.href ? "bg-blue-50 text-blue-600" : "text-gray-600"
+                                    pathname === item.href ? "bg-blue-50 text-gray-800" : "text-gray-600"
                                 )}
                             >
                                 {item.icon} <p>{item.name}</p>
@@ -100,8 +100,8 @@ export default function DashboardLayout({
             </aside>
 
             {/* Main */}
-            <main className="flex-1 flex-col overflow-y-auto">
-                <header className="flex items-center justify-end pr-6 pt-4 p-2">
+            <main className="flex-1 w-full flex-col overflow-y-auto">
+                <header className="flex rounded-2xl bg-white fixed right-4 z-10 items-center justify-end pt-6 p-2">
                     <Link title="View Profile" href="/dashboard/profile">
                         <Image
                             src={user?.user_metadata?.avatar_url || "/assets/favicon-32x32.png"}
