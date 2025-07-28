@@ -6,13 +6,9 @@ import {
     TrophyIcon,
     SparklesIcon,
     ChartBarIcon,
-    UserGroupIcon,
     ShieldCheckIcon
 } from "@heroicons/react/24/outline";
-import { ProgressBar } from "@/components/ProgressBar";
-import clsx from "clsx";
-import { AwardIcon, BookOpenIcon, MedalIcon, RepeatIcon, Rocket, Stars, UsersIcon, Weight } from "lucide-react";
-import { CircularProgressBar } from "@/components/CircularProgressBar";
+import { Award, AwardIcon, BookOpenIcon, Rocket, Stars, UsersIcon } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import AchievementBadges from "@/components/dashboard/AchievementBadgesSection";
 
@@ -156,11 +152,16 @@ export default function AchievementsPage() {
     ];
 
     return (
-        <div className="p-6 flex flex-col w-full gap-8 ">
-            <h1 className="text-2xl font-bold ">Achievements</h1>
+        <div className="p-6 bg-gray-50 flex flex-col w-full gap-8 ">
+            <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-blue-600 rounded-xl">
+                    <Award className="w-6 h-6 text-white" />
+                </div>
+                <h1 className="text-3xl font-bold text-gray-900">Achievements</h1>
+            </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className=" w-full grid grid-cols-2 md:grid-cols-2 gap-3">
                 <StatsCard
                     icon={<BookOpenIcon className="w-6 h-6" />}
                     title="Completed Calendars"

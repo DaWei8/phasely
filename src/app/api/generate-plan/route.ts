@@ -1,116 +1,89 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import { callGemini } from '@/components/callGemini';
+import { callGemini } from '@/components/callGemini'
+import { createClient } from '@/lib/supabase-server'
 
 // Type definitions
 interface GeneratePlanRequest {
-  prompt: string;
-  duration: number;
+  prompt: string
+  duration: number
 }
 
 interface GeminiResponse {
-  candidates?: Array<{
-    content?: {
-      parts?: Array<{
-        text?: string;
-      }>;
-    };
-  }>;
-  error?: any;
-  modelVersion?: string;
-  usageMetadata?: any;
+  candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
+  error?: any
+  modelVersion?: string
+  usageMetadata?: any
 }
 
 interface PlanPhase {
-  phase: number;
-  days: string;
-  focus: string;
-  activities: string[];
+  phase: number
+  days: string
+  focus: string
+  activities: string[]
 }
 
 interface CalendarEntry {
-  day: number;
-  taskName: string;
-  taskDescription: string;
-  timeCommitment: string;
-  learningStyle: string;
-  phaseNumber: number;
-  resources: Array<{
-    name: string;
-    link: string;
-  }>;
+  day: number
+  taskName: string
+  taskDescription: string
+  timeCommitment: string
+  learningStyle: string
+  phaseNumber: number
+  resources: Array<{ name: string; link: string }>
 }
 
 interface GeneratedPlan {
-  introduction: {
-    description: string;
-  };
-  plan: PlanPhase[];
-  calendar: CalendarEntry[];
+  introduction: { description: string }
+  plan: PlanPhase[]
+  calendar: CalendarEntry[]
 }
 
 interface DatabaseRow {
-  id?: number;
-  user_goal: string;
-  duration: number;
-  generated_plan: PlanPhase[];
-  content_calendar: CalendarEntry[];
-  created_at?: string;
-  user_id?: string;
+  id?: string
+  user_id: string
+  title: string
+  description: string | null
+  prompt_used: string
+  duration_days: number
+  daily_hours: number
+  learning_style: string
+  status: string
+  start_date: string | null
+  expected_end_date: string | null
+  actual_completion_date: string | null
+  progress_percentage: number
+  created_at?: string
+  updated_at?: string
 }
-
-// Database types for Supabase
-interface Database {
-  public: {
-    Tables: {
-      generated_plans: {
-        Row: DatabaseRow;
-        Insert: Omit<DatabaseRow, 'id' | 'created_at'>;
-        Update: Partial<Omit<DatabaseRow, 'id' | 'created_at'>>;
-      };
-    };
-  };
-}
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
-const { data: { user } } = await supabase.auth.getUser();
-const { data } = await supabase
-                .from("user_profiles")
-                .select("*")
-                .eq("id", user.id)
-                .single();
-
 
 export async function POST(request: NextRequest) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
-    const body: GeneratePlanRequest = await request.json();
-    const { prompt: userGoal, duration } = body;
+    const body: GeneratePlanRequest = await request.json()
+    const { prompt: userGoal, duration } = body
 
-    console.log("Received request to /api/generate-plan with body:", body);
+    console.log('Received request to /api/generate-plan with body:', body)
 
-    // Input validation
-    if (!userGoal || typeof userGoal !== "string" || userGoal.trim() === "") {
-      console.log("Validation failed: Prompt missing or invalid.");
+    if (!userGoal || typeof userGoal !== 'string' || userGoal.trim() === '') {
+      console.log('Validation failed: Prompt missing or invalid.')
       return NextResponse.json(
-        { message: "Prompt is required and must be a non-empty string." },
+        { message: 'Prompt is required and must be a non-empty string.' },
         { status: 400 }
-      );
+      )
     }
 
     if (!duration || isNaN(Number(duration)) || Number(duration) <= 0) {
-      console.log("Validation failed: Duration missing or invalid.");
+      console.log('Validation failed: Duration missing or invalid.')
       return NextResponse.json(
-        { message: "Duration is required and must be a positive integer." },
+        { message: 'Duration is required and must be a positive integer.' },
         { status: 400 }
-      );
+      )
     }
 
     const fullPrompt = `
@@ -144,107 +117,152 @@ export async function POST(request: NextRequest) {
 
       Ensure the "calendar" entries logically align with the "plan" phases and activities.
       Do NOT include any additional text, markdown formatting (like '''json), or explanations outside the JSON object itself.
-    `.trim();
+    `.trim()
 
-    console.log("Sending prompt to Gemini API:", fullPrompt.slice(0, 300) + "...");
+    console.log('Sending prompt to Gemini API:', fullPrompt.slice(0, 300) + '...')
 
-    // Call Gemini API
-    const response = await callGemini(fullPrompt.replace(/\s+/g, " ").trim())
+    const response = await callGemini(fullPrompt.replace(/\s+/g, ' ').trim())
 
     if (!response.data) {
-      throw new Error(`Gemini API error: ${response.status}`);
+      throw new Error(`Gemini API error: ${response.status}`)
     }
 
     const geminiData: GeminiResponse = response.data
-    // Check for Gemini API errors
+
     if (geminiData.error) {
-      console.error("Gemini API error:", geminiData.error);
+      console.error('Gemini API error:', geminiData.error)
       return NextResponse.json(
-        { message: "Gemini API error", error: geminiData.error },
+        { message: 'Gemini API error', error: geminiData.error },
         { status: 500 }
-      );
+      )
     }
 
-    const generatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+    const generatedText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text
 
-    console.log("Raw Gemini API response text:", generatedText ? generatedText.slice(0, 300) + "..." : "No text");
+    console.log(
+      'Raw Gemini API response text:',
+      generatedText ? generatedText.slice(0, 300) + '...' : 'No text'
+    )
 
     if (!generatedText) {
-      console.error("No text content in Gemini API response:", geminiData);
-      return NextResponse.json(
-        { message: "Gemini did not generate a plan.", error: "No text content in response." },
-        { status: 500 }
-      );
-    }
-
-    // Clean and parse the JSON data
-    const cleanedText = generatedText
-      .replace(/^```json\s*/, "")
-      .replace(/\s*```$/, "")
-      .trim();
-
-    let parsedPlan: GeneratedPlan;
-    try {
-      parsedPlan = JSON.parse(cleanedText);
-
-      // Ensure the response contains both "plan" and "calendar"
-      if (!parsedPlan.plan || !parsedPlan.calendar) {
-        console.error("Parsed JSON missing 'plan' or 'calendar' keys:", parsedPlan);
-        throw new Error('Parsed content must contain "plan" and "calendar" keys.');
-      }
-    } catch (jsonError: any) {
-      console.error("Failed to parse Gemini's response:", cleanedText);
+      console.error('No text content in Gemini API response:', geminiData)
       return NextResponse.json(
         {
-          message: "Failed to parse Gemini's response. It might not be valid JSON.",
+          message: 'Gemini did not generate a plan.',
+          error: 'No text content in response.',
+        },
+        { status: 500 }
+      )
+    }
+
+    const cleanedText = generatedText
+      .replace(/^```json\s*/, '')
+      .replace(/\s*```$/, '')
+      .trim()
+
+    let parsedPlan: GeneratedPlan
+    try {
+      parsedPlan = JSON.parse(cleanedText)
+
+      if (!parsedPlan.plan || !parsedPlan.calendar) {
+        console.error(
+          'Parsed JSON missing "plan" or "calendar" keys:',
+          parsedPlan
+        )
+        throw new Error(
+          'Parsed content must contain "plan" and "calendar" keys.'
+        )
+      }
+    } catch (jsonError: any) {
+      console.error('Failed to parse Gemini\'s response:', cleanedText)
+      return NextResponse.json(
+        {
+          message: 'Failed to parse Gemini\'s response. It might not be valid JSON.',
           error: jsonError.message,
           rawResponse: cleanedText,
         },
         { status: 500 }
-      );
+      )
     }
 
-    // Save to Supabase
-    try {
-      const { data, error } = await supabase
-        .from("learning_calendars")
-        .insert([
-          {
-            user_goal: userGoal,
-            duration: Number(duration),
-            generated_plan: parsedPlan.plan,
-            content_calendar: parsedPlan.calendar,
-            user_id: user.id
-          },
-        ]);
+    const dailyHours = parsedPlan.calendar.reduce(
+      (total, entry) => total + parseTimeCommitment(entry.timeCommitment),
+      0
+    ) / parsedPlan.calendar.length
 
+    const learningStyles = parsedPlan.calendar.map(
+      (entry) => entry.learningStyle.toLowerCase()
+    )
+
+    const styleCounts: { [key: string]: number } = {}
+    learningStyles.forEach((style) => {
+      styleCounts[style] = (styleCounts[style] || 0) + 1
+    })
+
+    const primaryStyle = Object.entries(styleCounts).reduce((a, b) =>
+      a[1] > b[1] ? a : b
+    )[0]
+
+    const insertPayload: DatabaseRow = {
+      user_id: user.id,
+      title: userGoal,
+      description: parsedPlan.introduction.description,
+      prompt_used: fullPrompt,
+      duration_days: duration,
+      daily_hours: Math.round(dailyHours), // Ensure this is an integer
+      learning_style: primaryStyle,
+      status: 'active',
+      start_date: new Date().toISOString().split('T')[0],
+      expected_end_date: calculateEndDate(duration),
+      actual_completion_date: null,
+      progress_percentage: 0,
+    }
+
+    try {
+      const { data, error } = await supabase.from('learning_calendars').insert([insertPayload])
+
+      console.log("from supabase:", data)
+      
       if (error) {
-        console.error("Error saving plan to Supabase:", error);
-        // Continue anyway - we can still return the plan
+        console.error('Error saving plan to Supabase:', error)
       } else {
-        console.log("Plan successfully saved to Supabase");
+        console.log('Plan successfully saved to Supabase')
       }
     } catch (dbError) {
-      console.error("Database error:", dbError);
-      // Continue anyway - we can still return the plan
+      console.error('Database error:', dbError)
     }
 
-    // Send successful response
-    console.log("Successfully parsed plan, sending response to frontend.");
+    console.log('Successfully parsed plan, sending response to frontend.')
     return NextResponse.json({
       plan: parsedPlan,
       modelVersion: geminiData.modelVersion,
       usageMetadata: geminiData.usageMetadata,
-    });
+    })
 
   } catch (error: any) {
-    console.error("Error in /api/generate-plan:", error);
+    console.error('Error in /api/generate-plan:', error)
     return NextResponse.json(
       {
-        message: "Error generating plan",
-        error: error.message || "Unknown error occurred",
+        message: 'Error generating plan',
+        error: error.message || 'Unknown error occurred',
       },
       { status: 500 }
-    );
+    )
   }
+}
+
+function parseTimeCommitment(time: string): number {
+  if (time.includes('-')) {
+    const [min, max] = time
+      .split('-')
+      .map((t) => parseFloat(t.trim().replace(/[^0-9.-]+/g, '')))
+    return (min + max) / 2
+  }
+  return parseFloat(time.replace(/[^0-9.-]+/g, ''))
+}
+
+function calculateEndDate(duration: number): string {
+  const startDate = new Date()
+  startDate.setDate(startDate.getDate() + duration)
+  return startDate.toISOString().split('T')[0]
 }

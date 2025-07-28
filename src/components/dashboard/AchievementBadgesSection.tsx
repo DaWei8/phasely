@@ -102,7 +102,7 @@ export default function AchievementBadges() {
       <div className="">
         {/* Header Section */}
         <div className="text-center w-full flex justify-between items-center mb-12">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl text-left font-bold text-gray-800 mb-4">
             Achievement Badges
           </h1>
           {/* <p className="text-gray-300 text-xl mb-8">
@@ -110,13 +110,13 @@ export default function AchievementBadges() {
           </p> */}
 
           {/* Progress Summary */}
-          <div className="inline-flex text-gray-800 items-center bg-blue-200/10 backdrop-blur-lg rounded-full pl-5 pr-7 py-4 border border-blue-700/20">
-            <div className="text-3xl mr-3">🏆</div>
+          <div className="inline-flex text-nowrap w-fit text-gray-800 items-center bg-blue-200/10 backdrop-blur-lg rounded-full pl-2 pr-3 lg:pl-5 lg:pr-7 py-3 border border-blue-700/20">
+            <div className=" text-lg lg:text-3xl ">🏆</div>
             <div className="text-left">
-              <div className="text-gray-700 font-bold text-md">
-                {unlockedCount} / {totalCount} Badges Earned
+              <div className="text-gray-700 font-bold lg:text-base text-sm">
+                {unlockedCount} / {totalCount} Earned
               </div>
-              <div className="text-gray-600 text-sm">
+              <div className="text-gray-600 text-xs lg:text-sm">
                 {Math.round((unlockedCount / totalCount) * 100)}% Complete
               </div>
             </div>

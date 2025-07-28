@@ -1,53 +1,101 @@
-"use client";
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase";
-import { CalendarItem } from "@/types/supabase";
+import { ArrowRight, Calendar, CheckCircle, Clock } from "lucide-react";
+import { useState } from "react";
 
-export default function TodayWidget() {
-    const [tasks, setTasks] = useState<CalendarItem[]>([]);
+interface CalendarItem {
+    id: string
+    title: string
+    description: string
+    day_number: number
+    is_completed: boolean
+    estimated_duration: number
+}
 
-    useEffect(() => {
-        (async () => {
-            const supabase = await createClient()
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
+export function TodayWidget() {
+    const [tasks, setTasks] = useState<CalendarItem[]>([
+        {
+            id: "1",
+            title: "Complete React Hooks Tutorial",
+            description: "Learn useState and useEffect",
+            day_number: 1,
+            is_completed: false,
+            estimated_duration: 120
+        },
+        {
+            id: "2",
+            title: "Practice JavaScript Exercises",
+            description: "Array methods and functions",
+            day_number: 1,
+            is_completed: false,
+            estimated_duration: 90
+        },
+        {
+            id: "3",
+            title: "Read TypeScript Documentation",
+            description: "Advanced types chapter",
+            day_number: 1,
+            is_completed: false,
+            estimated_duration: 60
+        }
+    ]);
 
-            const today = new Date();
-            const start = today.toISOString().split("T")[0];
-            const { data } = await supabase
-                .from("calendar_items")
-                .select("*")
-                .eq("is_completed", false)
-                .order("day_number", { ascending: true })
-                .limit(3);
-
-            setTasks(data ?? []);
-        })();
-    }, []);
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
+        <div
+            className="group relative rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-xl shadow-blue-200/20 border border-white/20 hover:shadow-2xl hover:shadow-blue-300/30 transition-all duration-500 transform hover:-translate-y-2"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {/* Animated background */}         
+            <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/10 via-blue-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-        <div className="relative rounded-xl w-full bg-white p-4 shadow">
-            {/* Animated background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br bg-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl" />
-            <h2 className="mb-2 text-lg font-semibold text-gray-600">Today</h2>
-            {tasks.length ? (
-                <ul className="space-y-2 text-sm">
-                    {tasks.map((t) => (
-                        <li key={t.id}>{t.title}</li>
-                    ))}
-                </ul>
-            ) : (
-                <p className="text-sm text-gray-400">Nothing scheduled</p>
-            )}
-            <div className={`
-        absolute inset-0 rounded-2xl
-        bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20
-        opacity-0 group-hover:opacity-100
-        transition-opacity duration-500
-        blur-sm -z-10
-        transform scale-105
-      `} />
+            <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-100 rounded-xl group-hover:bg-blue-200 transition-colors">
+                        <Calendar className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900">Today's Tasks</h2>
+                    <div className="ml-auto bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        {tasks.length}
+                    </div>
+                </div>
+
+                {tasks.length ? (
+                    <div className="space-y-3">
+                        {tasks.map((task, index) => (
+                            <div
+                                key={task.id}
+                                className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80 hover:bg-blue-50/80 transition-all duration-300 group-hover:transform group-hover:translate-x-1"
+                                style={{ animationDelay: `${index * 100}ms` }}
+                            >
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                <div className="flex-1">
+                                    <p className="font-medium text-gray-900 text-sm">{task.title}</p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <Clock className="w-3 h-3 text-gray-500" />
+                                        <span className="text-xs text-gray-500">{task.estimated_duration}min</span>
+                                    </div>
+                                </div>
+                                <CheckCircle className="w-4 h-4 text-gray-400 hover:text-green-500 cursor-pointer transition-colors" />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8">
+                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <CheckCircle className="w-8 h-8 text-blue-500" />
+                        </div>
+                        <p className="text-gray-600">All caught up! Great work! 🎉</p>
+                    </div>
+                )}
+
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                    <button className="w-full flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                        <span>View All Tasks</span>
+                        <ArrowRight className="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
