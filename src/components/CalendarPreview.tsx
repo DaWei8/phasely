@@ -42,7 +42,7 @@ export default function CalendarPreview() {
   const phaseColors = {
     1: 'green',
     2: 'blue', 
-    3: 'purple',
+    3: 'blue',
     4: 'yellow',
     5: 'red'
   }
@@ -222,7 +222,7 @@ END:VEVENT`
           </button>
           <button
             onClick={exportCalendar}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 w-full h-fit hover:from-blue-700 hover:to-purple-700 text-white px-2 md:px-4 py-3 rounded-md transition-colors"
+            className="bg-gradient-to-r from-blue-600 to-blue-600 w-full h-fit hover:from-blue-700 hover:to-blue-700 text-white px-2 md:px-4 py-3 rounded-md transition-colors"
           >
             <i className="fas fa-download mr-2"></i>Export ICS
           </button>
@@ -239,8 +239,8 @@ END:VEVENT`
           <div className="text-2xl font-bold text-green-600">{totalHours}</div>
           <div className="text-sm text-gray-600">Total Hours</div>
         </div>
-        <div className="bg-purple-50 p-4 rounded-lg text-center">
-          <div className="text-2xl font-bold text-purple-600">{currentCalendarData.reduce((sum, item) => sum + (item.resources?.length || 0), 0)}</div>
+        <div className="bg-blue-50 p-4 rounded-lg text-center">
+          <div className="text-2xl font-bold text-blue-600">{currentCalendarData.reduce((sum, item) => sum + (item.resources?.length || 0), 0)}</div>
           <div className="text-sm text-gray-600">Resources</div>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg text-center">
@@ -333,7 +333,7 @@ END:VEVENT`
         </button>
         <button
           onClick={exportCalendar}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 w-full h-fit hover:from-blue-700 hover:to-purple-700 text-white px-2 md:px-4 py-3 rounded-md transition-colors"
+          className="bg-gradient-to-r from-blue-600 to-blue-600 w-full h-fit hover:from-blue-700 hover:to-blue-700 text-white px-2 md:px-4 py-3 rounded-md transition-colors"
         >
           <i className="fas fa-download mr-2"></i>Export
         </button>
@@ -510,7 +510,7 @@ END:VEVENT`
               </button>
               <button
                 onClick={saveManualICS}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
               >
                 Add Event
               </button>

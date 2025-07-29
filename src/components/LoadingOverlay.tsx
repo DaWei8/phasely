@@ -10,7 +10,7 @@ interface LoadingOverlayProps {
 const loadingSteps = [
   { icon: AcademicCapIcon, text: "Analyzing your learning goals...", color: "text-blue-500" },
   { icon: CalendarIcon, text: "Creating personalized timeline...", color: "text-green-500" },
-  { icon: SparklesIcon, text: "Curating the best resources...", color: "text-purple-500" },
+  { icon: SparklesIcon, text: "Curating the best resources...", color: "text-blue-500" },
 ]
 
 export default function LoadingOverlay({ isVisible = true }: LoadingOverlayProps) {
@@ -34,7 +34,7 @@ export default function LoadingOverlay({ isVisible = true }: LoadingOverlayProps
             {/* Header */}
             <div className="text-center mb-8">
               <motion.div
-                className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4"
+                className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-4"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               >
@@ -98,7 +98,7 @@ export default function LoadingOverlay({ isVisible = true }: LoadingOverlayProps
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
+                  className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
                   transition={{ 

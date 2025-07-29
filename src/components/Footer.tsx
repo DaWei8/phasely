@@ -104,7 +104,7 @@ export default function Footer() {
                 <span>AI-Powered</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <i className="fas fa-mobile-alt text-purple-500"></i>
+                <i className="fas fa-mobile-alt text-blue-500"></i>
                 <span>Mobile Friendly</span>
               </div>
             </div>

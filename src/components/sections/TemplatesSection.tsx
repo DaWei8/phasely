@@ -39,7 +39,7 @@ export default function TemplatesSection(
       name: 'Mobile App Development',
       description: 'React Native, iOS, Android',
       icon: 'fas fa-mobile-alt',
-      color: 'purple',
+      color: 'blue',
       duration: 45,
       prompt: "I want to learn React Native mobile app development in 45 days. I have some JavaScript experience. Include building 3-4 complete apps for both iOS and Android, with focus on navigation, state management, and API integration."
     },
@@ -96,7 +96,7 @@ export default function TemplatesSection(
     const colorMap = {
       blue: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700',
       green: 'bg-green-50 hover:bg-green-100 border-green-200 text-green-700',
-      purple: 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-purple-700',
+      blue: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700',
       yellow: 'bg-yellow-50 hover:bg-yellow-100 border-yellow-200 text-yellow-700',
       orange: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-orange-700',
       pink: 'bg-pink-50 hover:bg-pink-100 border-pink-200 text-pink-700'
@@ -107,7 +107,7 @@ export default function TemplatesSection(
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg mb-8">
       <h2 className="text-lg lg:text-xl font-semibold mb-4 flex items-center">
-        <i className="fas fa-layer-group text-purple-600 mr-2"></i>
+        <i className="fas fa-layer-group text-blue-600 mr-2"></i>
         Prebuilt Templates
       </h2>
       
@@ -146,12 +146,12 @@ export default function TemplatesSection(
         ))}
       </div>
       
-      <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
+      <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-blue-200">
         <div className="flex items-center mb-2">
-          <i className="fas fa-magic text-purple-600 mr-2"></i>
-          <span className="font-medium text-purple-900">Template Benefits</span>
+          <i className="fas fa-magic text-blue-600 mr-2"></i>
+          <span className="font-medium text-blue-900">Template Benefits</span>
         </div>
-        <ul className="text-sm text-purple-800 space-y-1">
+        <ul className="text-sm text-blue-800 space-y-1">
           <li>• Pre-configured learning paths created by experts</li>
           <li>• Optimized duration and daily time commitments</li>
           <li>• Curated resources and project suggestions</li>

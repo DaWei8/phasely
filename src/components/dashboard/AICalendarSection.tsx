@@ -2,6 +2,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion'
 import { SparklesIcon, AcademicCapIcon, CalendarIcon } from '@heroicons/react/24/outline'
 import { generateAICalendar } from '@/lib/api/calendar-api'
@@ -19,14 +20,21 @@ const examplePrompts = {
 
 export default function AICalendarSection({ onCancel }: { onCancel?: () => void }) {
   const [prompt, setPrompt] = useState('')
+  const router = useRouter();
   const {
     calendarSettings,
     updateSettings,
+    // currentCalendarData,
     setCalendarData,
     setGenerating,
     isGenerating,
     saveToHistory
   } = useCalendarStore()
+
+   function handleReload() {
+    window.location.reload();
+    router.refresh(); // re-fetches server components & data
+  }
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -43,8 +51,10 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
       setGenerating(true)
       const data = await generateAICalendar(prompt, calendarSettings)
       setCalendarData(data)
+      console.log("data received from api", data)
       saveToHistory()
       toast.success('Calendar generated successfully!')
+      handleReload()
       onCancel?.()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to generate calendar')
@@ -59,7 +69,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
   }
 
   return (
-    <div className='relative w-full'>
+    <div className='relative flex flex-col w-full'>
       <div className=' w-full sticky z-30 top-0 flex justify-end' >
         <X className='w-7 h-7 cursor-pointer text-red-700' onClick={onCancel} />
       </div>
@@ -73,7 +83,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label className="flex text-xl font-semibold text-gray-700">
+          <label className="flex text-xl font-semibold text-gray-700 dark:text-gray-200">
             <AcademicCapIcon className="inline text-blue-600 h-6 w-6 mr-2 " />
             <p className='w-full' >
               Describe Your Learning Goals
@@ -83,13 +93,13 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={6}
-            className="input-field resize-none"
+            className="input-field h-40 resize-none w-full "
             placeholder="Example: I want to learn full-stack web development in 60 days. I'm a complete beginner and want to focus on React, Node.js, and MongoDB. I can dedicate 2-3 hours per day and prefer hands-on projects over theory. Include some portfolio projects I can build to showcase my skills."
           />
 
           {/* Example Prompts */}
           <div className="space-y-3">
-            <p className="font-medium text-gray-700">Quick Examples:</p>
+            <p className="font-medium text-gray-700 dark:text-gray-200">Quick Examples:</p>
             <div className="flex flex-wrap gap-3">
               {Object.entries({
                 webdev: 'Full-Stack Web Dev',
@@ -100,7 +110,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
                 <motion.button
                   key={key}
                   onClick={() => setExamplePrompt(key as keyof typeof examplePrompts)}
-                  className="px-4 py-2 text-sm bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
+                  className="px-4 py-2 text-sm bg-blue-50 dark:bg-opacity-15 text-blue-700 dark:text-gray-200 rounded-full hover:bg-blue-100 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -117,12 +127,12 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h3 className="text-xl font-semibold text-gray-700">
+          <h3 className="text-xl flex items-center font-semibold text-gray-700 dark:text-gray-200 ">
             <CalendarIcon className="inline h-6 w-6 text-blue-600 mr-2" />
             Calendar Settings
           </h3>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 w-full gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Start Date
@@ -131,7 +141,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
                 type="date"
                 value={calendarSettings.startDate}
                 onChange={(e) => updateSettings({ startDate: e.target.value })}
-                className="input-field"
+                className="input-field w-full"
               />
             </div>
 
@@ -143,7 +153,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
                 type="time"
                 value={calendarSettings.startTime}
                 onChange={(e) => updateSettings({ startTime: e.target.value })}
-                className="input-field"
+                className="input-field w-full"
               />
             </div>
 
@@ -155,7 +165,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
                   onChange={(e) => updateSettings({ skipWeekends: e.target.checked })}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">Skip weekends</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">Skip weekends</span>
               </label>
             </div>
           </div>
@@ -176,7 +186,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
               max="120"
               value={calendarSettings.duration}
               onChange={(e) => updateSettings({ duration: parseInt(e.target.value) || 14 })}
-              className="input-field"
+              className="input-field w-full"
             />
             <p className="text-xs text-gray-500">Between 3 and 120 days</p>
           </div>
@@ -188,7 +198,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
             <select
               value={calendarSettings.timeCommitment}
               onChange={(e) => updateSettings({ timeCommitment: e.target.value })}
-              className="select-field"
+              className="select-field w-full"
             >
               <option value="1">1 hour/day</option>
               <option value="2">2 hours/day</option>
@@ -206,7 +216,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
             <select
               value={calendarSettings.learningStyle}
               onChange={(e) => updateSettings({ learningStyle: e.target.value })}
-              className="select-field"
+              className="select-field w-full "
             >
               <option value="balanced">Balanced (Theory + Practice)</option>
               <option value="hands-on">Hands-on (Project-based)</option>

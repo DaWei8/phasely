@@ -50,7 +50,7 @@ interface DatabaseRow {
   status: string
   start_date: string | null
   expected_end_date: string | null
-  actual_completion_date: string | null
+  actual_completion_date?: string | null
   progress_percentage: number
   created_at?: string
   updated_at?: string
@@ -62,6 +62,19 @@ export async function POST(request: NextRequest) {
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  // Ensure the user exists in user_profiles
+  const { error: upsertError } = await supabase
+    .from('user_profiles')
+    .upsert({ id: user.id }, { onConflict: 'id' })
+
+  if (upsertError) {
+    console.error('Could not upsert user profile:', upsertError)
+    return NextResponse.json(
+      { message: 'Could not upsert user profile', error: upsertError.message },
+      { status: 500 }
+    )
   }
 
   try {
@@ -203,38 +216,106 @@ export async function POST(request: NextRequest) {
       a[1] > b[1] ? a : b
     )[0]
 
-    const insertPayload: DatabaseRow = {
+    // Start a database transaction
+    const { data: calendarData, error: calendarError } = await supabase
+      .from('learning_calendars')
+      .insert([{
+        user_id: user.id,
+        title: userGoal,
+        description: parsedPlan.introduction.description,
+        prompt_used: fullPrompt,
+        duration_days: duration,
+        daily_hours: Math.round(dailyHours),
+        learning_style: primaryStyle,
+        status: 'active',
+        start_date: new Date().toISOString().split('T')[0],
+        expected_end_date: calculateEndDate(duration),
+        progress_percentage: 0,
+      }])
+      .select('id')
+      .single()
+
+    if (calendarError) {
+      console.error('Error saving learning calendar to Supabase:', calendarError)
+      return NextResponse.json(
+        { message: 'Failed to create learning calendar', error: calendarError.message },
+        { status: 500 }
+      )
+    }
+
+    const calendarId = calendarData.id
+
+    // Insert calendar items
+    const calendarItems = parsedPlan.calendar.map(entry => ({
+      calendar_id: calendarId,
+      day_number: entry.day,
+      phase_number: entry.phaseNumber,
+      title: entry.taskName,
+      description: entry.taskDescription,
+      estimated_hours: parseTimeCommitment(entry.timeCommitment),
+    }))
+
+    const { data: calendarItemsData, error: calendarItemsError } = await supabase
+      .from('calendar_items')
+      .insert(calendarItems)
+      .select('id, day_number')
+
+    if (calendarItemsError) {
+      console.error('Error saving calendar items to Supabase:', calendarItemsError)
+      // Clean up the learning calendar if calendar items failed
+      await supabase.from('learning_calendars').delete().eq('id', calendarId)
+      return NextResponse.json(
+        { message: 'Failed to create calendar items', error: calendarItemsError.message },
+        { status: 500 }
+      )
+    }
+
+    // Create initial progress entries for each calendar item
+    const today = new Date().toISOString().split('T')[0]
+    const progressEntries = calendarItemsData?.map((item, index) => ({
       user_id: user.id,
-      title: userGoal,
-      description: parsedPlan.introduction.description,
-      prompt_used: fullPrompt,
-      duration_days: duration,
-      daily_hours: Math.round(dailyHours), // Ensure this is an integer
-      learning_style: primaryStyle,
-      status: 'active',
-      start_date: new Date().toISOString().split('T')[0],
-      expected_end_date: calculateEndDate(duration),
-      actual_completion_date: null,
-      progress_percentage: 0,
+      calendar_id: calendarId,
+      calendar_item_id: item.id,
+      date: calculateDateForDay(item.day_number),
+      hours_spent: 0,
+      completion_status: 'not_started',
+    })) || []
+
+    const { error: progressError } = await supabase
+      .from('progress_entries')
+      .insert(progressEntries)
+
+    if (progressError) {
+      console.error('Error creating progress entries:', progressError)
+      // Clean up the learning calendar and calendar items if progress entries failed
+      await supabase.from('learning_calendars').delete().eq('id', calendarId)
+      return NextResponse.json(
+        { message: 'Failed to create progress entries', error: progressError.message },
+        { status: 500 }
+      )
     }
 
-    try {
-      const { data, error } = await supabase.from('learning_calendars').insert([insertPayload])
+    // Update user profile with the primary learning style if it's different
+    const { data: currentProfile } = await supabase
+      .from('user_profiles')
+      .select('learning_style')
+      .eq('id', user.id)
+      .single()
 
-      console.log("from supabase:", data)
-      
-      if (error) {
-        console.error('Error saving plan to Supabase:', error)
-      } else {
-        console.log('Plan successfully saved to Supabase')
-      }
-    } catch (dbError) {
-      console.error('Database error:', dbError)
+    if (currentProfile && currentProfile.learning_style !== primaryStyle) {
+      await supabase
+        .from('user_profiles')
+        .update({ 
+          learning_style: primaryStyle,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id)
     }
 
-    console.log('Successfully parsed plan, sending response to frontend.')
+    console.log('Plan successfully saved to all tables')
     return NextResponse.json({
       plan: parsedPlan,
+      calendarId,
       modelVersion: geminiData.modelVersion,
       usageMetadata: geminiData.usageMetadata,
     })
@@ -264,5 +345,11 @@ function parseTimeCommitment(time: string): number {
 function calculateEndDate(duration: number): string {
   const startDate = new Date()
   startDate.setDate(startDate.getDate() + duration)
+  return startDate.toISOString().split('T')[0]
+}
+
+function calculateDateForDay(dayNumber: number): string {
+  const startDate = new Date()
+  startDate.setDate(startDate.getDate() + dayNumber - 1)
   return startDate.toISOString().split('T')[0]
 }

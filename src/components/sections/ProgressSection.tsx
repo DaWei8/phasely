@@ -38,7 +38,7 @@ export default function ProgressSection() {
 
       {/* Progress Stats */}
       <motion.div
-        className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6"
+        className="bg-gradient-to-r from-blue-50 to-blue-50 rounded-xl p-6"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
@@ -55,7 +55,7 @@ export default function ProgressSection() {
         {/* Progress Bar */}
         <div className="w-full bg-white rounded-full h-4 shadow-inner">
           <motion.div
-            className="bg-gradient-to-r from-blue-500 to-purple-500 h-4 rounded-full"
+            className="bg-gradient-to-r from-blue-500 to-blue-500 h-4 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${stats.percentage}%` }}
             transition={{ duration: 1, ease: "easeOut" }}

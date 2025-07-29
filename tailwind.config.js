@@ -5,6 +5,7 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+darkMode: 'class',   // <-- add this line
   theme: {
     extend: {
       fontFamily: {
@@ -12,11 +13,7 @@ module.exports = {
         funnel: ['var(--font-funnel)', 'sans-serif'],
         sans: ['var(--font-poppins)', 'ui-sans-serif', 'system-ui'],
       },
-      colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-      },
     },
   },
   plugins: [],
-}
+};

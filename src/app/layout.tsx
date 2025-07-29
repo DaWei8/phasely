@@ -44,7 +44,7 @@ export default function RootLayout({
       <body className="font-funnel max-w-screen bg-gray-50 dark:bg-gray-900 dark:text-white text-gray-800 min-h-screen antialiased">
         {children}
         <Toaster
-          position="top-right"
+          position="top-center"
           toastOptions={{
             duration: 4000,
             style: {

@@ -104,15 +104,6 @@ const nav: NavItem[] = [
     requiresPro: true
   },
   {
-    name: "History",
-    href: "/dashboard/history",
-    icon: <History className="w-5 h-5" />,
-    badge: 0,
-    category: "data",
-    keywords: ["history", "past", "timeline", "archive"],
-    shortcuts: ["⌘", "6"]
-  },
-  {
     name: "Analytics",
     href: "/dashboard/analytics",
     icon: <TrendingUp className="w-5 h-5" />,
@@ -120,6 +111,15 @@ const nav: NavItem[] = [
     category: "data",
     keywords: ["analytics", "insights", "reports", "data"],
     isComingSoon: true
+  },
+  {
+    name: "History",
+    href: "/dashboard/history",
+    icon: <History className="w-5 h-5" />,
+    badge: 0,
+    category: "data",
+    keywords: ["history", "past", "timeline", "archive"],
+    shortcuts: ["⌘", "6"]
   },
   {
     name: "Settings",
@@ -372,7 +372,7 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center">
             <Image
-              src="/assets/phasely-logo.svg"
+              src={isDark ? "/assets/phasely-logo.svg" : "/assets/phasely-logo-2.svg"}
               alt="Logo"
               width={120}
               height={32}
@@ -499,7 +499,7 @@ export default function DashboardLayout({
                       </span>
                     )}
                     {item.requiresPro && (
-                      <span className="px-1.5 py-0.5 text-xs font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 rounded">
+                      <span className="px-1.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 rounded">
                         PRO
                       </span>
                     )}
@@ -682,7 +682,7 @@ export default function DashboardLayout({
           </button>
         </div>
 
-        {!isCollapsed && (
+        {/* {!isCollapsed && (
           <div className="px-3">
             <button
               onClick={() =>
@@ -691,16 +691,16 @@ export default function DashboardLayout({
               className={clsx(
                 "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium",
                 appState.focusMode
-                  ? "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300"
+                  ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300"
                   : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
               )}
             >
               <Eye className="w-4 h-4" />
               <span>Focus Mode</span>
-              {appState.focusMode && <div className="ml-auto w-2 h-2 bg-purple-500 rounded-full animate-pulse" />}
+              {appState.focusMode && <div className="ml-auto w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </>
   );
@@ -926,9 +926,9 @@ export default function DashboardLayout({
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-4 right-4 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-4 py-2 rounded-full text-sm font-medium shadow-lg z-40 flex items-center gap-2"
+            className="fixed bottom-4 right-4 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full text-sm font-medium shadow-lg z-40 flex items-center gap-2"
           >
-            <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
             Focus Mode Active
           </motion.div>
         )}

@@ -99,7 +99,7 @@ export function StatsCard({
           <div
             key={i}
             className={`
-              absolute w-1 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full
+              absolute w-1 h-1 bg-gradient-to-r from-blue-400 to-blue-400 rounded-full
               opacity-0 group-hover:opacity-60
               transition-all duration-1000 delay-${i * 100}
               group-hover:animate-pulse
@@ -185,7 +185,7 @@ export function StatsCard({
           `} />
           <div className={`
             w-1 h-1 rounded-full mt-2
-            bg-gradient-to-r ${color.replace('text-', 'from-').replace('-500', '-400')} to-purple-400
+            bg-gradient-to-r ${color.replace('text-', 'from-').replace('-500', '-400')} to-blue-400
             transform transition-all duration-300
             ${isHovered ? 'scale-150 animate-ping' : ''}
           `} />
@@ -195,7 +195,7 @@ export function StatsCard({
       {/* Enhanced border glow effect */}
       <div className={`
         absolute inset-0 rounded-2xl
-        bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20
+        bg-gradient-to-r from-blue-500/20 via-blue-500/20 to-blue-500/20
         opacity-0 group-hover:opacity-100
         transition-opacity duration-500
         blur-sm -z-10
@@ -234,7 +234,7 @@ export default function StatsCardDemo() {
       icon: "📊",
       title: "Conversion Rate",
       value: "3.24",
-      color: "text-purple-500",
+      color: "text-blue-500",
       unit: "%",
       trend: "down" as const,
       trendValue: "-0.5%",
@@ -253,7 +253,7 @@ export default function StatsCardDemo() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
@@ -264,7 +264,7 @@ export default function StatsCardDemo() {
           </p>
           <button 
             onClick={() => setRefreshKey(prev => prev + 1)}
-            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105"
           >
             Restart Animations
           </button>

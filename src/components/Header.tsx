@@ -82,7 +82,7 @@ export default function Header() {
         <div className="gradient-bg text-white pb-16 pt-20 bg-cover bg-center overflow-hidden relative">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-600/20" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-600/20" />
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
                 <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">

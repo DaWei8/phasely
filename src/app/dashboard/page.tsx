@@ -1,8 +1,21 @@
+// app/dashboard/page.tsx
 "use client";
 import { useState, useEffect } from "react";
-import { Sparkles, Calendar, Target, Plus, BookOpen, Clock, TrendingUp, Flame, CheckCircle, ArrowRight, Star, Zap, Award } from 'lucide-react';
-// import TodayWidget from "@/components/dashboard/TodayWidget";
-// import StreakWidget from "@/components/dashboard/StreakWidget";
+import {
+  Sparkles,
+  Calendar,
+  Target,
+  Plus,
+  BookOpen,
+  Clock,
+  TrendingUp,
+  Flame,
+  CheckCircle,
+  ArrowRight,
+  Star,
+  Zap,
+  Award
+} from "lucide-react";
 import { QuickActionsWidget } from "@/components/dashboard/QuickActions";
 import { StatsWidget } from "@/components/dashboard/StatsWidget";
 import { AchievementsWidget } from "@/components/dashboard/AchievementsWidget";
@@ -11,46 +24,39 @@ import { MotivationWidget } from "@/components/dashboard/MotivationWidget";
 import { TodayWidget } from "@/components/dashboard/TodayWidget";
 import { StreakWidget } from "@/components/dashboard/StreakWidget";
 
-
-
 export default function DashboardPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [greeting, setGreeting] = useState("");
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    
     const hour = new Date().getHours();
     if (hour < 12) setGreeting("Good Morning");
     else if (hour < 17) setGreeting("Good Afternoon");
     else setGreeting("Good Evening");
-
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
     });
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+  const formatDate = (date: Date) =>
+    date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     });
-  };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-6">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Animated Header */}
         <div className="text-left mb-8">
-          <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl shadow-blue-200/20 border border-white/20">
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl shadow-blue-200/20 dark:shadow-blue-900/20 border border-white/20 dark:border-gray-700/20">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -60,15 +66,21 @@ export default function DashboardPage() {
                       <Sparkles className="h-8 w-8" />
                     </div>
                   </div>
-                  <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 bg-clip-text text-transparent">
+                  <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
                     {greeting}, John!
                   </h1>
                 </div>
-                <p className="text-gray-600 text-sm lg:text-lg">Ready to continue your learning journey?</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm lg:text-lg">
+                  Ready to continue your learning journey?
+                </p>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900">{formatTime(currentTime)}</div>
-                <div className="text-sm text-gray-600">{formatDate(currentTime)}</div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {formatTime(currentTime)}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  {formatDate(currentTime)}
+                </div>
               </div>
             </div>
           </div>

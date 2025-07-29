@@ -34,7 +34,7 @@ export const AchievementBadge = ({
     
     switch (badge.rarity || "common") {
       case "legendary": return "from-blue-400 via-orange-500 to-red-500";
-      case "epic": return "from-purple-400 via-pink-500 to-red-500";
+      case "epic": return "from-blue-400 via-pink-500 to-red-500";
       case "rare": return "from-blue-400 via-blue-500 to-blue-600";
       default: return "from-green-400 via-green-500 to-green-600";
     }
@@ -45,7 +45,7 @@ export const AchievementBadge = ({
     
     switch (badge.rarity || "common") {
       case "legendary": return "shadow-blue-300/50";
-      case "epic": return "shadow-purple-300/50";
+      case "epic": return "shadow-blue-300/50";
       case "rare": return "shadow-blue-300/30";
       default: return "shadow-blue-300/30";
     }
@@ -202,7 +202,7 @@ export const AchievementBadge = ({
             <div className={`
               inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
               ${badge.rarity === 'legendary' ? 'bg-blue-100 text-blue-800' :
-                badge.rarity === 'epic' ? 'bg-purple-100 text-purple-800' :
+                badge.rarity === 'epic' ? 'bg-blue-100 text-blue-800' :
                 badge.rarity === 'rare' ? 'bg-blue-100 text-blue-800' :
                 'bg-gray-100 text-gray-800'}
               transform transition-all duration-300

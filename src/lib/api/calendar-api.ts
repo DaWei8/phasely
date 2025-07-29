@@ -2,16 +2,16 @@ import { HistoryItem } from "@/components/sections/HistorySection"
 import { CalendarItem, CalendarSettings, Resources } from "../store/calendar-store"
 
 // Get correct API base URL for Next.js
-function getApiBase(): string {
-  // For Next.js API routes, use relative URLs
-  return ''
-}
+// function getApiBase(): string {
+//   // For Next.js API routes, use relative URLs
+//   return (process.env.NEXT_PUBLIC_SITE_URL)
+// }
 
 export async function generateAICalendar(
   prompt: string, 
   settings: CalendarSettings
 ): Promise<CalendarItem[]> {
-  const API_BASE = getApiBase()
+  const API_BASE = process.env.NEXT_PUBLIC_SITE_URL
   
   try {
     let allCalendar: CalendarItem[] = []
@@ -46,6 +46,7 @@ export async function generateAICalendar(
 
       const data = await response.json()
       console.log("Received response from API:", data)
+
       
       // Handle the response structure from Next.js API
       if (data.plan && data.plan.calendar) {
@@ -91,7 +92,7 @@ export async function generateAICalendar(
 }
 
 export async function loadHistory(): Promise<HistoryItem[]> {
-  const API_BASE = getApiBase()
+  const API_BASE = process.env.NEXT_PUBLIC_SITE_URL
   
   try {
     console.log("Loading history from Next.js API...")
@@ -151,7 +152,7 @@ export async function loadHistory(): Promise<HistoryItem[]> {
 }
 
 export async function deleteHistoryItem(id: number): Promise<void> {
-  const API_BASE = getApiBase()
+  const API_BASE = process.env.NEXT_PUBLIC_SITE_URL
   
   try {
     const response = await fetch(`${API_BASE}/api/history?id=${id}`, {
