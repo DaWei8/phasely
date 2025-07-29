@@ -96,7 +96,6 @@ export default function TemplatesSection(
     const colorMap = {
       blue: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700',
       green: 'bg-green-50 hover:bg-green-100 border-green-200 text-green-700',
-      blue: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700',
       yellow: 'bg-yellow-50 hover:bg-yellow-100 border-yellow-200 text-yellow-700',
       orange: 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-orange-700',
       pink: 'bg-pink-50 hover:bg-pink-100 border-pink-200 text-pink-700'
