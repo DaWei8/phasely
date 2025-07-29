@@ -79,7 +79,7 @@ export default function Header() {
 
       {/* Hero Section */}
       <div className="relative">
-        <div className="gradient-bg text-white pb-16 pt-20 bg-cover bg-center overflow-hidden relative">
+        <div className="gradient-bg bg-blue-800 text-white pb-16 pt-20 bg-cover bg-center overflow-hidden relative">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-600/20" />

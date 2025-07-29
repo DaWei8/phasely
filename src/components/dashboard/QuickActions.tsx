@@ -4,14 +4,14 @@ export function QuickActionsWidget() {
   const actions = [
     {
       icon: Plus,
-      label: "New Learning Path",
-      href: "/dashboard/calendar/create",
+      label: "New Calendars",
+      href: "/dashboard/calendars/",
       color: "blue",
       description: "Start your next journey"
     },
     {
       icon: BookOpen,
-      label: "My Learning Paths",
+      label: "My Calendars",
       href: "/dashboard/calendars",
       color: "blue",
       description: "Continue where you left off"
