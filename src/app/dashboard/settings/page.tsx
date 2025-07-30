@@ -525,8 +525,8 @@ const NotificationsTab = ({
 }: NotificationsTabProps) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-8 py-6">
-        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 lg:px-6 py-6">
+        <h2 className="text-2xl lg:text-2xl font-bold text-white flex items-center gap-3">
           <Bell size={24} />
           Notification Preferences
         </h2>
@@ -535,7 +535,7 @@ const NotificationsTab = ({
         </p>
       </div>
 
-      <form onSubmit={onSave} className="p-8">
+      <form onSubmit={onSave} className="p-4">
         <div className="space-y-6">
           {/* Email Notifications */}
           <div className="flex py-3 items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-xl">
@@ -884,7 +884,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-4 lg:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

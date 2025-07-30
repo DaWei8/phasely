@@ -78,12 +78,12 @@ export default function AICalendarSection() {
 
         {/* Prompt Input */}
         <motion.div 
-          className="space-y-4"
+          className="space-y-4 w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label className="block text-xl font-semibold text-gray-700">
+          <label className="block text-xl w-full font-semibold text-gray-700">
             <AcademicCapIcon className="inline text-blue-600 h-6 w-6 mr-2" />
             Describe Your Learning Goals
           </label>
@@ -92,7 +92,7 @@ export default function AICalendarSection() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={6}
-            className="input-field resize-none"
+            className="input-field h-44 w-full resize-none"
             placeholder="Example: I want to learn full-stack web development in 60 days. I'm a complete beginner and want to focus on React, Node.js, and MongoDB. I can dedicate 2-3 hours per day and prefer hands-on projects over theory. Include some portfolio projects I can build to showcase my skills."
           />
 

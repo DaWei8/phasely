@@ -127,6 +127,7 @@ export default function CalendarDetailPage() {
 
   const handleCompleteDay = async (dayId: string, isCompleted: boolean) => {
     const supabase = await createClient();
+    console.log("this should be the calendar item id: ", dayId)
     
     try {
       const { error } = await supabase
@@ -137,7 +138,13 @@ export default function CalendarDetailPage() {
         })
         .eq("id", dayId);
 
-      if (!error) {
+      const { error: pError } = await supabase
+        .from("progress_entries")
+        .update({ 
+          completion_status: isCompleted,
+        }).eq("calendar_item_id", dayId)
+
+      if (!error || !pError) {
         setCalendarItems(prev => prev.map(item => 
           item.id === dayId 
             ? { ...item, is_completed: isCompleted, completed_at: isCompleted ? new Date().toISOString() : null }
@@ -174,7 +181,17 @@ export default function CalendarDetailPage() {
         })
         .eq("id", editingDay);
 
-      if (!error) {
+      const { error: pError } = await supabase
+        .from("progress_entries")
+        .update({
+          notes: editNotes,
+          difficulty_rating: editDifficulty,
+          satisfaction_rating: editSatisfaction,
+          hours_spent: editActualHours,
+        })
+        .eq("calender_item_id", editingDay);
+
+      if (!error || !pError) {
         setCalendarItems(prev => prev.map(item => 
           item.id === editingDay 
             ? { 
@@ -332,7 +349,7 @@ export default function CalendarDetailPage() {
           },
           { 
             label: 'Target Hours', 
-            value: `${calendar.daily_hours}h`, 
+            value: `${calendar.daily_hours} h`, 
             icon: Target, 
             color: 'orange',
             percentage: 100
@@ -371,7 +388,7 @@ export default function CalendarDetailPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-3.5 lg:p-6 pb-10"
       >
         <div className="flex items-center gap-3 mb-8">
           <Calendar className="w-6 h-6 text-blue-600" />
@@ -382,7 +399,7 @@ export default function CalendarDetailPage() {
 
         <div className="grid grid-cols-7 gap-4 mb-6">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center font-semibold p-2 w-full bg-gray-200 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-400 py-2">
+            <div key={day} className="text-center uppercase truncate text-xs md:text-base font-semibold p-2 w-full bg-gray-200 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-400 py-2">
               {day}
             </div>
           ))}
@@ -450,7 +467,7 @@ export default function CalendarDetailPage() {
                       </p>
                       <div className="flex items-center mt-auto gap-1 text-xs text-gray-500 dark:text-gray-400">
                         <Clock className="w-3 h-3" />
-                        <span>{item.estimated_hours}h</span>
+                        <span>{item.estimated_hours} {item.estimated_hours >= 12? "m" : "h"}</span>
                       </div>
                     </div>
                   )}
@@ -532,7 +549,7 @@ export default function CalendarDetailPage() {
                       <span className="font-medium text-gray-900 dark:text-gray-100">Estimated Time</span>
                     </div>
                     <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                      {selectedDay.estimated_hours} hours
+                      {selectedDay.estimated_hours} {selectedDay.estimated_hours >= 12 ? "mins" : "hours" }
                     </p>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">

@@ -155,8 +155,6 @@ export default function CalendarPage() {
     }
   };
 
-  console.log(filteredCalendars)
-
   return (
     <div className="mx-auto max-w-7xl p-6 lg:pt-8 space-y-8">
       {/* Header Section */}
@@ -250,6 +248,7 @@ export default function CalendarPage() {
             <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
+        
       </motion.div>
 
       {/* Calendar Grid */}

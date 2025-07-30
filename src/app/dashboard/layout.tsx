@@ -69,7 +69,7 @@ const nav: NavItem[] = [
     name: "My Calendars",
     href: "/dashboard/calendars",
     icon: <CalendarCheck className="w-5 h-5" />,
-    badge: 2,
+    badge: 0,
     category: "main",
     keywords: ["calendar", "schedule", "events", "appointments"],
     shortcuts: ["⌘", "2"],
@@ -88,7 +88,7 @@ const nav: NavItem[] = [
     name: "Achievements",
     href: "/dashboard/achievements",
     icon: <Medal className="w-5 h-5" />,
-    badge: 5,
+    badge: 0,
     category: "main",
     keywords: ["achievements", "badges", "rewards", "goals"],
     shortcuts: ["⌘", "4"]
@@ -97,7 +97,7 @@ const nav: NavItem[] = [
     name: "Habits",
     href: "/dashboard/habits",
     icon: <HeartPulse className="w-5 h-5" />,
-    badge: 3,
+    badge: 0,
     category: "main",
     keywords: ["habits", "routines", "health", "tracking"],
     shortcuts: ["⌘", "5"],
@@ -419,7 +419,7 @@ export default function DashboardLayout({
                 placeholder="Search or press ⌘K"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-5 pr-4 py-2 text-sm rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-8 pr-4 py-2 text-sm rounded-lg border bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -512,7 +512,7 @@ export default function DashboardLayout({
                   {item.shortcuts && (
                     <div className="flex gap-0.5">
                       {item.shortcuts.map((k, idx) => (
-                        <kbd key={idx} className="px-1 py-0.5 text-xs bg-gray-200 dark:bg-gray-700 rounded">
+                        <kbd key={idx} className="px-1 hidden md:block py-0.5 text-xs bg-gray-200 dark:bg-gray-700 rounded">
                           {k}
                         </kbd>
                       ))}
@@ -590,7 +590,7 @@ export default function DashboardLayout({
 
       {/* User section */}
       <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-3 px-3 py-2">
+        <div className="flex items-center gap-3 py-2">
           <div className="relative w-10 h-10 shrink-0">
             {user?.user_metadata?.avatar_url ? (
               <Image
@@ -624,7 +624,7 @@ export default function DashboardLayout({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 px-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={toggleTheme}
             className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -681,26 +681,6 @@ export default function DashboardLayout({
             </span>
           </button>
         </div>
-
-        {/* {!isCollapsed && (
-          <div className="px-3">
-            <button
-              onClick={() =>
-                setAppState((p) => ({ ...p, focusMode: !p.focusMode }))
-              }
-              className={clsx(
-                "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium",
-                appState.focusMode
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-              )}
-            >
-              <Eye className="w-4 h-4" />
-              <span>Focus Mode</span>
-              {appState.focusMode && <div className="ml-auto w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
-            </button>
-          </div>
-        )} */}
       </div>
     </>
   );
@@ -745,10 +725,10 @@ export default function DashboardLayout({
 
       {/* Desktop Sidebar */}
       <motion.aside
-        animate={{ width: isCollapsed ? 80 : 320 }}
+        animate={{ width: isCollapsed ? 72 : 320 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={clsx(
-          "hidden lg:flex flex-col shrink-0 h-full z-30 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm p-6",
+          "hidden lg:flex flex-col shrink-0 h-full z-30 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm py-6 px-3",
           appState.focusMode && "bg-gray-50 dark:bg-gray-850"
         )}
       >

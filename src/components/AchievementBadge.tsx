@@ -46,8 +46,8 @@ export const AchievementBadge = ({
     switch (badge.rarity || "common") {
       case "legendary": return "shadow-blue-300/50 dark:shadow-blue-400/50";
       case "epic": return "shadow-blue-300/50 dark:shadow-blue-400/50";
-      case "rare": return "shadow-blue-300/30 dark:shadow-blue-400/30";
-      default: return "shadow-blue-300/30 dark:shadow-blue-400/30";
+      case "rare": return "shadow-blue-300/10 dark:shadow-blue-400/10";
+      default: return "shadow-blue-300/10 dark:shadow-blue-400/10";
     }
   };
 
@@ -55,11 +55,11 @@ export const AchievementBadge = ({
     <div
       className={twMerge(`
         group relative overflow-hidden
-        backdrop-blur-sm border-2 rounded-2xl p-6
+        backdrop-blur-sm border-2 rounded-2xl p-4 lg:p-6
         transform transition-all duration-500 ease-out
         cursor-pointer select-none
         ${badge.unlocked 
-          ? `border-transparent shadow-xl ${getBorderGlow()} hover:scale-105 hover:shadow-xl` 
+          ? `border-transparent shadow-xl ${getBorderGlow()} hover:scale-102 hover:shadow-xl` 
           : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:scale-102'
         }
         ${isFlipping ? 'animate-pulse scale-110' : ''}
@@ -100,7 +100,7 @@ export const AchievementBadge = ({
       <div className="relative z-10 flex flex-col items-center text-center">
         <div className={`
           relative mb-4 transform transition-all duration-500
-          ${isHovered ? 'scale-110' : 'scale-100'}
+          ${isHovered ? 'scale-105' : 'scale-100'}
           ${isFlipping ? 'animate-spin' : ''}
         `}>
           {badge.unlocked ? (
