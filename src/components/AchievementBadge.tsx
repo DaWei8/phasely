@@ -1,3 +1,4 @@
+// AchievementBadge.tsx
 import { twMerge } from "tailwind-merge";
 import { ParticleSystem } from "./ParticleSystem";
 import { useEffect, useRef, useState } from "react";
@@ -15,7 +16,6 @@ export const AchievementBadge = ({
   const [isFlipping, setIsFlipping] = useState(false);
   const prevUnlocked = useRef(badge.unlocked);
 
-  // Trigger celebration when badge is unlocked
   useEffect(() => {
     if (badge.unlocked && !prevUnlocked.current) {
       setIsFlipping(true);
@@ -44,10 +44,10 @@ export const AchievementBadge = ({
     if (!badge.unlocked) return "";
     
     switch (badge.rarity || "common") {
-      case "legendary": return "shadow-blue-300/50";
-      case "epic": return "shadow-blue-300/50";
-      case "rare": return "shadow-blue-300/30";
-      default: return "shadow-blue-300/30";
+      case "legendary": return "shadow-blue-300/50 dark:shadow-blue-400/50";
+      case "epic": return "shadow-blue-300/50 dark:shadow-blue-400/50";
+      case "rare": return "shadow-blue-300/30 dark:shadow-blue-400/30";
+      default: return "shadow-blue-300/30 dark:shadow-blue-400/30";
     }
   };
 
@@ -60,7 +60,7 @@ export const AchievementBadge = ({
         cursor-pointer select-none
         ${badge.unlocked 
           ? `border-transparent shadow-xl ${getBorderGlow()} hover:scale-105 hover:shadow-xl` 
-          : 'border-gray-200 hover:border-gray-300 hover:scale-102'
+          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:scale-102'
         }
         ${isFlipping ? 'animate-pulse scale-110' : ''}
         before:absolute before:inset-0 before:bg-gradient-to-br
@@ -70,20 +70,18 @@ export const AchievementBadge = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Particle celebration effect */}
       <ParticleSystem
         isActive={showCelebration} 
         color={badge.unlocked ? "bg-blue-400" : "bg-gray-400"} 
       />
 
-      {/* Animated background rays */}
       {badge.unlocked && (
         <div className="absolute inset-0 overflow-hidden">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
               className={`
-                absolute w-0.5 bg-gradient-to-t from-transparent via-blue-400/30 to-transparent
+                absolute w-0.5 bg-gradient-to-t from-transparent via-blue-400/30 dark:via-blue-300/40 to-transparent
                 transform origin-bottom transition-all duration-1000
                 ${isHovered ? 'opacity-100 scale-y-150' : 'opacity-0 scale-y-100'}
               `}
@@ -100,7 +98,6 @@ export const AchievementBadge = ({
       )}
 
       <div className="relative z-10 flex flex-col items-center text-center">
-        {/* Badge Icon Container */}
         <div className={`
           relative mb-4 transform transition-all duration-500
           ${isHovered ? 'scale-110' : 'scale-100'}
@@ -113,7 +110,6 @@ export const AchievementBadge = ({
               shadow-xl transform transition-all duration-300
               ${isHovered ? 'shadow-xl rotate-12' : ''}
             `}>
-              {/* Glowing ring effect */}
               <div className={`
                 absolute inset-0 rounded-full
                 bg-gradient-to-br ${getBadgeGradient()}
@@ -121,12 +117,10 @@ export const AchievementBadge = ({
                 ${showCelebration ? 'animate-pulse' : ''}
               `} />
               
-              {/* Icon */}
               <div className="relative z-10 text-white text-3xl transform transition-transform duration-300">
                 {badge.icon}
               </div>
               
-              {/* Sparkle effects */}
               {badge.unlocked && (
                 <>
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-ping opacity-60" />
@@ -137,7 +131,6 @@ export const AchievementBadge = ({
             </div>
           ) : (
             <div className="relative">
-              {/* Progress ring */}
               <CircularProgressBar
                 progress={progress}
                 size={80}
@@ -145,16 +138,14 @@ export const AchievementBadge = ({
                 className="relative"
               />
               
-              {/* Locked icon overlay */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="p-3 rounded-full bg-gray-200 text-gray-400 text-xl opacity-60">
+                <div className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 text-xl opacity-60">
                   {badge.icon}
                 </div>
               </div>
               
-              {/* Lock indicator */}
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                <div className="bg-gray-400 text-white text-xs px-2 py-1 rounded-full">
+                <div className="bg-gray-400 dark:bg-gray-600 text-white text-xs px-2 py-1 rounded-full">
                   🔒
                 </div>
               </div>
@@ -162,13 +153,12 @@ export const AchievementBadge = ({
           )}
         </div>
 
-        {/* Badge Details */}
         <div className="space-y-2">
           <h3 className={`
             font-bold text-lg transition-all duration-300
             ${badge.unlocked 
-              ? 'text-gray-800 group-hover:text-blue-600' 
-              : 'text-gray-500'
+              ? 'text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400' 
+              : 'text-gray-500 dark:text-gray-400'
             }
           `}>
             {badge.name}
@@ -176,19 +166,18 @@ export const AchievementBadge = ({
           
           <p className={`
             text-sm leading-relaxed transition-all duration-300
-            ${badge.unlocked ? 'text-gray-600' : 'text-gray-400'}
+            ${badge.unlocked ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}
           `}>
             {badge.description}
           </p>
 
-          {/* Progress indicator for locked badges */}
           {!badge.unlocked && progress > 0 && (
             <div className="mt-3">
-              <div className="flex justify-between text-xs text-gray-500 mb-1">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
                 <span>Progress</span>
                 <span>{Math.round(progress)}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div 
                   className="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
@@ -197,14 +186,13 @@ export const AchievementBadge = ({
             </div>
           )}
 
-          {/* Rarity indicator */}
           {badge.unlocked && badge.rarity && (
             <div className={`
               inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-              ${badge.rarity === 'legendary' ? 'bg-blue-100 text-blue-800' :
-                badge.rarity === 'epic' ? 'bg-blue-100 text-blue-800' :
-                badge.rarity === 'rare' ? 'bg-blue-100 text-blue-800' :
-                'bg-gray-100 text-gray-800'}
+              ${badge.rarity === 'legendary' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
+                badge.rarity === 'epic' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
+                badge.rarity === 'rare' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
+                'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'}
               transform transition-all duration-300
               ${isHovered ? 'scale-105' : ''}
             `}>
@@ -212,16 +200,14 @@ export const AchievementBadge = ({
             </div>
           )}
 
-          {/* Unlock date */}
           {badge.unlocked && badge.unlockedAt && (
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
               Unlocked {new Date(badge.unlockedAt).toLocaleDateString()}
             </p>
           )}
         </div>
       </div>
 
-      {/* Celebration burst effect */}
       {showCelebration && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-6xl animate-bounce">🎉</div>

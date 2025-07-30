@@ -321,12 +321,12 @@ export default function ProgressPage() {
         )}
 
         {/* Completion Statistics */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6 mb-8">
+        {/* <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6 mb-8">
           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
             Completion Statistics
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
               <p className="text-gray-500 dark:text-gray-400 mb-1">Total Hours Logged</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -352,7 +352,7 @@ export default function ProgressPage() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Progress Details */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">

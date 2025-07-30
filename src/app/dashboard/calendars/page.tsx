@@ -4,20 +4,21 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import AICalendarSection from "@/components/dashboard/AICalendarSection";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Calendar, 
-  SparklesIcon, 
-  Play, 
-  Pause, 
-  CheckCircle, 
-  Clock, 
+import {
+  Calendar,
+  SparklesIcon,
+  Play,
+  Pause,
+  CheckCircle,
+  Clock,
   Target,
   TrendingUp,
   BookOpen,
   Eye,
   MoreVertical,
   Filter,
-  Search
+  Search,
+  CalendarClock
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -91,7 +92,7 @@ export default function CalendarPage() {
     }
 
     if (searchQuery) {
-      filtered = filtered.filter(c => 
+      filtered = filtered.filter(c =>
         c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -104,8 +105,8 @@ export default function CalendarPage() {
     try {
       const supabase = await createClient();
       await supabase.from("learning_calendars").update({ status }).eq("id", id);
-      
-      setCalendars(prev => prev.map(c => 
+
+      setCalendars(prev => prev.map(c =>
         c.id === id ? { ...c, status: status as any } : c
       ));
       setShowDropdown(null);
@@ -144,8 +145,8 @@ export default function CalendarPage() {
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.5,
@@ -167,7 +168,7 @@ export default function CalendarPage() {
       >
         <div className="flex flex-wrap gap-4 items-center justify-between mb-8">
           <div className="flex items-start gap-4">
-            <motion.div 
+            <motion.div
               className="p-3 bg-blue-600 rounded-2xl shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -183,7 +184,7 @@ export default function CalendarPage() {
               </p>
             </div>
           </div>
-          
+
           <motion.button
             className="bg-blue-600 text-white px-6 py-4 rounded-xl hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
             onClick={() => setShowCreateModal(true)}
@@ -271,9 +272,8 @@ export default function CalendarPage() {
             <div
               key={calendar.id}
               // variants={cardVariants}
-              className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-2xl p-6 transition-all duration-300 cursor-pointer group ${
-                hoveredCalendar === calendar.id ? 'scale-102  shadow-2xl' : ''
-              }`}
+              className={`bg-white hover:dark:bg-blue-700 hover:dark:bg-opacity-20 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-2xl p-6 transition-all duration-300 cursor-pointer group ${hoveredCalendar === calendar.id ? 'scale-102  shadow-2xl' : ''
+                }`}
               onMouseEnter={() => setHoveredCalendar(calendar.id)}
               onMouseLeave={() => setHoveredCalendar(null)}
               onClick={() => router.push(`/dashboard/calendars/${calendar.id}`)}
@@ -281,15 +281,21 @@ export default function CalendarPage() {
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 line-clamp-1">
-                    {calendar.title}
-                  </h3>
+                  <div className="flex items-center gap-2 mb-2 transition-all duration-200"
+                  >
+                    <div className="w-9 h-9 p-1.5 flex items-center gap-2 bg-blue-100 dark:bg-blue-100 rounded-lg " >
+                      <CalendarClock className="  text-blue-400 dark:text-blue-600" />
+                    </div>
+                    <h3 title={calendar.title} className="text-xl font-bold text-gray-900 dark:text-gray-100 line-clamp-1">
+                      {calendar.title}
+                    </h3>
+                  </div>
                   <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(calendar.status)}`}>
                     {getStatusIcon(calendar.status)}
                     <span className="capitalize">{calendar.status}</span>
                   </div>
                 </div>
-                
+
                 <div className="relative">
                   <button
                     onClick={(e) => {
@@ -300,7 +306,7 @@ export default function CalendarPage() {
                   >
                     <MoreVertical className="w-4 h-4 text-gray-500" />
                   </button>
-                  
+
                   <AnimatePresence>
                     {showDropdown === calendar.id && (
                       <motion.div
@@ -404,7 +410,7 @@ export default function CalendarPage() {
             {searchQuery || selectedStatus !== 'all' ? 'No calendars found' : 'No calendars yet'}
           </h3>
           <p className="text-gray-600 dark:text-gray-300 mb-6">
-            {searchQuery || selectedStatus !== 'all' 
+            {searchQuery || selectedStatus !== 'all'
               ? 'Try adjusting your search or filter criteria'
               : 'Create your first learning calendar to get started on your journey'
             }
