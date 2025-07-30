@@ -349,7 +349,7 @@ export default function CalendarDetailPage() {
           },
           { 
             label: 'Target Hours', 
-            value: `${calendar.daily_hours}h`, 
+            value: `${calendar.daily_hours} h`, 
             icon: Target, 
             color: 'orange',
             percentage: 100
@@ -467,7 +467,7 @@ export default function CalendarDetailPage() {
                       </p>
                       <div className="flex items-center mt-auto gap-1 text-xs text-gray-500 dark:text-gray-400">
                         <Clock className="w-3 h-3" />
-                        <span>{item.estimated_hours}h</span>
+                        <span>{item.estimated_hours} {item.estimated_hours >= 12? "m" : "h"}</span>
                       </div>
                     </div>
                   )}
@@ -549,7 +549,7 @@ export default function CalendarDetailPage() {
                       <span className="font-medium text-gray-900 dark:text-gray-100">Estimated Time</span>
                     </div>
                     <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                      {selectedDay.estimated_hours} hours
+                      {selectedDay.estimated_hours} {selectedDay.estimated_hours >= 12 ? "mins" : "hours" }
                     </p>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
