@@ -371,7 +371,7 @@ export default function CalendarDetailPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-3.5 lg:p-6 pb-10"
       >
         <div className="flex items-center gap-3 mb-8">
           <Calendar className="w-6 h-6 text-blue-600" />
@@ -382,7 +382,7 @@ export default function CalendarDetailPage() {
 
         <div className="grid grid-cols-7 gap-4 mb-6">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center font-semibold p-2 w-full bg-gray-200 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-400 py-2">
+            <div key={day} className="text-center uppercase truncate text-xs md:text-base font-semibold p-2 w-full bg-gray-200 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-400 py-2">
               {day}
             </div>
           ))}

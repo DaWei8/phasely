@@ -7,8 +7,8 @@ import { AchievementBadgeData, CelebrationItem } from "@/types/global";
 export default function AchievementBadges() {
   const [celebrationQueue, setCelebrationQueue] = useState<CelebrationItem[]>([]);
   const [stats, setStats] = useState({
-    activeHabits: 3,
-    longestStreak: 75,
+    activeHabits: 0,
+    longestStreak: 0,
   });
 
   const [achievements, setAchievements] = useState([
@@ -97,7 +97,7 @@ export default function AchievementBadges() {
   const totalCount = achievementBadges.length;
 
   return (
-    <div className="h-fit bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5">
+    <div className="h-fit bg-white dark:bg-gray-800 rounded-2xl shadow-xl lg:p-6 p-3">
       <div className="">
         <div className="text-center w-full flex justify-between items-center mb-12">
           <h1 className="text-2xl text-left font-bold text-gray-800 dark:text-gray-100 mb-4">
@@ -117,7 +117,7 @@ export default function AchievementBadges() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ">
           {achievementBadges.map((badge, index) => (
             <AchievementBadge
               key={index}

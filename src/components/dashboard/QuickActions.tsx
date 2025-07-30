@@ -39,7 +39,7 @@ export function QuickActionsWidget() {
   };
 
   return (
-    <div className="group relative rounded-3xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 shadow-xl shadow-gray-200/30 dark:shadow-gray-900/30 border border-white/20 dark:border-gray-700/20 hover:shadow-2xl hover:shadow-gray-300/40 dark:hover:shadow-gray-700/40 transition-all duration-500 transform hover:-translate-y-2">
+    <div className="group relative rounded-3xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-3 lg:p-6 shadow-xl shadow-gray-200/30 dark:shadow-gray-900/30 border border-white/20 dark:border-gray-700/20 hover:shadow-2xl hover:shadow-gray-300/40 dark:hover:shadow-gray-700/40 transition-all duration-500 transform hover:-translate-y-2">
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-xl group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
           <Zap className="h-5 w-5 text-blue-600 dark:text-blue-300" />

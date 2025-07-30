@@ -87,15 +87,6 @@ export function StatsCard({
     return "text-gray-500 dark:text-gray-400";
   };
 
-  // const getRarityGlow = () => {
-  //   switch (rarity) {
-  //     case 'legendary': return 'shadow-yellow-500/30 dark:shadow-yellow-400/40';
-  //     case 'epic': return 'shadow-purple-500/30 dark:shadow-purple-400/40';
-  //     case 'rare': return 'shadow-blue-500/30 dark:shadow-blue-400/40';
-  //     default: return 'shadow-gray-500/20 dark:shadow-gray-400/30';
-  //   }
-  // };
-
   const getRarityBorder = () => {
     switch (rarity) {
       case 'legendary': return 'border-yellow-500/40 dark:border-yellow-400/50';
@@ -129,7 +120,7 @@ export function StatsCard({
         group relative overflow-hidden
         bg-white/90 dark:bg-gray-800 backdrop-blur-xl 
         border border-white/20 dark:border-gray-800/50 ${getRarityBorder()}
-        rounded-2xl p-6 shadow-xl transform transition-all duration-500 ease-out
+        rounded-2xl lg:p-6 p-3 shadow-xl transform transition-all duration-500 ease-out
         hover:scale-105 hover:${getRarityGlow()}
         cursor-pointer
       `, className)}

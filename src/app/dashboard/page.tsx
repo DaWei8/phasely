@@ -52,21 +52,21 @@ export default function DashboardPage() {
     });
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-4 md:p-6">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-3 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Animated Header */}
         <div className="text-left mb-8">
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl shadow-blue-200/20 dark:shadow-blue-900/20 border border-white/20 dark:border-gray-700/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl lg:p-6 p-3 shadow-xl shadow-blue-200/20 dark:shadow-blue-900/20 border border-white/20 dark:border-gray-700/20">
+            <div className="flex flex-wrap items-center justify-between">
+              <div className="w-fit mr-auto gap-2" >
+                <div className="flex w-fit items-center gap-3 mb-2">
                   <div className="relative">
                     <Sparkles className="h-8 w-8 text-blue-600 animate-pulse" />
                     <div className="absolute inset-0 h-8 w-8 text-blue-400 animate-ping opacity-75">
                       <Sparkles className="h-8 w-8" />
                     </div>
                   </div>
-                  <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+                  <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
                     {greeting}, John!
                   </h1>
                 </div>
@@ -74,8 +74,8 @@ export default function DashboardPage() {
                   Ready to continue your learning journey?
                 </p>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-right ml-auto w-fit ">
+                <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {formatTime(currentTime)}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-300">

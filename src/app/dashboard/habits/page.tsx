@@ -305,17 +305,17 @@ export default function HabitsPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
+        <div className="mb-8 ">
+          <div className="flex flex-wrap gap-2 items-center justify-between mb-6">
             <div className="flex items-start gap-4">
               <div className="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl shadow-lg">
                 <HeartPulse className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">
                   Habit Tracker
                 </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-300 mt-1">
+                <p className="text-lg text-gray-600 dark:text-gray-300">
                   Build better habits, one day at a time
                 </p>
               </div>
@@ -323,7 +323,7 @@ export default function HabitsPage() {
             
             <button 
               onClick={() => router.push('/dashboard/habits/create')}
-              className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white pl-4 pr-6 py-4 rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg mx-auto md:mx-0 hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus className="w-6 h-6" />
               New Habit

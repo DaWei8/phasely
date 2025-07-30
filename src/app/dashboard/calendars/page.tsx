@@ -155,8 +155,6 @@ export default function CalendarPage() {
     }
   };
 
-  console.log(filteredCalendars)
-
   return (
     <div className="mx-auto max-w-7xl p-6 lg:pt-8 space-y-8">
       {/* Header Section */}

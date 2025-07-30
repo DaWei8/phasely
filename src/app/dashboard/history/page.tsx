@@ -235,7 +235,7 @@ export default function HistoryPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-green-100 dark:bg-green-900 rounded-xl">
@@ -303,26 +303,26 @@ export default function HistoryPage() {
 
         {/* Filters and Search */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-wrap lg:flex-row gap-4">
             {/* Search */}
-            <div className="flex-1 relative">
+            <div className="flex-1 lg:w-full min-w-[100%] md:min-w-[50%] relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search learning paths..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors"
+                className="w-full pl-9 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors"
               />
             </div>
 
             {/* Status Filter */}
-            <div className="relative">
+            <div className="relative ml-auto ">
               <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-10 pr-8 py-3 border-2 border-gray-200 dark:border-gray-700 dark:text-gray-100 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors appearance-none bg-white dark:bg-gray-800"
+                className="pl-8 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 dark:text-gray-100 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors appearance-none bg-white dark:bg-gray-800"
               >
                 <option value="all">All Status</option>
                 <option value="completed">Completed</option>
@@ -332,12 +332,12 @@ export default function HistoryPage() {
             </div>
 
             {/* Sort */}
-            <div className="relative">
+            <div className="relative ">
               <TrendingUp className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="pl-10 pr-8 py-3 border-2 border-gray-200 dark:border-gray-700 dark:text-gray-100 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors appearance-none bg-white dark:bg-gray-800"
+                className="pl-8 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 dark:text-gray-100 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors appearance-none bg-white dark:bg-gray-800"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -359,28 +359,31 @@ export default function HistoryPage() {
             </div>
           </div>
         ) : filteredCalendars.length ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredCalendars.map((calendar) => (
               <div
                 key={calendar.id}
                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 {/* Card Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 p-6 h-40 text-white">
+                <div className=" bg-white/20 lg:p-6 p-4 h-40 text-gray-700">
                   <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 flex justify-center items-center p-1.5 rounded-md bg-blue-50" >
                       {getStatusIcon(calendar.status)}
-                      <h2 className="text-xl w-64 font-bold">{calendar.title.trim().slice(0, 30)}...</h2>
+                      </div>
+                      <h2 className="text-xl text-gray-700 dark:text-gray-100 w-64 font-bold">{calendar.title.trim().slice(0, 30)}...
+                      </h2>
                     </div>
                     {getStatusBadge(calendar.status)}
                   </div>
-                  <p className="text-blue-100 dark:text-blue-200 text-sm leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-100 text-sm leading-relaxed">
                     {calendar.description.trim().slice(0, 90)}...
                   </p>
                 </div>
 
                 {/* Card Body */}
-                <div className="p-6">
+                <div className="lg:p-6 p-4">
                   {/* Progress Bar */}
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-2">
