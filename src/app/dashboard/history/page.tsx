@@ -20,6 +20,7 @@ import {
   Brain
 } from "lucide-react";
 import { createClient } from "@/lib/supabase";
+import Link from "next/link";
 
 interface LearningCalendar {
   id: string;
@@ -366,41 +367,25 @@ export default function HistoryPage() {
                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 {/* Card Header */}
-                <div className=" bg-white/20 lg:p-6 p-4 h-40 text-gray-700">
+                <div className=" bg-blue-800/10 lg:p-6 p-4 h-40 text-gray-700">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 flex justify-center items-center p-1.5 rounded-md bg-blue-50" >
-                      {getStatusIcon(calendar.status)}
+                      <div className="w-12 h-12 flex justify-center items-center p-1.5 rounded-lg bg-blue-800/20" >
+                        {getStatusIcon(calendar.status)}
                       </div>
-                      <h2 className="text-xl text-gray-700 dark:text-gray-100 w-64 font-bold">{calendar.title.trim().slice(0, 30)}...
+                      <h2 title={calendar.title} className="text-xl text-gray-700 dark:text-gray-100 w-64 font-bold">{calendar.title.trim().slice(0, 30)}...
                       </h2>
                     </div>
                     {getStatusBadge(calendar.status)}
                   </div>
-                  <p className="text-gray-700 dark:text-gray-100 text-sm leading-relaxed">
+                  <p title={calendar.description} className="text-gray-700 dark:text-gray-100 text-sm leading-relaxed">
                     {calendar.description.trim().slice(0, 90)}...
                   </p>
                 </div>
 
                 {/* Card Body */}
                 <div className="lg:p-6 p-4">
-                  {/* Progress Bar */}
-                  <div className="mb-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Progress
-                      </span>
-                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                        {getCompletedDays() / calendar.duration_days * 100}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                      <div
-                        className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 h-3 rounded-full transition-all duration-500"
-                        style={{ width: `${calendar.progress_percentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
+
 
                   {/* Stats Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-6">
@@ -417,6 +402,23 @@ export default function HistoryPage() {
                         {calendar.daily_hours}h
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">Daily</p>
+                    </div>
+                  </div>
+                  {/* Progress Bar */}
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        Progress
+                      </span>
+                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                        {getCompletedDays() / calendar.duration_days * 100}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                      <div
+                        className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 h-3 rounded-full transition-all duration-500"
+                        style={{ width: `${calendar.progress_percentage}%` }}
+                      ></div>
                     </div>
                   </div>
 
@@ -472,10 +474,10 @@ export default function HistoryPage() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-3">
-                    <button className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
+                    <Link href={`/dashboard/calendars/${calendar.id}`} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
                       <Eye className="w-4 h-4" />
                       View Details
-                    </button>
+                    </Link>
                     <button className="px-4 py-3 border-2 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-xl hover:border-blue-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                       <Target className="w-4 h-4" />
                     </button>

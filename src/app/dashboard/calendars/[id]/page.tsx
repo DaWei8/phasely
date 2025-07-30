@@ -127,6 +127,7 @@ export default function CalendarDetailPage() {
 
   const handleCompleteDay = async (dayId: string, isCompleted: boolean) => {
     const supabase = await createClient();
+    console.log("this should be the calendar item id: ", dayId)
     
     try {
       const { error } = await supabase
@@ -137,7 +138,13 @@ export default function CalendarDetailPage() {
         })
         .eq("id", dayId);
 
-      if (!error) {
+      const { error: pError } = await supabase
+        .from("progress_entries")
+        .update({ 
+          completion_status: isCompleted,
+        }).eq("calendar_item_id", dayId)
+
+      if (!error || !pError) {
         setCalendarItems(prev => prev.map(item => 
           item.id === dayId 
             ? { ...item, is_completed: isCompleted, completed_at: isCompleted ? new Date().toISOString() : null }
@@ -174,7 +181,17 @@ export default function CalendarDetailPage() {
         })
         .eq("id", editingDay);
 
-      if (!error) {
+      const { error: pError } = await supabase
+        .from("progress_entries")
+        .update({
+          notes: editNotes,
+          difficulty_rating: editDifficulty,
+          satisfaction_rating: editSatisfaction,
+          hours_spent: editActualHours,
+        })
+        .eq("calender_item_id", editingDay);
+
+      if (!error || !pError) {
         setCalendarItems(prev => prev.map(item => 
           item.id === editingDay 
             ? { 

@@ -3,43 +3,85 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  BarChart,
+  Bar
 } from "recharts";
-import { Calendar, CheckCircle, Award, TrendingUp } from "lucide-react";
-import { ProgressEntry } from "@/types/supabase";
+import { Calendar, CheckCircle, Award, TrendingUp, Clock, Target, Star} from "lucide-react";
+import Link from "next/link";
+
+interface CalendarItem {
+  id: string;
+  calendar_id: string;
+  day_number: number;
+  phase_number: number;
+  title: string;
+  description: string;
+  estimated_hours: number;
+  is_completed: boolean;
+  completed_at: string | null;
+  actual_hours_spent: number | null;
+  difficulty_rating: number | null;
+  satisfaction_rating: number | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface LearningCalendar {
+  id: string;
+  title: string;
+  description: string;
+  start_date: string;
+  status: string;
+  progress_percentage: number;
+  duration_days: number;
+  daily_hours: number;
+}
 
 interface ChartData {
   date: string;
-  hours: number;
-  status: string;
+  day: number;
+  estimatedHours: number;
+  actualHours: number;
+  completed: boolean;
+  phase: number;
 }
 
 interface StatsData {
-  totalHours: number;
+  totalActualHours: number;
+  totalEstimatedHours: number;
   completedTasks: number;
   totalTasks: number;
   avgDailyHours: number;
   longestStreak: number;
+  avgSatisfaction: number;
+  avgDifficulty: number;
+  efficiencyRate: number;
 }
 
 export default function ProgressPage() {
-  const [progressEntries, setProgressEntries] = useState<ProgressEntry[]>([]);
+  const [calendarItems, setCalendarItems] = useState<CalendarItem[]>([]);
+  const [learningCalendars, setLearningCalendars] = useState<LearningCalendar[]>([]);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"daily" | "weekly" | "monthly">("daily");
+  const [selectedCalendar, setSelectedCalendar] = useState<string>("all");
   const [stats, setStats] = useState<StatsData>({
-    totalHours: 0,
+    totalActualHours: 0,
+    totalEstimatedHours: 0,
     completedTasks: 0,
     totalTasks: 0,
     avgDailyHours: 0,
-    longestStreak: 0
+    longestStreak: 0,
+    avgSatisfaction: 0,
+    avgDifficulty: 0,
+    efficiencyRate: 0
   });
 
   useEffect(() => {
@@ -47,110 +89,174 @@ export default function ProgressPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
-        .from("progress_entries")
-        .select("date, hours_spent, completion_status")
+      // Fetch learning calendars
+      const { data: calendarsData, error: calendarsError } = await supabase
+        .from("learning_calendars")
+        .select("*")
         .eq("user_id", user.id)
-        .order("date", { ascending: true });
+        .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching progress data:", error);
-      } else {
-        const transformedData: ChartData[] =
-          data?.map((entry) => ({
-            date: new Date(entry.date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric"
-            }),
-            hours: entry.hours_spent,
-            status: entry.completion_status
-          })) || [];
-
-        setProgressEntries(data as ProgressEntry[]);
-        setChartData(transformedData);
-
-        // stats
-        const totalHours = transformedData.reduce((sum, entry) => sum + entry.hours, 0);
-        const completedTasks = data?.filter((e) => e.completion_status === "completed").length || 0;
-        const totalTasks = data?.length || 0;
-        const avgDailyHours = totalHours / Math.max(1, data?.length || 1);
-        const dates = transformedData.map((e) => new Date(e.date)).sort((a, b) => a.getTime() - b.getTime());
-
-        let currentStreak = 1;
-        let longestStreak = 1;
-        for (let i = 1; i < dates.length; i++) {
-          const diffTime = Math.abs(dates[i - 1].getTime() - dates[i].getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-          if (diffDays === 1 && dates[i].getTime() > dates[i - 1].getTime()) {
-            currentStreak++;
-            longestStreak = Math.max(longestStreak, currentStreak);
-          } else {
-            currentStreak = 1;
-          }
-        }
-
-        setStats({
-          totalHours,
-          completedTasks,
-          totalTasks,
-          avgDailyHours: parseFloat(avgDailyHours.toFixed(1)),
-          longestStreak
-        });
-
+      if (calendarsError) {
+        console.error("Error fetching calendars:", calendarsError);
         setLoading(false);
+        return;
       }
+
+      setLearningCalendars(calendarsData || []);
+
+      // Fetch calendar items with calendar info
+      const { data: itemsData, error: itemsError } = await supabase
+        .from("calendar_items")
+        .select(`
+          *,
+          learning_calendars!inner (
+            id,
+            title,
+            start_date,
+            status,
+            user_id
+          )
+        `)
+        .eq("learning_calendars.user_id", user.id)
+        .order("day_number", { ascending: true });
+
+      if (itemsError) {
+        console.error("Error fetching calendar items:", itemsError);
+        setLoading(false);
+        return;
+      }
+
+      const items = itemsData || [];
+      setCalendarItems(items);
+
+      // Transform data for chart
+      const transformedData: ChartData[] = items.map((item, index) => {
+        const calendar = calendarsData?.find(c => c.id === item.calendar_id);
+        const itemDate = calendar?.start_date 
+          ? new Date(new Date(calendar.start_date).getTime() + (item.day_number - 1) * 24 * 60 * 60 * 1000)
+          : new Date();
+
+        return {
+          date: itemDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric"
+          }),
+          day: item.day_number,
+          estimatedHours: item.estimated_hours,
+          actualHours: item.actual_hours_spent || 0,
+          completed: item.is_completed,
+          phase: item.phase_number
+        };
+      });
+
+      setChartData(transformedData);
+
+      // Calculate comprehensive stats
+      const totalActualHours = items.reduce((sum, item) => sum + (item.actual_hours_spent || 0), 0);
+      const totalEstimatedHours = items.reduce((sum, item) => sum + item.estimated_hours, 0);
+      const completedTasks = items.filter(item => item.is_completed).length;
+      const totalTasks = items.length;
+      
+      // Calculate average daily hours from completed items
+      const completedItems = items.filter(item => item.is_completed && item.actual_hours_spent);
+      const avgDailyHours = completedItems.length > 0 
+        ? completedItems.reduce((sum, item) => sum + (item.actual_hours_spent || 0), 0) / completedItems.length
+        : 0;
+
+      // Calculate longest streak of completed consecutive days
+      const completedDays = items
+        .filter(item => item.is_completed)
+        .map(item => item.day_number)
+        .sort((a, b) => a - b);
+      
+      let currentStreak = 1;
+      let longestStreak = completedDays.length > 0 ? 1 : 0;
+      
+      for (let i = 1; i < completedDays.length; i++) {
+        if (completedDays[i] === completedDays[i - 1] + 1) {
+          currentStreak++;
+          longestStreak = Math.max(longestStreak, currentStreak);
+        } else {
+          currentStreak = 1;
+        }
+      }
+
+      // Calculate satisfaction and difficulty averages
+      const ratedItems = items.filter(item => item.satisfaction_rating && item.difficulty_rating);
+      const avgSatisfaction = ratedItems.length > 0
+        ? ratedItems.reduce((sum, item) => sum + (item.satisfaction_rating || 0), 0) / ratedItems.length
+        : 0;
+      const avgDifficulty = ratedItems.length > 0
+        ? ratedItems.reduce((sum, item) => sum + (item.difficulty_rating || 0), 0) / ratedItems.length
+        : 0;
+
+      // Calculate efficiency rate (actual vs estimated hours)
+      const efficiencyRate = totalEstimatedHours > 0 
+        ? (totalActualHours / totalEstimatedHours) * 100
+        : 0;
+
+      setStats({
+        totalActualHours: parseFloat(totalActualHours.toFixed(1)),
+        totalEstimatedHours: parseFloat(totalEstimatedHours.toFixed(1)),
+        completedTasks,
+        totalTasks,
+        avgDailyHours: parseFloat(avgDailyHours.toFixed(1)),
+        longestStreak,
+        avgSatisfaction: parseFloat(avgSatisfaction.toFixed(1)),
+        avgDifficulty: parseFloat(avgDifficulty.toFixed(1)),
+        efficiencyRate: parseFloat(efficiencyRate.toFixed(1))
+      });
+
+      setLoading(false);
     })();
   }, []);
 
   const getTabData = () => {
-    if (tab === "daily") return chartData;
+    const filteredData = selectedCalendar === "all" 
+      ? chartData 
+      : chartData.filter(item => {
+          const calendarItem = calendarItems.find(ci => ci.day_number === item.day);
+          return calendarItem?.calendar_id === selectedCalendar;
+        });
+
+    if (tab === "daily") return filteredData;
+    
     if (tab === "weekly") {
-      const weeks: Record<string, { date: string; hours: number }> = {};
-      chartData.forEach((entry) => {
-        const d = new Date(entry.date);
-        const key = `${d.getFullYear()}-${d.getMonth()}-${Math.floor(d.getDate() / 7)}`;
+      const weeks: Record<string, { date: string; estimatedHours: number; actualHours: number }> = {};
+      filteredData.forEach((entry) => {
+        const weekNum = Math.floor((entry.day - 1) / 7) + 1;
+        const key = `week-${weekNum}`;
         weeks[key] ??= {
-          date: `Week ${Math.floor(d.getDate() / 7) + 1} (${new Date(d.getFullYear(), d.getMonth(), 1).toLocaleDateString("en-US", { month: "short" })})`,
-          hours: 0
+          date: `Week ${weekNum}`,
+          estimatedHours: 0,
+          actualHours: 0
         };
-        weeks[key].hours += entry.hours;
+        weeks[key].estimatedHours += entry.estimatedHours;
+        weeks[key].actualHours += entry.actualHours;
       });
       return Object.values(weeks);
     }
+    
     if (tab === "monthly") {
-      const months: Record<string, { date: string; hours: number }> = {};
-      chartData.forEach((entry) => {
-        const d = new Date(entry.date);
-        const key = `${d.getFullYear()}-${d.getMonth()}`;
+      const months: Record<string, { date: string; estimatedHours: number; actualHours: number }> = {};
+      filteredData.forEach((entry) => {
+        const monthNum = Math.floor((entry.day - 1) / 30) + 1;
+        const key = `month-${monthNum}`;
         months[key] ??= {
-          date: `${d.getFullYear()} ${new Date(d.getFullYear(), d.getMonth()).toLocaleDateString("en-US", { month: "long" })}`,
-          hours: 0
+          date: `Month ${monthNum}`,
+          estimatedHours: 0,
+          actualHours: 0
         };
-        months[key].hours += entry.hours;
+        months[key].estimatedHours += entry.estimatedHours;
+        months[key].actualHours += entry.actualHours;
       });
       return Object.values(months);
     }
-    return chartData;
+    
+    return filteredData;
   };
 
-  const tabData = [
-    { date: "Jul 01", hours: 1 },
-    { date: "Jul 02", hours: 3 },
-    { date: "Jul 03", hours: 2 },
-    { date: "Jul 04", hours: 4 },
-    { date: "Jul 05", hours: 3.5 },
-    { date: "Jul 06", hours: 5 },
-    { date: "Jul 07", hours: 4.2 },
-    { date: "Jul 08", hours: 2.8 },
-    { date: "Jul 09", hours: 4.5 },
-    { date: "Jul 10", hours: 6 },
-    { date: "Jul 11", hours: 5.5 },
-    { date: "Jul 12", hours: 6.2 },
-    { date: "Jul 13", hours: 3.9 },
-    { date: "Jul 14", hours: 5.8 }
-  ];
+  const currentTabData = getTabData();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-6">
@@ -166,22 +272,40 @@ export default function ProgressPage() {
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-300">
-            Track your learning journey over time
+            Track your learning journey and performance metrics
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+        {/* Calendar Filter */}
+        {learningCalendars.length > 1 && (
+          <div className="mb-6">
+            <select
+              value={selectedCalendar}
+              onChange={(e) => setSelectedCalendar(e.target.value)}
+              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100"
+            >
+              <option value="all">All Learning Plans</option>
+              {learningCalendars.map((calendar) => (
+                <option key={calendar.id} value={calendar.id}>
+                  {calendar.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Enhanced Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
-                <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                <Clock className="w-6 h-6 text-blue-600 dark:text-blue-300" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.totalHours}
+                  {stats.totalActualHours}h
                 </p>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">Total Hours</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Hours Learning</p>
               </div>
             </div>
           </div>
@@ -193,23 +317,9 @@ export default function ProgressPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.completedTasks}
+                  {stats.completedTasks}/{stats.totalTasks}
                 </p>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">Completed Tasks</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
-                <Award className="w-6 h-6 text-blue-600 dark:text-blue-300" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.longestStreak}
-                </p>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">Longest Streak</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Tasks Done</p>
               </div>
             </div>
           </div>
@@ -217,13 +327,72 @@ export default function ProgressPage() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-xl">
-                <Calendar className="w-6 h-6 text-orange-600 dark:text-orange-300" />
+                <Award className="w-6 h-6 text-orange-600 dark:text-orange-300" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.avgDailyHours}
+                  {stats.longestStreak}
+                </p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Day Streak</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-xl">
+                <Target className="w-6 h-6 text-purple-600 dark:text-purple-300" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats.efficiencyRate}%
+                </p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Efficiency</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Stats Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
+                <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats.avgDailyHours}h
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 text-sm">Avg Daily Hours</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-xl">
+                <Star className="w-6 h-6 text-yellow-600 dark:text-yellow-300" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats.avgSatisfaction}/5
+                </p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Satisfaction</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-red-100 dark:bg-red-900 rounded-xl">
+                <TrendingUp className="w-6 h-6 text-red-600 dark:text-red-300" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats.avgDifficulty}/5
+                </p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Avg Difficulty</p>
               </div>
             </div>
           </div>
@@ -261,146 +430,130 @@ export default function ProgressPage() {
           </div>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 mb-8">
-            <ResponsiveContainer width="100%" height={400}>
-              <LineChart
-                data={tabData}
-                margin={{ top: 20, right: 40, left: 0, bottom: 20 }}
-              >
-                <defs>
-                  <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                Learning Hours: Estimated vs Actual
+              </h3>
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart
+                  data={currentTabData}
+                  margin={{ top: 20, right: 40, left: 0, bottom: 20 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="4 4"
+                    stroke="#e5e7eb"
+                    className="dark:stroke-gray-700"
+                  />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 12 }}
+                    className="dark:fill-gray-300"
+                  />
+                  <YAxis tick={{ fontSize: 12 }} className="dark:fill-gray-300" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#fff",
+                      borderRadius: 8,
+                      borderColor: "#ddd"
+                    }}
+                    labelStyle={{ fontWeight: 600 }}
+                  />
+                  <Legend iconType="rect" verticalAlign="top" height={36} />
 
-                <CartesianGrid
-                  strokeDasharray="4 4"
-                  stroke="#e5e7eb"
-                  className="dark:stroke-gray-700"
-                />
-                <XAxis
-                  dataKey="date"
-                  tick={{ fontSize: 12 }}
-                  className="dark:fill-gray-300"
-                />
-                <YAxis tick={{ fontSize: 12 }} className="dark:fill-gray-300" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#fff",
-                    borderRadius: 8,
-                    borderColor: "#ddd"
-                  }}
-                  labelStyle={{ fontWeight: 600 }}
-                  cursor={{ className: "dark:fill-gray-700" }}
-                />
-                <Legend iconType="circle" verticalAlign="top" height={36} />
-
-                <Line
-                  type="monotone"
-                  dataKey="hours"
-                  stroke="#3b82f6"
-                  strokeWidth={3}
-                  dot={{
-                    r: 3,
-                    strokeWidth: 2,
-                    fill: "#3b82f6",
-                    stroke: "#fff"
-                  }}
-                  activeDot={{
-                    r: 6,
-                    stroke: "#fff",
-                    strokeWidth: 2,
-                    fill: "#3b82f6"
-                  }}
-                  fillOpacity={1}
-                  fill="url(#colorHours)"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-
-        {/* Completion Statistics */}
-        {/* <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6 mb-8">
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-            Completion Statistics
-          </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-              <p className="text-gray-500 dark:text-gray-400 mb-1">Total Hours Logged</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {stats.totalHours}
-              </p>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-              <p className="text-gray-500 dark:text-gray-400 mb-1">Completion Rate</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {stats.completedTasks} / {stats.totalTasks}
-              </p>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-              <p className="text-gray-500 dark:text-gray-400 mb-1">Longest Streak</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {stats.longestStreak} days
-              </p>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-              <p className="text-gray-500 dark:text-gray-400 mb-1">Avg Daily Hours</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {stats.avgDailyHours}
-              </p>
+                  <Bar
+                    dataKey="estimatedHours"
+                    fill="#93c5fd"
+                    name="Estimated Hours"
+                    radius={[2, 2, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="actualHours"
+                    fill="#3b82f6"
+                    name="Actual Hours"
+                    radius={[2, 2, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
-        </div> */}
+        )}  
 
         {/* Progress Details */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            Progress Details
+            Daily Progress Details
           </h3>
           <div className="grid grid-cols-1 gap-4">
-            {chartData.length ? (
-              chartData.map((entry, index) => (
-                <div
-                  key={index}
-                  className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="font-medium text-gray-900 dark:text-gray-100">
-                      {entry.date}
-                    </p>
-                    <p className="text-gray-600 dark:text-gray-300">{entry.hours} hours</p>
-                  </div>
-                  <div className="flex items-center">
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-xs font-medium mr-2
-                        ${
-                          entry.status === "completed"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                            : entry.status === "in_progress"
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                            : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-                        }`}
-                    >
-                      {entry.status.charAt(0).toUpperCase() + entry.status.slice(1)}
-                    </span>
-                    <div className="flex-1 h-1 bg-gray-200 dark:bg-gray-600 rounded-full ml-3">
-                      <div
-                        className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-full"
-                        style={{ width: `${entry.hours * 10}%` }}
-                      />
+            {calendarItems.length ? (
+              calendarItems
+                .filter(item => selectedCalendar === "all" || item.calendar_id === selectedCalendar)
+                .slice(0, 10) // Show recent 10 items
+                .map((item) => (
+                  <Link
+                    href={`/dashboard/calendars/${item.calendar_id}`}
+                    key={item.id}
+                    className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          Day {item.day_number}: {item.title}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                          {item.description}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-nowrap w-fit text-gray-600 dark:text-gray-300">
+                          {item.actual_hours_spent || 0}h / {item.estimated_hours}h
+                        </p>
+                        {item.satisfaction_rating && (
+                          <div className="flex items-center justify-end gap-1 mt-2">
+                            <Star className="w-3 h-3 text-yellow-500" />
+                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                              {item.satisfaction_rating}/5
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs font-medium
+                          ${
+                            item.is_completed
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                          }`}
+                      >
+                        {item.is_completed ? "Completed" : "Pending"}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        Phase {item.phase_number}
+                      </span>
+                      <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-600 rounded-full ml-3">
+                        <div
+                          className="h-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-full"
+                          style={{ 
+                            width: `${Math.min(100, ((item.actual_hours_spent || 0) / item.estimated_hours) * 100)}%` 
+                          }}
+                        />
+                      </div>
+                    </div>
+                    {item.notes && (
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 italic">
+                        "{item.notes}"
+                      </p>
+                    )}
+                  </Link>
+                ))
             ) : (
               <div className="text-center flex flex-col items-center py-8">
                 <p className="text-gray-500 dark:text-gray-400">No progress entries found</p>
-                <button className="mt-4 flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
-                  Add Progress Entry
-                </button>
+                <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
+                  Start a learning calendar to track your progress
+                </p>
               </div>
             )}
           </div>

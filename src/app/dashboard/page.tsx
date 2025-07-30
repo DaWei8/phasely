@@ -56,9 +56,9 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto">
         {/* Animated Header */}
         <div className="text-left mb-8">
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl lg:p-6 p-3 shadow-xl shadow-blue-200/20 dark:shadow-blue-900/20 border border-white/20 dark:border-gray-700/20">
-            <div className="flex flex-wrap items-center justify-between">
-              <div className="w-fit mr-auto gap-2" >
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl lg:p-6 p-5 py-7 border border-white/20 dark:border-gray-700/20">
+            <div className="flex flex-wrap gap-8 items-center justify-between">
+              <div className="w-fit mr-auto gap-1" >
                 <div className="flex w-fit items-center gap-3 mb-2">
                   <div className="relative">
                     <Sparkles className="h-8 w-8 text-blue-600 animate-pulse" />
@@ -74,7 +74,7 @@ export default function DashboardPage() {
                   Ready to continue your learning journey?
                 </p>
               </div>
-              <div className="text-right ml-auto w-fit ">
+              <div className="text-right w-full justify-between flex flex-row-reverse md:block gap-2 items-center ml-auto md:w-fit ">
                 <div className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {formatTime(currentTime)}
                 </div>
@@ -89,8 +89,8 @@ export default function DashboardPage() {
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <TodayWidget />
-          <StreakWidget />
           <QuickActionsWidget />
+          <StreakWidget />
         </div>
 
         {/* Secondary Widgets */}

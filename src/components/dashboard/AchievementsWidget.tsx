@@ -2,7 +2,7 @@ import { Award } from "lucide-react";
 
 export function AchievementsWidget() {
   return (
-    <div className="rounded-3xl bg-gradient-to-br from-yellow-400 to-orange-500 lg:p-6 p-3 shadow-xl shadow-orange-600/30 text-white">
+    <div className="rounded-3xl bg-gradient-to-br from-blue-700 to-purple-900 lg:p-6 p-3 shadow-xl text-white">
       <div className="flex items-center gap-3 mb-4">
         <div className="p-2 bg-blue-600 dark:bg-blue-600 rounded-xl" >
           <Award className="h-6 w-6" />

@@ -42,7 +42,7 @@ export function TodayWidget() {
 
   return (
     <div
-      className="group relative rounded-3xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm lg:p-6 p-3 shadow-xl shadow-blue-200/20 dark:shadow-blue-900/20 border border-white/20 dark:border-gray-700/20 hover:shadow-2xl hover:shadow-blue-300/30 dark:hover:shadow-blue-700/30 transition-all duration-500 transform hover:-translate-y-2"
+      className="group relative rounded-3xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm lg:p-6 p-3 border border-white/20 dark:border-gray-700/20 hover:shadow-2xl hover:shadow-blue-300/30 dark:hover:shadow-blue-700/30 transition-all duration-500 transform hover:-translate-y-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
