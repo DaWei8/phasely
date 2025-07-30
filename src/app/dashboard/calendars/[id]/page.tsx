@@ -286,18 +286,16 @@ export default function CalendarDetailPage() {
     <div className="mx-auto max-w-7xl p-6 space-y-8">
       {/* Header */}
       <div  
-        className="flex items-center justify-between"
+        className="flex items-start justify-between"
       >
         <div className="flex items-start gap-4">
-          <motion.button
+          <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
           >
-            <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-          </motion.button>
-          <div>
+            <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+          </button>
+          <div className="flex flex-col gap-1.5 items-start" >
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
               {calendar.title.trim().slice(0,40)}...
             </h1>

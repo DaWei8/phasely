@@ -27,7 +27,7 @@ export function StreakWidget() {
 
         <div className="text-center">
           <div
-            className={`text-6xl font-bold mb-2 ${
+            className={`text-7xl font-bold mb-2 ${
               isAnimating ? "animate-pulse" : ""
             }`}
           >

@@ -11,7 +11,6 @@ export default function AchievementBadges() {
     longestStreak: 75,
   });
 
-  // Mock achievements data
   const [achievements, setAchievements] = useState([
     { achievements: { name: "First Step" } },
     { achievements: { name: "Week Warrior" } },
@@ -75,7 +74,7 @@ export default function AchievementBadges() {
 
   const handleBadgeUnlock = (badge: AchievementBadgeData) => {
     const celebrationItem: CelebrationItem = {
-      id: badge.id || badge.name, // use id if available, fallback to name
+      id: badge.id || badge.name,
       badge: badge,
       timestamp: Date.now(),
       type: "unlock"
@@ -83,47 +82,41 @@ export default function AchievementBadges() {
 
     setCelebrationQueue(prev => [...prev, celebrationItem]);
 
-    // Remove from queue after celebration
     setTimeout(() => {
       setCelebrationQueue(prev => prev.filter(item => item.badge.name !== badge.name));
     }, 3000);
   };
+  
   const getProgress = (badge: AchievementBadgeData, index: number) => {
     if (badge.name === "Productivity Pro") return (stats.activeHabits / 5) * 100;
     if (badge.name === "Unstoppable") return (stats.longestStreak / 100) * 100;
-    return Math.min(100, (index + 1) * 15); // Mock progress
+    return Math.min(100, (index + 1) * 15);
   };
 
   const unlockedCount = achievementBadges.filter(b => b.unlocked).length;
   const totalCount = achievementBadges.length;
 
   return (
-    <div className="h-fit bg-white rounded-2xl shadow-xl p-5">
+    <div className="h-fit bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5">
       <div className="">
-        {/* Header Section */}
         <div className="text-center w-full flex justify-between items-center mb-12">
-          <h1 className="text-2xl text-left font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl text-left font-bold text-gray-800 dark:text-gray-100 mb-4">
             Achievement Badges
           </h1>
-          {/* <p className="text-gray-300 text-xl mb-8">
-            Celebrate your learning journey with these prestigious badges
-          </p> */}
 
-          {/* Progress Summary */}
-          <div className="inline-flex text-nowrap w-fit text-gray-800 items-center bg-blue-200/10 backdrop-blur-lg rounded-full pl-2 pr-3 lg:pl-5 lg:pr-7 py-3 border border-blue-700/20">
+          <div className="inline-flex text-nowrap w-fit text-gray-800 dark:text-gray-100 items-center bg-blue-200/10 dark:bg-blue-800/20 backdrop-blur-lg rounded-full pl-2 pr-3 lg:pl-5 lg:pr-7 py-3 border border-blue-700/20 dark:border-blue-400/30">
             <div className=" text-lg lg:text-3xl ">🏆</div>
             <div className="text-left">
-              <div className="text-gray-700 font-bold lg:text-base text-sm">
+              <div className="text-gray-700 dark:text-gray-200 font-bold lg:text-base text-sm">
                 {unlockedCount} / {totalCount} Earned
               </div>
-              <div className="text-gray-600 text-xs lg:text-sm">
+              <div className="text-gray-600 dark:text-gray-400 text-xs lg:text-sm">
                 {Math.round((unlockedCount / totalCount) * 100)}% Complete
               </div>
             </div>
           </div>
         </div>
 
-        {/* Achievement Badges Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
           {achievementBadges.map((badge, index) => (
             <AchievementBadge
@@ -136,22 +129,6 @@ export default function AchievementBadges() {
           ))}
         </div>
 
-        {/* Achievement Stats */}
-        {/* <div className="grid bg-black grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { label: "Badges Earned", value: unlockedCount, icon: "🏅" },
-            { label: "Learning Streak", value: `${stats.longestStreak} days`, icon: "🔥" },
-            { label: "Active Habits", value: stats.activeHabits, icon: "⚡" },
-          ].map((stat, idx) => (
-            <div key={idx} className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 text-center">
-              <div className="text-4xl mb-3">{stat.icon}</div>
-              <div className="text-white font-bold text-2xl mb-1">{stat.value}</div>
-              <div className="text-gray-300 text-sm">{stat.label}</div>
-            </div>
-          ))}
-        </div> */}
-
-        {/* Celebration Toast */}
         {celebrationQueue.length > 0 && (
           <div className="fixed top-8 right-8 z-50">
             {celebrationQueue.map((item, idx) => (
