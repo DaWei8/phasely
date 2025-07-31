@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowLeft, 
-  Calendar, 
-  Clock, 
-  BookOpen, 
-  CheckCircle2, 
-  Circle, 
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  BookOpen,
+  CheckCircle2,
+  Circle,
   Star,
   ExternalLink,
   Edit,
@@ -21,17 +21,10 @@ import {
   Lightbulb
 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
+import { GoogleCalendarModal, useGoogleCalendarModal } from "@/components/GoogleCalendarModal";
+import { CalendarData } from "@/lib/googleCalendar"
+import Image from "next/image";
 
-interface CalendarData {
-  id: string;
-  title: string;
-  description: string;
-  daily_hours: number;
-  duration_days: number;
-  progress_percentage: number;
-  status: string;
-  created_at: string;
-}
 
 interface CalendarItem {
   id: string;
@@ -68,6 +61,7 @@ export default function CalendarDetailPage() {
   const router = useRouter();
   const params = useParams();
   const calendarId = params?.id as string;
+  const { isOpen, openModal, closeModal } = useGoogleCalendarModal();
 
   useEffect(() => {
     if (calendarId) {
@@ -78,7 +72,7 @@ export default function CalendarDetailPage() {
   const fetchCalendarData = async () => {
     const supabase = await createClient();
     setLoading(true);
-    
+
     try {
       // Fetch calendar info
       const { data: calendarData, error: calendarError } = await supabase
@@ -128,11 +122,11 @@ export default function CalendarDetailPage() {
   const handleCompleteDay = async (dayId: string, isCompleted: boolean) => {
     const supabase = await createClient();
     console.log("this should be the calendar item id: ", dayId)
-    
+
     try {
       const { error } = await supabase
         .from("calendar_items")
-        .update({ 
+        .update({
           is_completed: isCompleted,
           completed_at: isCompleted ? new Date().toISOString() : null
         })
@@ -140,20 +134,20 @@ export default function CalendarDetailPage() {
 
       const { error: pError } = await supabase
         .from("progress_entries")
-        .update({ 
+        .update({
           completion_status: isCompleted,
         }).eq("calendar_item_id", dayId)
 
       if (!error || !pError) {
-        setCalendarItems(prev => prev.map(item => 
-          item.id === dayId 
+        setCalendarItems(prev => prev.map(item =>
+          item.id === dayId
             ? { ...item, is_completed: isCompleted, completed_at: isCompleted ? new Date().toISOString() : null }
             : item
         ));
-        
+
         if (selectedDay && selectedDay.id === dayId) {
-          setSelectedDay(prev => prev ? { 
-            ...prev, 
+          setSelectedDay(prev => prev ? {
+            ...prev,
             is_completed: isCompleted,
             completed_at: isCompleted ? new Date().toISOString() : null
           } : null);
@@ -166,9 +160,9 @@ export default function CalendarDetailPage() {
 
   const handleSaveEdit = async () => {
     if (!editingDay) return;
-    
+
     const supabase = await createClient();
-    
+
     try {
       const { error } = await supabase
         .from("calendar_items")
@@ -192,18 +186,18 @@ export default function CalendarDetailPage() {
         .eq("calender_item_id", editingDay);
 
       if (!error || !pError) {
-        setCalendarItems(prev => prev.map(item => 
-          item.id === editingDay 
-            ? { 
-                ...item, 
-                notes: editNotes,
-                difficulty_rating: editDifficulty,
-                satisfaction_rating: editSatisfaction,
-                actual_hours_spent: editActualHours
-              }
+        setCalendarItems(prev => prev.map(item =>
+          item.id === editingDay
+            ? {
+              ...item,
+              notes: editNotes,
+              difficulty_rating: editDifficulty,
+              satisfaction_rating: editSatisfaction,
+              actual_hours_spent: editActualHours
+            }
             : item
         ));
-        
+
         if (selectedDay && selectedDay.id === editingDay) {
           setSelectedDay(prev => prev ? {
             ...prev,
@@ -213,7 +207,7 @@ export default function CalendarDetailPage() {
             actual_hours_spent: editActualHours
           } : null);
         }
-        
+
         setEditingDay(null);
       }
     } catch (e) {
@@ -233,7 +227,7 @@ export default function CalendarDetailPage() {
     const today = new Date();
     const startDate = new Date(calendar?.created_at || '');
     const dayDate = new Date(startDate.getTime() + (dayNumber - 1) * 24 * 60 * 60 * 1000);
-    
+
     if (dayDate > today) return 'future';
     if (dayDate.toDateString() === today.toDateString()) return 'today';
     return 'past';
@@ -246,11 +240,10 @@ export default function CalendarDetailPage() {
           <button
             key={star}
             onClick={() => onChange?.(star)}
-            className={`${
-              star <= rating 
-                ? 'text-yellow-400' 
-                : 'text-gray-300 dark:text-gray-600'
-            } hover:text-yellow-400 transition-colors ${onChange ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`${star <= rating
+              ? 'text-yellow-400'
+              : 'text-gray-300 dark:text-gray-600'
+              } hover:text-yellow-400 transition-colors ${onChange ? 'cursor-pointer' : 'cursor-default'}`}
             disabled={!onChange}
           >
             <Star className="w-4 h-4 fill-current" />
@@ -263,7 +256,7 @@ export default function CalendarDetailPage() {
   const getCompletedDays = () => calendarItems.filter(item => item.is_completed).length;
   const getAverageHours = () => {
     const completedItems = calendarItems.filter(item => item.actual_hours_spent);
-    return completedItems.length > 0 
+    return completedItems.length > 0
       ? (completedItems.reduce((acc, item) => acc + (item.actual_hours_spent || 0), 0) / completedItems.length).toFixed(1)
       : '0';
   };
@@ -300,57 +293,66 @@ export default function CalendarDetailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-6 space-y-8">
+    <div className="mx-auto max-w-7xl p-6   space-y-8">
       {/* Header */}
-      <div  
+      <div
         className="flex items-start justify-between"
       >
-        <div className="flex items-start gap-4">
-          <button
-            onClick={() => router.back()}
-            className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-          </button>
-          <div className="flex flex-col gap-1.5 items-start" >
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              {calendar.title.trim().slice(0,40)}...
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              {calendar.description}
-            </p>
+        <div className="flex w-full flex-col lg:flex-row items-start gap-4">
+          <div className="flex gap-4 items-start" >
+            <button
+              onClick={() => router.back()}
+              className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            >
+              <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            </button>
+            <div className="flex flex-col " >
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                {calendar.title.trim().slice(0, 40)}...
+              </h1>
+              <p className="text-gray-600 lg:max-w-[70vw]  dark:text-gray-400 mt-1">
+                {calendar.description && calendar.description.slice(0, 100)}...
+              </p>
+            </div>
           </div>
+          <button
+            onClick={openModal}
+            className="flex ml-auto justify-center md:w-fit w-full lg:float-right items-center gap-2 px-4 py-3 bg-blue-600/20 text-white rounded-md hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            <Image width={32} height={32} src={"/google_calendar.svg"} alt="google calendar" />
+            Add to Google Calendar
+          </button>
         </div>
       </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { 
-            label: 'Days Completed', 
-            value: `${getCompletedDays()}/${calendar.duration_days}`, 
-            icon: CheckCircle2, 
+          {
+            label: 'Completed',
+            value: `${getCompletedDays()}/${calendar.duration_days}`,
+            icon: CheckCircle2,
             color: 'green',
             percentage: (getCompletedDays() / calendar.duration_days) * 100
           },
-          { 
-            label: 'Total Progress', 
-            value: `${Math.ceil(getCompletedDays()/calendar.duration_days * 100)}%`, 
-            icon: TrendingUp, 
+          {
+            label: 'Total Progress',
+            value: `${Math.ceil(getCompletedDays() / calendar.duration_days * 100)}%`,
+            icon: TrendingUp,
             color: 'blue',
-            percentage: (getCompletedDays()/calendar.duration_days * 100)
+            percentage: (getCompletedDays() / calendar.duration_days * 100)
           },
-          { 
-            label: 'Avg Hours/Day', 
-            value: getAverageHours(), 
-            icon: Clock, 
+          {
+            label: 'Avg Hours/Day',
+            value: getAverageHours(),
+            icon: Clock,
             color: 'purple',
             percentage: (parseFloat(getAverageHours()) / calendar.daily_hours) * 100
           },
-          { 
-            label: 'Target Hours', 
-            value: `${calendar.daily_hours} h`, 
-            icon: Target, 
+          {
+            label: 'Target Hours',
+            value: `${calendar.daily_hours} h`,
+            icon: Target,
             color: 'orange',
             percentage: 100
           }
@@ -397,7 +399,7 @@ export default function CalendarDetailPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-7 gap-4 mb-6">
+        <div className="grid grid-cols-7 lg:gap-4 gap-2  mb-6">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
             <div key={day} className="text-center uppercase truncate text-xs md:text-base font-semibold p-2 w-full bg-gray-200 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-400 py-2">
               {day}
@@ -405,13 +407,13 @@ export default function CalendarDetailPage() {
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-4">
+        <div className="grid grid-cols-7 lg:gap-4 gap-2">
           {Array.from({ length: calendar.duration_days }, (_, index) => {
-            const dayNumber = index + 1;
+            const dayNumber = index + 1;  
             const item = calendarItems.find(item => item.day_number === dayNumber);
             const status = getDayStatus(dayNumber);
             const isCompleted = item?.is_completed || false;
-            
+
             return (
               <motion.div
                 key={dayNumber}
@@ -420,14 +422,14 @@ export default function CalendarDetailPage() {
                 transition={{ delay: index * 0.02 }}
                 className={`
                   relative aspect-square p-2 lg:p-4 rounded-xl border-2 cursor-pointer transition-all duration-300
-                  ${status === 'future' 
-                    ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50' 
+                  ${status === 'future'
+                    ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50'
                     : status === 'today'
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg'
-                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'
                   }
-                  ${isCompleted 
-                    ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700' 
+                  ${isCompleted
+                    ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
                     : ''
                   }
                   hover:shadow-lg hover:scale-105 group
@@ -440,11 +442,11 @@ export default function CalendarDetailPage() {
                   <div className="flex items-center justify-between mb-1">
                     <span className={`
                       text-sm font-bold
-                      ${status === 'today' 
-                        ? 'text-blue-600 dark:text-blue-400' 
+                      ${status === 'today'
+                        ? 'text-blue-600 dark:text-blue-400'
                         : status === 'future'
-                        ? 'text-gray-400 dark:text-gray-600'
-                        : 'text-gray-700 dark:text-gray-300'
+                          ? 'text-gray-400 dark:text-gray-600'
+                          : 'text-gray-700 dark:text-gray-300'
                       }
                     `}>
                       {dayNumber}
@@ -453,13 +455,13 @@ export default function CalendarDetailPage() {
                       <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
                     )}
                   </div>
-                  
+
                   {item && (
                     <div className="flex-1 flex flex-col justify-between min-h-0">
                       <p className={`
                         text-xs font-medium line-clamp-2 mb-1
-                        ${status === 'future' 
-                          ? 'text-gray-400 dark:text-gray-600' 
+                        ${status === 'future'
+                          ? 'text-gray-400 dark:text-gray-600'
                           : 'text-gray-800 dark:text-gray-200'
                         }
                       `}>
@@ -467,7 +469,7 @@ export default function CalendarDetailPage() {
                       </p>
                       <div className="flex items-center mt-auto gap-1 text-xs text-gray-500 dark:text-gray-400">
                         <Clock className="w-3 h-3" />
-                        <span>{item.estimated_hours} {item.estimated_hours >= 12? "m" : "h"}</span>
+                        <span>{item.estimated_hours} {item.estimated_hours >= 12 ? "m" : "h"}</span>
                       </div>
                     </div>
                   )}
@@ -549,7 +551,7 @@ export default function CalendarDetailPage() {
                       <span className="font-medium text-gray-900 dark:text-gray-100">Estimated Time</span>
                     </div>
                     <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                      {selectedDay.estimated_hours} {selectedDay.estimated_hours >= 12 ? "mins" : "hours" }
+                      {selectedDay.estimated_hours} {selectedDay.estimated_hours >= 12 ? "mins" : "hours"}
                     </p>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
@@ -703,6 +705,15 @@ export default function CalendarDetailPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <GoogleCalendarModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        calendar={calendar}
+        calendarItems={calendarItems}
+        googleApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY!}
+        googleClientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+      />
     </div>
   );
 }

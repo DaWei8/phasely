@@ -17,7 +17,7 @@ export function MotivationWidget() {
         <div className="p-2 bg-blue-600 dark:bg-blue-600 rounded-xl" >
           <Star className="h-6 w-6 animate-pulse" />
         </div>
-        <h3 className="font-bold">Daily Motivation</h3>
+        <h3 className=" text-xl lg:text-lg font-bold">Daily Motivation</h3>
       </div>
       <p className="text-sm italic">"{currentQuote}"</p>
     </div>

@@ -12,7 +12,7 @@ export function StreakWidget() {
   }, []);
 
   return (
-    <div className="group relative rounded-3xl bg-gradient-to-br from-blue-400 via-blue-600 to-blue-500 dark:from-blue-500 dark:via-blue-700 dark:to-blue-600 lg:p-6 p-3 hover:shadow-2xl hover:shadow-blue-300/40 dark:hover:shadow-blue-500/40 transition-all duration-500 transform hover:-translate-y-2 text-white overflow-hidden">
+    <div className="group relative rounded-3xl bg-gradient-to-br from-blue-400 via-blue-600 to-blue-500 dark:from-blue-500 dark:via-blue-700 dark:to-blue-600 p-6 hover:shadow-2xl hover:shadow-blue-300/40 dark:hover:shadow-blue-500/40 transition-all duration-500 transform hover:-translate-y-2 text-white overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-700" />
       <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12 group-hover:scale-125 transition-transform duration-700" />
@@ -27,7 +27,7 @@ export function StreakWidget() {
 
         <div className="text-center">
           <div
-            className={`text-7xl font-bold mb-2 ${
+            className={`text-[100px] font-bold mb-2 ${
               isAnimating ? "animate-pulse" : ""
             }`}
           >

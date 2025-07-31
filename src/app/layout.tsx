@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import type { Viewport } from 'next';
+import { GoogleApiScript } from '@/components/GoogleApiScript';
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
       </head>
       <body className="font-funnel max-w-screen bg-gray-50 dark:bg-gray-900 dark:text-white text-gray-800 min-h-screen antialiased">
         {children}
+        <GoogleApiScript />
         <Toaster
           position="top-center"
           toastOptions={{

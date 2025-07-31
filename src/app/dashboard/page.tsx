@@ -95,14 +95,14 @@ export default function DashboardPage() {
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl lg:p-6 p-5 py-7 border border-white/20 dark:border-gray-700/20">
             <div className="flex flex-wrap gap-8 items-center justify-between">
               <div className="w-fit mr-auto gap-1">
-                <div className="flex w-fit items-center gap-3 mb-2">
+                <div className="flex w-fit items-start gap-3 mb-2">
                   <div className="relative">
                     <Sparkles className="h-8 w-8 text-blue-600 animate-pulse" />
                     <div className="absolute inset-0 h-8 w-8 text-blue-400 animate-ping opacity-75">
                       <Sparkles className="h-8 w-8" />
                     </div>
                   </div>
-                  <h1 className="text-3xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+                  <h1 className="md:text-3xl text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
                     {greeting}{name ? `, ${name.split(' ')[0]}!` : "!"}
                   </h1>
                 </div>
