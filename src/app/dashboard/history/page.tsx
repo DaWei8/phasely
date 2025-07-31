@@ -238,11 +238,11 @@ export default function HistoryPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
               <div className="p-3 bg-green-100 dark:bg-green-900 rounded-xl">
                 <Trophy className="w-6 h-6 text-green-600 dark:text-green-300" />
               </div>
-              <div>
+              <div className="flex flex-col justify-center items-center md:items-start md:justify-center " >
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {stats.completed}
                 </p>
@@ -254,11 +254,11 @@ export default function HistoryPage() {
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
               <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
                 <Clock className="w-6 h-6 text-blue-600 dark:text-blue-300" />
               </div>
-              <div>
+              <div className="flex flex-col justify-center items-center md:items-start md:justify-center " >
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {stats.totalHours}h
                 </p>
@@ -270,11 +270,11 @@ export default function HistoryPage() {
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
               <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
                 <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-300" />
               </div>
-              <div>
+              <div className="flex flex-col justify-center items-center md:items-start md:justify-center " >
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {Math.round(stats.avgProgress)}%
                 </p>
@@ -286,11 +286,11 @@ export default function HistoryPage() {
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
               <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-xl">
                 <Calendar className="w-6 h-6 text-orange-600 dark:text-orange-300" />
               </div>
-              <div>
+              <div className="flex flex-col justify-center items-center md:items-start md:justify-center " >
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {stats.totalDays}
                 </p>
@@ -303,7 +303,7 @@ export default function HistoryPage() {
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 lg:p-6 p-4 mb-8">
           <div className="flex flex-wrap lg:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 lg:w-full min-w-[100%] md:min-w-[50%] relative">
@@ -370,16 +370,16 @@ export default function HistoryPage() {
                 <div className=" bg-blue-800/10 lg:p-6 p-4 h-40 text-gray-700">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 flex justify-center items-center p-1.5 rounded-lg bg-blue-800/20" >
+                      <div className="min-w-12 h-12 flex justify-center items-center p-1.5 rounded-lg bg-blue-800/20" >
                         {getStatusIcon(calendar.status)}
                       </div>
-                      <h2 title={calendar.title} className="text-xl text-gray-700 dark:text-gray-100 w-64 font-bold">{calendar.title.trim().slice(0, 30)}...
+                      <h2 title={calendar.title} className="text-xl text-gray-700 dark:text-gray-100 max-w-64 font-bold">{calendar.title.trim().slice(0, 24)}...
                       </h2>
                     </div>
                     {getStatusBadge(calendar.status)}
                   </div>
                   <p title={calendar.description} className="text-gray-700 dark:text-gray-100 text-sm leading-relaxed">
-                    {calendar.description.trim().slice(0, 90)}...
+                    {calendar.description.trim().slice(0, 70)}...
                   </p>
                 </div>
 

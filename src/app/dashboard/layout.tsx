@@ -624,10 +624,10 @@ export default function DashboardLayout({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center justify-start gap-2">
           <button
             onClick={toggleTheme}
-            className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             title={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
             <motion.div
@@ -647,7 +647,7 @@ export default function DashboardLayout({
                 return { ...p, soundEnabled: next };
               })
             }
-            className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             title={appState.soundEnabled ? "Mute sounds" : "Enable sounds"}
           >
             {appState.soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -655,7 +655,7 @@ export default function DashboardLayout({
 
           <button
             onClick={() => setShowKeys(true)}
-            className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex items-center justify-center w-10 h-10 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             title="Keyboard shortcuts (⌘/)"
           >
             <Keyboard className="w-4 h-4" />
@@ -664,16 +664,16 @@ export default function DashboardLayout({
           <button
             onClick={signOut}
             className={clsx(
-              "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20",
-              "flex-1 justify-center lg:justify-start",
-              isCollapsed && "lg:justify-center lg:px-2"
+              "flex items-center justify-center gap-2 w-10 h-10 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20",
+              "justify-center",
+              isCollapsed && "lg:justify-center w-10 h-10 flex lg:items-center lg:px-2"
             )}
             title="Sign out"
           >
             <LogOut className="w-4 h-4" />
             <span
               className={clsx(
-                "transition-all duration-300",
+                "transition-all hidden lg:block duration-300",
                 isCollapsed && "lg:opacity-0 lg:w-0 lg:overflow-hidden"
               )}
             >

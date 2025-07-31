@@ -11,11 +11,9 @@ import {
   Clock,
   Award,
   ChevronRight,
-  MoreVertical,
   HeartPulse,
   Target,
   TrendingUp,
-  Zap,
   BookOpen,
   Dumbbell,
   User,
@@ -134,18 +132,18 @@ export default function HabitsPage() {
     // Check if today or yesterday was completed for current streak
     const todayStr = format(today, 'yyyy-MM-dd');
     const yesterdayStr = format(new Date(today.getTime() - 24 * 60 * 60 * 1000), 'yyyy-MM-dd');
-    
+
     const hasToday = entries.some(e => e.date === todayStr && e.completed);
     const hasYesterday = entries.some(e => e.date === yesterdayStr && e.completed);
 
     if (hasToday || hasYesterday) {
       currentStreak = 1;
-      
+
       // Count consecutive days backwards
       for (let i = 1; i < completedDates.length; i++) {
         const diffTime = completedDates[i - 1].getTime() - completedDates[i].getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays === 1) {
           currentStreak++;
         } else {
@@ -174,10 +172,10 @@ export default function HabitsPage() {
 
   const logHabit = async (habitId: string, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent navigation to detail page
-    
+
     try {
       const todayStr = format(today, "yyyy-MM-dd");
-      
+
       // Check if already logged today
       const existingEntry = habits
         .find(h => h.id === habitId)
@@ -189,7 +187,7 @@ export default function HabitsPage() {
           .from("habit_entries")
           .update({ completed: !existingEntry.completed })
           .eq("id", existingEntry.id);
-          
+
         if (error) throw error;
       } else {
         // Create new entry
@@ -200,7 +198,7 @@ export default function HabitsPage() {
             date: todayStr,
             completed: true
           }]);
-          
+
         if (error) throw error;
       }
 
@@ -233,19 +231,19 @@ export default function HabitsPage() {
       const entries = habit.habit_entries?.filter(e => e.completed) || [];
       const { current, longest } = calculateStreak(habit.habit_entries || []);
       const todayCompleted = getTodayCompletion(habit);
-      
+
       acc.totalHabits += 1;
       acc.completedToday += todayCompleted ? 1 : 0;
       acc.totalCompletions += entries.length;
       acc.longestStreak = Math.max(acc.longestStreak, longest);
       acc.averageStreak += current;
-      
+
       return acc;
     },
-    { 
-      totalHabits: 0, 
-      completedToday: 0, 
-      totalCompletions: 0, 
+    {
+      totalHabits: 0,
+      completedToday: 0,
+      totalCompletions: 0,
       longestStreak: 0,
       averageStreak: 0
     }
@@ -255,7 +253,7 @@ export default function HabitsPage() {
     habitStats.averageStreak = Math.round(habitStats.averageStreak / habits.length);
   }
 
-  const completionPercentage = habits.length > 0 
+  const completionPercentage = habits.length > 0
     ? Math.round((habitStats.completedToday / habits.length) * 100)
     : 0;
 
@@ -288,7 +286,7 @@ export default function HabitsPage() {
               <p className="text-xl text-red-600 dark:text-red-300 font-medium mb-4">
                 {error}
               </p>
-              <button 
+              <button
                 onClick={() => window.location.reload()}
                 className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
               >
@@ -320,8 +318,8 @@ export default function HabitsPage() {
                 </p>
               </div>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => router.push('/dashboard/habits/create')}
               className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white pl-4 pr-6 py-4 rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg mx-auto md:mx-0 hover:shadow-xl transform hover:-translate-y-0.5"
             >
@@ -342,7 +340,7 @@ export default function HabitsPage() {
                 </span>
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-2">
-                <div 
+                <div
                   className="bg-gradient-to-r from-blue-600 to-blue-700 h-3 rounded-full transition-all duration-500"
                   style={{ width: `${completionPercentage}%` }}
                 ></div>
@@ -454,35 +452,18 @@ export default function HabitsPage() {
                             {habit.category}
                           </span>
                         </div>
+                        <div className="flex items-center gap-2">
+                          <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                        </div>
                       </div>
-                      
-                      <button
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 font-medium shadow-sm ${
-                          isCompletedToday
-                            ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
-                            : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 hover:shadow-md"
-                        }`}
-                        onClick={(e) => logHabit(habit.id, e)}
-                      >
-                        {isCompletedToday ? (
-                          <>
-                            <CheckCircle className="w-4 h-4" />
-                            Done
-                          </>
-                        ) : (
-                          <>
-                            <Plus className="w-4 h-4" />
-                            Mark
-                          </>
-                        )}
-                      </button>
                     </div>
-                    
+
                     {habit.description && (
                       <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
                         {habit.description}
                       </p>
                     )}
+
 
                     {/* Progress Ring or Bar */}
                     <div className="flex items-center gap-4 mb-4">
@@ -496,7 +477,7 @@ export default function HabitsPage() {
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div 
+                          <div
                             className="bg-gradient-to-r from-blue-600 to-blue-700 h-2 rounded-full transition-all duration-500"
                             style={{ width: `${completionRate}%` }}
                           ></div>
@@ -517,7 +498,7 @@ export default function HabitsPage() {
                           Current
                         </p>
                       </div>
-                      
+
                       <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
                         <Award className="w-5 h-5 text-yellow-600 dark:text-yellow-300 mx-auto mb-2" />
                         <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -527,7 +508,7 @@ export default function HabitsPage() {
                           Best
                         </p>
                       </div>
-                      
+
                       <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
                         <Clock className="w-5 h-5 text-blue-600 dark:text-blue-300 mx-auto mb-2" />
                         <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -544,10 +525,25 @@ export default function HabitsPage() {
                         <Calendar className="w-4 h-4" />
                         <span className="capitalize">{habit.frequency}</span>
                       </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <ChevronRight className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                      </div>
+                      <button
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 font-medium shadow-sm ${isCompletedToday
+                          ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
+                          : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 hover:shadow-md"
+                          }`}
+                        onClick={(e) => logHabit(habit.id, e)}
+                      >
+                        {isCompletedToday ? (
+                          <>
+                            <CheckCircle className="w-4 h-4" />
+                            Done
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="w-4 h-4" />
+                            Mark
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -566,7 +562,7 @@ export default function HabitsPage() {
               <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg leading-relaxed">
                 Create your first habit and begin building the life you want, one day at a time.
               </p>
-              <button 
+              <button
                 onClick={() => router.push('/dashboard/habits/create')}
                 className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
