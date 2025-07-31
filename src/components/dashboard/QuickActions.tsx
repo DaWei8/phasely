@@ -1,4 +1,5 @@
 import { ArrowRight, BookOpen, HeartPulse, Plus, Target, TrendingUp, Zap } from "lucide-react";
+import Link from "next/link";
 
 export function QuickActionsWidget() {
   const actions = [
@@ -60,7 +61,8 @@ export function QuickActionsWidget() {
 
       <div className="space-y-3">
         {actions.map((action, index) => (
-          <button
+          <Link
+            href={action.href}
             key={action.label}
             className={`w-full flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r ${getColorClasses(
               action.color
@@ -75,7 +77,7 @@ export function QuickActionsWidget() {
               <p className="text-sm opacity-90">{action.description}</p>
             </div>
             <ArrowRight className="h-4 w-4 opacity-70" />
-          </button>
+          </Link>
         ))}
       </div>
     </div>
