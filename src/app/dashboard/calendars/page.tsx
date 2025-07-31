@@ -209,13 +209,14 @@ export default function CalendarPage() {
               transition={{ delay: index * 0.1 }}
               className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
-                </div>
+              <div className="flex flex-col gap-2 justify-between">
+                <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                <div className="flex w-full items-center justify-between" >
+
+                <p className="lg:text-4xl text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
                 <div className={`p-3 rounded-xl bg-${stat.color}-100 dark:bg-${stat.color}-900/20`}>
                   <stat.icon className={`w-6 h-6 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+                </div>
                 </div>
               </div>
             </motion.div>
@@ -248,7 +249,7 @@ export default function CalendarPage() {
             <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
-        
+
       </motion.div>
 
       {/* Calendar Grid */}
