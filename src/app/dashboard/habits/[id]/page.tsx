@@ -21,8 +21,6 @@ import {
   BookOpen,
   Dumbbell,
   User,
-  Activity,
-  Save,
   Smile,
   Meh,
   Frown,
@@ -104,7 +102,7 @@ export default function HabitDetailPage() {
     target_duration_minutes: 30,
     reminder_time: '09:00'
   });
-  
+
   const router = useRouter();
   const params = useParams();
   const habitId = params.id as string;
@@ -180,17 +178,17 @@ export default function HabitDetailPage() {
     const today = new Date();
     const todayStr = format(today, 'yyyy-MM-dd');
     const yesterdayStr = format(subDays(today, 1), 'yyyy-MM-dd');
-    
+
     const hasToday = entries.some(e => e.date === todayStr && e.completed);
     const hasYesterday = entries.some(e => e.date === yesterdayStr && e.completed);
 
     if (hasToday || hasYesterday) {
       currentStreak = 1;
-      
+
       for (let i = 1; i < completedDates.length; i++) {
         const diffTime = completedDates[i - 1].getTime() - completedDates[i].getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays === 1) {
           currentStreak++;
         } else {
@@ -217,12 +215,12 @@ export default function HabitDetailPage() {
 
   const getWeeklyData = () => {
     if (!habit?.habit_entries) return [];
-    
+
     const today = new Date();
     const weekStart = startOfWeek(today);
     const weekEnd = endOfWeek(today);
     const daysInWeek = eachDayOfInterval({ start: weekStart, end: weekEnd });
-    
+
     return daysInWeek.map(day => {
       const dayStr = format(day, 'yyyy-MM-dd');
       const entry = habit.habit_entries?.find(e => e.date === dayStr);
@@ -384,7 +382,7 @@ export default function HabitDetailPage() {
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <p className="text-xl text-red-600 dark:text-red-300 mb-4">{error}</p>
-              <button 
+              <button
                 onClick={() => router.push("/dashboard/habits")}
                 className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
               >
@@ -405,24 +403,24 @@ export default function HabitDetailPage() {
   const completionRate = totalEntries > 0 ? Math.round((completedEntries.length / totalEntries) * 100) : 0;
 
   return (
-    <div className="min-h-screen   bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 pt-0 md:pt-5 p-5">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
+        <div className="flex items-start gap-4 flex-col lg:flex-row justify-between mb-8">
+          <div className="flex flex-wrap float-left justify-start items-start gap-4">
             <button
               onClick={() => router.push("/dashboard/habits")}
               className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
             >
               <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-300" />
             </button>
-            
-            <div className="flex items-center gap-4">
-              <div className={`p-3 rounded-2xl ${categoryColors[habit.category]}`}>
-                <CategoryIcon className="w-8 h-8" />
+
+            <div className="flex w-fit items-start gap-4">
+              <div className={`p-2 hidden rounded-xl ${categoryColors[habit.category]}`}>
+                <CategoryIcon className="w-7 h-7" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+                <h1 className=" text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100">
                   {habit.name}
                 </h1>
                 <p className="text-lg text-gray-600 dark:text-gray-300 capitalize">
@@ -432,10 +430,10 @@ export default function HabitDetailPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex w-full lg:w-fit float-right items-center gap-3">
             <button
               onClick={() => setShowLogModal(true)}
-              className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors font-medium"
+              className="flex ml-auto text-nowrap items-center gap-2 bg-blue-600 text-white px-6 py-4 rounded-xl hover:bg-blue-700 transition-colors font-medium"
             >
               <Plus className="w-5 h-5" />
               Log Entry
@@ -454,6 +452,13 @@ export default function HabitDetailPage() {
             </button>
           </div>
         </div>
+        {/* Description */}
+        {habit.description && (
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Description</h3>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{habit.description}</p>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -507,25 +512,24 @@ export default function HabitDetailPage() {
         </div>
 
         {/* Weekly View */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">This Week</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg py-6 px-3 lg:p-6 mb-8">
+          <h3 className="text-2xl px-2 font-bold text-gray-900 dark:text-gray-100 mb-6">This Week</h3>
           <div className="grid grid-cols-7 gap-4">
             {weeklyData.map((day, index) => {
               const MoodIcon = day.mood ? moodIcons[day.mood as keyof typeof moodIcons] : null;
-              
+
               return (
-                <div key={index} className="text-center">
+                <div key={index} className="text-center flex flex-col items-center justify-center">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
                     {format(day.date, 'EEE')}
                   </p>
                   <div
-                    className={`w-16 h-16 rounded-2xl border-2 flex items-center justify-center cursor-pointer transition-all duration-200 mx-auto mb-2 ${
-                      day.completed
+                    className={` w-12 h-12 md:w-16 md:h-16 rounded-2xl border-2 flex items-center justify-center cursor-pointer transition-all duration-200 mx-auto mb-2 ${day.completed
                         ? 'bg-green-100 border-green-500 dark:bg-green-900 dark:border-green-400'
                         : day.isToday
-                        ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400'
-                        : 'bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    }`}
+                          ? 'bg-blue-100 border-blue-500 dark:bg-blue-900 dark:border-blue-400'
+                          : 'bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      }`}
                     onClick={() => toggleDayCompletion(day.dateStr)}
                   >
                     {day.completed ? (
@@ -548,13 +552,6 @@ export default function HabitDetailPage() {
           </div>
         </div>
 
-        {/* Description */}
-        {habit.description && (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Description</h3>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{habit.description}</p>
-          </div>
-        )}
 
         {/* Recent Entries */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
@@ -562,7 +559,7 @@ export default function HabitDetailPage() {
           <div className="space-y-4">
             {completedEntries.slice(0, 10).map((entry) => {
               const MoodIcon = entry.mood_rating ? moodIcons[entry.mood_rating as keyof typeof moodIcons] : null;
-              
+
               return (
                 <div key={entry.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
                   <div className="flex items-center gap-4">
@@ -643,11 +640,10 @@ export default function HabitDetailPage() {
                         <button
                           key={mood}
                           onClick={() => setLogForm(prev => ({ ...prev, mood }))}
-                          className={`p-3 rounded-xl border-2 transition-colors ${
-                            logForm.mood === mood
+                          className={`p-3 rounded-xl border-2 transition-colors ${logForm.mood === mood
                               ? 'border-blue-500 bg-blue-100 dark:bg-blue-900'
                               : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-                          }`}
+                            }`}
                         >
                           <MoodIcon className="w-6 h-6 text-gray-600 dark:text-gray-400" />
                         </button>
@@ -759,11 +755,10 @@ export default function HabitDetailPage() {
                           key={category.value}
                           type="button"
                           onClick={() => updateEditForm('category', category.value)}
-                          className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                            editForm.category === category.value
+                          className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${editForm.category === category.value
                               ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                               : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className={`p-2 rounded-lg ${category.color}`}>
@@ -796,11 +791,10 @@ export default function HabitDetailPage() {
                           key={freq.value}
                           type="button"
                           onClick={() => updateEditForm('frequency', freq.value)}
-                          className={`w-full p-3 rounded-lg border-2 text-left transition-all duration-200 ${
-                            editForm.frequency === freq.value
+                          className={`w-full p-3 rounded-lg border-2 text-left transition-all duration-200 ${editForm.frequency === freq.value
                               ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                               : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <Calendar className="w-4 h-4 text-gray-600 dark:text-gray-400" />

@@ -442,7 +442,7 @@ export default function CalendarDetailPage() {
                   <div className="flex items-center justify-between mb-1">
                     <span className={`
                       text-sm font-bold
-                      ${status === 'today'
+                      ${status === 'today' 
                         ? 'text-blue-600 dark:text-blue-400'
                         : status === 'future'
                           ? 'text-gray-400 dark:text-gray-600'
