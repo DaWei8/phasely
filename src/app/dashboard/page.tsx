@@ -1,32 +1,40 @@
 // app/dashboard/page.tsx
 "use client";
 import { useState, useEffect } from "react";
-import {
-  Sparkles,
-  Calendar,
-  Target,
-  Plus,
-  BookOpen,
-  Clock,
-  TrendingUp,
-  Flame,
-  CheckCircle,
-  ArrowRight,
-  Star,
-  Zap,
-  Award
-} from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { QuickActionsWidget } from "@/components/dashboard/QuickActions";
 import { StatsWidget } from "@/components/dashboard/StatsWidget";
 import { AchievementsWidget } from "@/components/dashboard/AchievementsWidget";
 import { ProgressWidget } from "@/components/dashboard/ProgressWidget";
 import { MotivationWidget } from "@/components/dashboard/MotivationWidget";
-import { TodayWidget } from "@/components/dashboard/TodayWidget";
 import { StreakWidget } from "@/components/dashboard/StreakWidget";
+import { createClient } from "@/lib/supabase";
+import TodayWidget from "@/components/dashboard/TodayWidget";
+
+const supabase = createClient();
 
 export default function DashboardPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [greeting, setGreeting] = useState("");
+  const [name, setName] = useState("")
+
+  useEffect(() => {
+    (async () => {
+      console.log("The user id : ")
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log("The user id : ", user)
+      if (!user) return;
+
+      /* ---- Get Name ---- */
+      const { data: p } = await supabase
+        .from("user_profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      setName(p.display_name)
+    })
+  })
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -36,6 +44,8 @@ export default function DashboardPage() {
     else setGreeting("Good Evening");
     return () => clearInterval(timer);
   }, []);
+
+
 
   const formatTime = (date: Date) =>
     date.toLocaleTimeString("en-US", {
@@ -66,8 +76,8 @@ export default function DashboardPage() {
                       <Sparkles className="h-8 w-8" />
                     </div>
                   </div>
-                  <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
-                    {greeting}, John!
+                  <h1 className="text-3xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+                    {greeting}, {name}!
                   </h1>
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 text-sm lg:text-lg">
