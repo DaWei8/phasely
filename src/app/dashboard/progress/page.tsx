@@ -278,11 +278,11 @@ export default function ProgressPage() {
 
         {/* Calendar Filter */}
         {learningCalendars.length > 1 && (
-          <div className="mb-6">
+          <div className="mb-6 w-full">
             <select
               value={selectedCalendar}
               onChange={(e) => setSelectedCalendar(e.target.value)}
-              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100"
+              className="px-4 w-full py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100"
             >
               <option value="all">All Learning Plans</option>
               {learningCalendars.map((calendar) => (
