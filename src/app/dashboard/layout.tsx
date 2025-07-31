@@ -161,6 +161,17 @@ export default function DashboardLayout({
     "all"
   );
 
+  function useIsMobile() {
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 1024);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }, []);
+    return isMobile;
+  }
+
   const [appState, setAppState] = useState({
     isOnline: true,
     battery: 85,
@@ -512,7 +523,7 @@ export default function DashboardLayout({
                   {item.shortcuts && (
                     <div className="flex gap-0.5">
                       {item.shortcuts.map((k, idx) => (
-                        <kbd key={idx} className="px-1 hidden md:block py-0.5 text-xs bg-gray-200 dark:bg-gray-700 rounded">
+                        <kbd key={idx} className="px-1 py-0.5 text-xs bg-gray-200 dark:bg-gray-700 rounded">
                           {k}
                         </kbd>
                       ))}
@@ -724,16 +735,18 @@ export default function DashboardLayout({
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <motion.aside
-        animate={{ width: isCollapsed ? 72 : 320 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={clsx(
-          "hidden lg:flex flex-col shrink-0 h-full z-30 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm py-6 px-3",
-          appState.focusMode && "bg-gray-50 dark:bg-gray-850"
-        )}
-      >
-        {sidebarContent}
-      </motion.aside>
+      <div className="hidden lg:block" >
+        <motion.aside
+          animate={{ width: isCollapsed ? 72 : 320 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className={clsx(
+            "hidden lg:flex flex-col shrink-0 h-full z-30 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm py-6 px-3",
+            appState.focusMode && "bg-gray-50 dark:bg-gray-850"
+          )}
+        >
+          {sidebarContent}
+        </motion.aside>
+      </div>
 
       {/* Mobile Sidebar */}
       <AnimatePresence>

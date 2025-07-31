@@ -57,12 +57,12 @@ const TabButton = ({ tab, isActive, onClick }: TabButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center gap-3 px-6 py-4 rounded-xl font-medium transition-all duration-200 ${isActive
+      className={`flex flex-1 w-full items-center gap-3 px-4 py-4 rounded-xl font-medium transition-all duration-200 ${isActive
         ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
         : "text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700"
         }`}
     >
-      <Icon size={20} />
+      <Icon className="min-w-5 h-5" size={20} />
       {tab.label}
     </button>
   );
@@ -77,15 +77,15 @@ interface SaveButtonProps {
   type?: "button" | "submit";
 }
 
-const SaveButton = ({ 
-  status, 
+const SaveButton = ({
+  status,
   isLoading, // Deprecated but kept for compatibility
-  children, 
+  children,
   onClick,
   type = "submit"
 }: SaveButtonProps) => {
   const [showSuccess, setShowSuccess] = useState(false);
-  
+
   // Handle the success state timing
   useEffect(() => {
     if (status === "success") {
@@ -93,7 +93,7 @@ const SaveButton = ({
       const timer = setTimeout(() => {
         setShowSuccess(false);
       }, 2000); // Show success for 2 seconds
-      
+
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -109,13 +109,12 @@ const SaveButton = ({
       type={type}
       disabled={isCurrentlyLoading}
       onClick={onClick}
-      className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 min-w-[120px] ${
-        isSuccess
+      className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 min-w-[120px] ${isSuccess
           ? "bg-green-600 text-white shadow-lg shadow-green-600/25"
           : isError
-          ? "bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/25"
-          : "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25"
-      } disabled:opacity-50 disabled:cursor-not-allowed`}
+            ? "bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/25"
+            : "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25"
+        } disabled:opacity-50 disabled:cursor-not-allowed`}
     >
       {isCurrentlyLoading ? (
         <>
@@ -157,9 +156,9 @@ const AvatarSection = ({ profile, onAvatarChange }: AvatarSectionProps) => {
       const styles = ['avataaars', 'big-smile', 'bottts', 'fun-emoji', 'identicon', 'initials', 'lorelei', 'micah', 'miniavs', 'open-peeps', 'personas', 'pixel-art'];
       const randomStyle = styles[Math.floor(Math.random() * styles.length)];
       const randomSeed = Math.random().toString(36).substring(7);
-    
+
       const avatarUrl = `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${randomSeed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
-      
+
       onAvatarChange(avatarUrl);
     } catch (error) {
       console.error('Error generating avatar:', error);
@@ -169,29 +168,6 @@ const AvatarSection = ({ profile, onAvatarChange }: AvatarSectionProps) => {
       setIsGenerating(false);
     }
   };
-
-  // const handleFileUpload = () => {
-  //   const input = document.createElement('input');
-  //   input.type = 'file';
-  //   input.accept = 'image/*';
-  //   input.onchange = (e) => {
-  //     const file = (e.target as HTMLInputElement).files?.[0];
-  //     if (file) {
-  //       // Validate file size (max 5MB)
-  //       if (file.size > 5 * 1024 * 1024) {
-  //         alert('File size must be less than 5MB');
-  //         return;
-  //       }
-
-  //       const reader = new FileReader();
-  //       reader.onload = (e) => {
-  //         onAvatarChange(e.target?.result as string);
-  //       };
-  //       reader.readAsDataURL(file);
-  //     }
-  //   };
-  //   input.click();
-  // };
 
   // Default avatar if none exists
   const getAvatarUrl = () => {
@@ -224,7 +200,7 @@ const AvatarSection = ({ profile, onAvatarChange }: AvatarSectionProps) => {
           <Camera size={16} />
         </button> */}
       </div>
-      
+
       <div className="flex-1">
         <div className="flex items-center gap-3 mb-2">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100">
@@ -284,7 +260,7 @@ const SkillsSection = ({ skills, onSkillsChange }: SkillsSectionProps) => {
       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
         Skill Interests
       </label>
-      
+
       {/* Add new skill */}
       <div className="flex gap-2 mb-4">
         <input
@@ -362,7 +338,7 @@ const ProfileTab = ({ profile, setProfile, onSave, loading, saveStatus }: Profil
 
       <form onSubmit={onSave} className="p-8">
         {/* Avatar Section */}
-        <AvatarSection 
+        <AvatarSection
           profile={profile}
           onAvatarChange={(url) => setProfile({ ...profile, avatar_url: url })}
         />
@@ -516,12 +492,12 @@ interface NotificationsTabProps {
   saveStatus: "success" | "error" | 'idle' | 'loading';
 }
 
-const NotificationsTab = ({ 
-  notificationPreferences, 
-  setNotificationPreferences, 
-  onSave, 
-  loading, 
-  saveStatus 
+const NotificationsTab = ({
+  notificationPreferences,
+  setNotificationPreferences,
+  onSave,
+  loading,
+  saveStatus
 }: NotificationsTabProps) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 overflow-hidden">
@@ -861,7 +837,7 @@ export default function SettingsPage() {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setLoading(p => ({ ...p, password: false }));
     if (error) {
-      setFormErrors({ password: error.message});
+      setFormErrors({ password: error.message });
     } else {
       setSaveStatus(s => ({ ...s, password: "success" }));
       setCurrentPassword(""); setNewPassword(""); setNewPasswordConfirmation("");
@@ -901,21 +877,19 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="">
           {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 p-2">
-              <nav className="space-y-2">
-                {tabs.map((tab) => (
-                  <TabButton
-                    key={tab.id}
-                    tab={tab}
-                    isActive={activeTab === tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                  />
-                ))}
-              </nav>
-            </div>
+          <div className="bg-white mb-8 h-fit dark:bg-gray-800 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 p-2">
+            <nav className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+              {tabs.map((tab) => (
+                <TabButton
+                  key={tab.id}
+                  tab={tab}
+                  isActive={activeTab === tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                />
+              ))}
+            </nav>
           </div>
 
           {/* Main Content */}
