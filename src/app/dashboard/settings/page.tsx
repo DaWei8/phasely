@@ -262,19 +262,19 @@ const SkillsSection = ({ skills, onSkillsChange }: SkillsSectionProps) => {
       </label>
 
       {/* Add new skill */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex w-full gap-2 mb-4">
         <input
           type="text"
           value={newSkill}
           onChange={(e) => setNewSkill(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Add a new skill..."
-          className="flex-1 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl py-2 px-4 focus:border-blue-500 focus:ring-0 transition-colors"
+          className="w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl py-2 px-4 focus:border-blue-500 focus:ring-0 transition-colors"
         />
         <button
           type="button"
           onClick={addSkill}
-          className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="px-3 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2"
         >
           <Plus size={16} />
           Add
