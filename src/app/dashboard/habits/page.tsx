@@ -304,7 +304,7 @@ export default function HabitsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Enhanced Header */}
         <div className="mb-8 ">
-          <div className="flex flex-wrap gap-2 items-center justify-between mb-6">
+          <div className="flex flex-wrap gap-3 items-center justify-between mb-6">
             <div className="flex items-start gap-4">
               <div className="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl shadow-lg">
                 <HeartPulse className="w-8 h-8 text-white" />
@@ -321,7 +321,7 @@ export default function HabitsPage() {
 
             <button
               onClick={() => router.push('/dashboard/habits/create')}
-              className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white pl-4 pr-6 py-4 rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg mx-auto md:mx-0 hover:shadow-xl transform hover:-translate-y-0.5"
+              className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white pl-4 pr-6 py-4 rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg md:mx-0 hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus className="w-6 h-6" />
               New Habit

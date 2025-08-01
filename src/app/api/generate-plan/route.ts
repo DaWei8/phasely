@@ -252,6 +252,7 @@ export async function POST(request: NextRequest) {
       phase_number: entry.phaseNumber,
       title: entry.taskName,
       description: entry.taskDescription,
+      resources: entry.resources,
       estimated_hours: parseTimeCommitment(entry.timeCommitment),
     }))
 

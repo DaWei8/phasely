@@ -68,9 +68,9 @@ export default function AchievementsPage() {
         console.error(
           "Error fetching achievements:",
           achievementsError ||
-            calendarsError ||
-            habitsError ||
-            progressError
+          calendarsError ||
+          habitsError ||
+          progressError
         );
       } else {
         /* ----  longest streak calculation  ---- */
@@ -164,6 +164,7 @@ export default function AchievementsPage() {
 
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-900 flex flex-col w-full gap-8">
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <div className="p-2 bg-blue-600 dark:bg-blue-500 rounded-xl">
@@ -212,7 +213,8 @@ export default function AchievementsPage() {
           Achievement History
         </h2>
         {loading ? (
-          <p className="text-gray-500 dark:text-gray-400">Loading achievements…</p>
+          <p className="text-gray-500 dark:text-gray-400">
+            Loading achievements…</p>
         ) : (
           <div className="space-y-4">
             {achievements.length > 0 ? (
@@ -246,6 +248,7 @@ export default function AchievementsPage() {
           </div>
         )}
       </div>
+
     </div>
   );
 }

@@ -90,6 +90,7 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 p-3 md:p-6">
       <div className="max-w-7xl mx-auto">
+        
         {/* Animated Header */}
         <div className="text-left mb-8">
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-3xl lg:p-6 p-5 py-7 border border-white/20 dark:border-gray-700/20">

@@ -24,6 +24,7 @@ import { useRouter, useParams } from "next/navigation";
 import { GoogleCalendarModal, useGoogleCalendarModal } from "@/components/GoogleCalendarModal";
 import { CalendarData } from "@/lib/googleCalendar"
 import Image from "next/image";
+import Link from "next/link";
 
 
 interface CalendarItem {
@@ -44,8 +45,19 @@ interface CalendarItem {
   updated_at: string;
 }
 
+const resourcesType = [
+  {
+    "link": "https://www.tutorialspoint.com/artificial_intelligence/artificial_intelligence_agents.htm",
+    "name": "AI Agent Architecture"
+  },
+  {
+    "link": "https://www.mpi-forum.org/",
+    "name": "Message Passing Interface"
+  }
+]
+
 interface DayModalData extends CalendarItem {
-  resources?: Array<{ title: string; url: string; type: string }>;
+  resources?: typeof resourcesType;
 }
 
 export default function CalendarDetailPage() {
@@ -109,12 +121,7 @@ export default function CalendarDetailPage() {
 
   const handleDayClick = (item: CalendarItem) => {
     const dayData: DayModalData = {
-      ...item,
-      resources: [
-        { title: "Study Material", url: "#", type: "document" },
-        { title: "Video Tutorial", url: "#", type: "video" },
-        { title: "Practice Exercises", url: "#", type: "exercise" }
-      ]
+      ...item
     };
     setSelectedDay(dayData);
   };
@@ -223,14 +230,79 @@ export default function CalendarDetailPage() {
     setEditActualHours(item.actual_hours_spent || 0);
   };
 
+  // Helper function to get the actual date for a day number
+  const getDateForDay = (dayNumber: number) => {
+    if (!calendar) return new Date();
+    const startDate = new Date(calendar.created_at);
+    startDate.setHours(0, 0, 0, 0); // Normalize to start of day
+    return new Date(startDate.getTime() + (dayNumber - 1) * 24 * 60 * 60 * 1000);
+  };
+
   const getDayStatus = (dayNumber: number) => {
     const today = new Date();
-    const startDate = new Date(calendar?.created_at || '');
-    const dayDate = new Date(startDate.getTime() + (dayNumber - 1) * 24 * 60 * 60 * 1000);
+    const dayDate = getDateForDay(dayNumber);
 
     if (dayDate > today) return 'future';
     if (dayDate.toDateString() === today.toDateString()) return 'today';
     return 'past';
+  };
+
+  // Helper function to generate calendar grid with proper date alignment
+  const generateCalendarGrid = () => {
+    if (!calendar) return [];
+
+    const startDate = new Date(calendar.created_at);
+    // Normalize to start of day to avoid timezone issues
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(startDate.getTime() + (calendar.duration_days - 1) * 24 * 60 * 60 * 1000);
+
+    // Find the first day of the month that contains the start date
+    const firstDayOfMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+
+    // Find the last day we need to show (end of the month containing the end date)
+    const lastDayOfMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0);
+
+    // Get the day of week for the first day of the month (0 = Sunday)
+    const startDayOfWeek = firstDayOfMonth.getDay();
+
+    const calendarCells = [];
+
+    // Add empty cells for days before the start of the month
+    for (let i = 0; i < startDayOfWeek; i++) {
+      calendarCells.push({ isEmpty: true, date: null, dayNumber: null, item: null });
+    }
+
+    // Add all days from first day of month to last day of month
+    const currentDate = new Date(firstDayOfMonth);
+    while (currentDate <= lastDayOfMonth) {
+      // Calculate the day number relative to the start date
+      const timeDiff = currentDate.getTime() - startDate.getTime();
+      const daysDiff = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
+      const dayNumber = daysDiff + 1; // day_number starts from 1
+
+      const isInRange = currentDate >= startDate && currentDate <= endDate && dayNumber > 0;
+      const item = isInRange ? calendarItems.find(item => item.day_number === dayNumber) : null;
+
+      calendarCells.push({
+        isEmpty: false,
+        date: new Date(currentDate),
+        dayNumber: isInRange ? dayNumber : null,
+        item: item || null,
+        isInRange
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return calendarCells;
+  };
+
+  // Get current month name
+  const getCurrentMonthName = () => {
+    if (!calendar) return '';
+    const startDate = new Date(calendar.created_at);
+    return startDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   };
 
   const renderStars = (rating: number, onChange?: (rating: number) => void) => {
@@ -291,6 +363,8 @@ export default function CalendarDetailPage() {
       </div>
     );
   }
+
+  const calendarGrid = generateCalendarGrid();
 
   return (
     <div className="mx-auto max-w-7xl p-6   space-y-8">
@@ -362,15 +436,15 @@ export default function CalendarDetailPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700"
+            className="bg-white h-36 md:h-fit flex flex-col justify-between dark:bg-gray-800 md:p-4 rounded-2xl shadow-lg border p-3 border-gray-200 dark:border-gray-700"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl bg-${stat.color}-100 dark:bg-${stat.color}-900/20`}>
-                <stat.icon className={`w-6 h-6 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+            <div className="flex flex-col md:flex-row gap-3 items-center md:justify-between justify-between">
+              <div className={`p-3 w-fit h-fit rounded-xl bg-${stat.color}-100 dark:bg-${stat.color}-900/20`}>
+                <stat.icon className={` w-4 h-4 md:w-6 md:h-6 text-${stat.color}-600 dark:text-${stat.color}-400`} />
               </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+              <div className=" flex flex-col items-center md:items-end text-right">
+                <p className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
+                <p className=" text-xs md:text-sm text-gray-600 text-center dark:text-gray-400">{stat.label}</p>
               </div>
             </div>
             <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -392,11 +466,16 @@ export default function CalendarDetailPage() {
         transition={{ duration: 0.8 }}
         className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-3.5 lg:p-6 pb-10"
       >
-        <div className="flex items-center gap-3 mb-8">
-          <Calendar className="w-6 h-6 text-blue-600" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Learning Calendar
-          </h2>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <Calendar className="w-6 h-6 text-blue-600" />
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              Learning Calendar
+            </h2>
+          </div>
+          <div className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            {getCurrentMonthName()}
+          </div>
         </div>
 
         <div className="grid grid-cols-7 lg:gap-4 gap-2  mb-6">
@@ -408,73 +487,85 @@ export default function CalendarDetailPage() {
         </div>
 
         <div className="grid grid-cols-7 lg:gap-4 gap-2">
-          {Array.from({ length: calendar.duration_days }, (_, index) => {
-            const dayNumber = index + 1;  
-            const item = calendarItems.find(item => item.day_number === dayNumber);
-            const status = getDayStatus(dayNumber);
+          {calendarGrid.map((cell, index) => {
+            if (cell.isEmpty) {
+              return <div key={`empty-${index}`} className="aspect-square" />;
+            }
+
+            const date = cell.date!;
+            const dayNumber = cell.dayNumber;
+            const item = cell.item;
+            const isInRange = cell.isInRange;
+            const today = new Date();
+            const isToday = date.toDateString() === today.toDateString();
+            const isFuture = date > today;
             const isCompleted = item?.is_completed || false;
 
             return (
               <motion.div
-                key={dayNumber}
+                key={`${date.getMonth()}-${date.getDate()}`}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.02 }}
                 className={`
-                  relative aspect-square p-2 lg:p-4 rounded-xl border-2 cursor-pointer transition-all duration-300
-                  ${status === 'future'
-                    ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50'
-                    : status === 'today'
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg'
-                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'
+                  relative aspect-square p-2 lg:p-4 rounded-xl border-2 transition-all duration-300
+                  ${!isInRange
+                    ? 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 cursor-default'
+                    : isFuture
+                      ? 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 cursor-pointer hover:shadow-lg hover:scale-105'
+                      : isToday
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg cursor-pointer hover:shadow-xl hover:scale-105'
+                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 cursor-pointer hover:shadow-lg hover:scale-105'
                   }
-                  ${isCompleted
+                  ${isCompleted && isInRange
                     ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
                     : ''
                   }
-                  hover:shadow-lg hover:scale-105 group
+                  group
                 `}
-                onClick={() => item && handleDayClick(item)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
+                onClick={() => item && isInRange && handleDayClick(item)}
+                whileHover={isInRange ? { scale: 1.05 } : {}}
+                whileTap={isInRange ? { scale: 0.98 } : {}}
               >
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between mb-1">
                     <span className={`
                       text-sm font-bold
-                      ${status === 'today' 
-                        ? 'text-blue-600 dark:text-blue-400'
-                        : status === 'future'
-                          ? 'text-gray-400 dark:text-gray-600'
-                          : 'text-gray-700 dark:text-gray-300'
+                      ${!isInRange
+                        ? 'text-gray-300 dark:text-gray-700'
+                        : isToday
+                          ? 'text-blue-600 dark:text-blue-400'
+                          : isFuture
+                            ? 'text-gray-400 dark:text-gray-600'
+                            : 'text-gray-700 dark:text-gray-300'
                       }
                     `}>
-                      {dayNumber}
+                      {date.getDate()}
                     </span>
-                    {isCompleted && (
+                    {isCompleted && isInRange && (
                       <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
                     )}
                   </div>
 
-                  {item && (
+                  {item && isInRange && (
                     <div className="flex-1 flex flex-col justify-between min-h-0">
                       <p className={`
-                        text-xs font-medium line-clamp-2 mb-1
-                        ${status === 'future'
+                        text-xs md:flex hidden font-medium line-clamp-2 mb-1
+                        ${isFuture
                           ? 'text-gray-400 dark:text-gray-600'
                           : 'text-gray-800 dark:text-gray-200'
                         }
                       `}>
                         {item.title}
                       </p>
-                      <div className="flex items-center mt-auto gap-1 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="md:flex hidden md:items-center mt-auto gap-1 text-xs text-gray-500 dark:text-gray-400">
                         <Clock className="w-3 h-3" />
                         <span>{item.estimated_hours} {item.estimated_hours >= 12 ? "m" : "h"}</span>
                       </div>
                     </div>
                   )}
 
-                  {status === 'today' && (
+                  {isToday && isInRange && (
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
                   )}
                 </div>
@@ -494,6 +585,7 @@ export default function CalendarDetailPage() {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setSelectedDay(null)}
           >
+
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -509,7 +601,12 @@ export default function CalendarDetailPage() {
                       Day {selectedDay.day_number}: {selectedDay.title}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Phase {selectedDay.phase_number}
+                      {getDateForDay(selectedDay.day_number).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })} • Phase {selectedDay.phase_number}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -571,16 +668,17 @@ export default function CalendarDetailPage() {
                     <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Resources</h4>
                     <div className="space-y-2">
                       {selectedDay.resources.map((resource, index) => (
-                        <div
+                        <Link
+                          href={resource.link}
                           key={index}
                           className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                         >
                           <BookOpen className="w-4 h-4 text-gray-500" />
-                          <span className="flex-1 text-gray-700 dark:text-gray-300">{resource.title}</span>
+                          <span className="flex-1 text-gray-700 dark:text-gray-300">{resource.name}</span>
                           <button className="text-blue-600 hover:text-blue-700 dark:text-blue-400">
                             <ExternalLink className="w-4 h-4" />
                           </button>
-                        </div>
+                        </Link>
                       ))}
                     </div>
                   </div>

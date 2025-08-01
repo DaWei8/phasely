@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { format, parseISO, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isToday, isSameDay } from "date-fns";
+import { format, parseISO, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isToday } from "date-fns";
 import {
   ArrowLeft,
   Calendar,
@@ -335,7 +335,6 @@ export default function HabitDetailPage() {
 
     try {
       const existingEntry = habit.habit_entries?.find(e => e.date === dateStr);
-
       if (existingEntry) {
         const { error } = await supabase
           .from("habit_entries")
@@ -404,7 +403,9 @@ export default function HabitDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 pt-0 md:pt-5 p-5">
+
       <div className="max-w-7xl mx-auto">
+
         {/* Header */}
         <div className="flex items-start gap-4 flex-col lg:flex-row justify-between mb-8">
           <div className="flex flex-wrap float-left justify-start items-start gap-4">
@@ -452,6 +453,7 @@ export default function HabitDetailPage() {
             </button>
           </div>
         </div>
+
         {/* Description */}
         {habit.description && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
@@ -459,7 +461,7 @@ export default function HabitDetailPage() {
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{habit.description}</p>
           </div>
         )}
-
+ 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
@@ -551,7 +553,6 @@ export default function HabitDetailPage() {
             })}
           </div>
         </div>
-
 
         {/* Recent Entries */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
@@ -683,6 +684,7 @@ export default function HabitDetailPage() {
             </div>
           </div>
         )}
+
         {/* Edit Habit Modal */}
         {isEditing && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -886,7 +888,10 @@ export default function HabitDetailPage() {
             </div>
           </div>
         )}
+
       </div>
+
     </div>
   );
+  
 }

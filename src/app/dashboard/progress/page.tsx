@@ -437,7 +437,7 @@ export default function ProgressPage() {
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart
                   data={currentTabData}
-                  margin={{ top: 20, right: 40, left: 0, bottom: 20 }}
+                  margin={{ top: 20, right: 0, left: -40, bottom: 20 }}
                 >
                   <CartesianGrid
                     strokeDasharray="4 4"

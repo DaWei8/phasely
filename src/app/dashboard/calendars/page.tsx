@@ -143,20 +143,9 @@ export default function CalendarPage() {
     }
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
   return (
-    <div className="mx-auto max-w-7xl p-6 lg:pt-8   space-y-8">
+    <div className="mx-auto max-w-7xl p-6 lg:pt-8 space-y-8">
+
       {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -450,6 +439,7 @@ export default function CalendarPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }

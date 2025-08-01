@@ -378,6 +378,7 @@ export default function DashboardLayout({
   /* Sidebar shared between desktop & mobile */
   const sidebarContent = (
     <>
+
       {/* Header */}
       <div className="space-y-4 mb-6">
         <div className="flex items-center justify-between">
@@ -455,7 +456,7 @@ export default function DashboardLayout({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 overflow-y-auto">
+      <nav className="flex-1 space-y-1 h-full overflow-y-auto">
         {filtered.map((item) => {
           const active = pathname === item.href;
           const section = pathname.startsWith(item.href) && item.href !== "/dashboard";
@@ -577,7 +578,7 @@ export default function DashboardLayout({
 
       {/* System status */}
       {!isCollapsed && (
-        <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg mb-4">
+        <div className="px-3 py-2 mt-auto bg-gray-50 dark:bg-gray-800 rounded-lg mb-4">
           <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-2">
               <Clock className="w-3 h-3" />
@@ -675,7 +676,7 @@ export default function DashboardLayout({
           <button
             onClick={signOut}
             className={clsx(
-              "flex items-center justify-center gap-2 w-10 h-10 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20",
+              "flex items-center justify-center gap-2 w-10 lg:w-fit lg:px-3 h-10 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20",
               "justify-center",
               isCollapsed && "lg:justify-center w-10 h-10 flex lg:items-center lg:px-2"
             )}
@@ -684,7 +685,7 @@ export default function DashboardLayout({
             <LogOut className="w-4 h-4" />
             <span
               className={clsx(
-                "transition-all hidden lg:block duration-300",
+                "transition-all hidden text-nowrap lg:block duration-300",
                 isCollapsed && "lg:opacity-0 lg:w-0 lg:overflow-hidden"
               )}
             >
@@ -693,6 +694,7 @@ export default function DashboardLayout({
           </button>
         </div>
       </div>
+
     </>
   );
 
@@ -735,7 +737,7 @@ export default function DashboardLayout({
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block" >
+      <div className="hidden max-h-screen h-full lg:block" >
         <motion.aside
           animate={{ width: isCollapsed ? 72 : 320 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -769,9 +771,10 @@ export default function DashboardLayout({
           "flex-1 flex flex-col overflow-hidden",
           "pt-20 lg:pt-0",
           appState.focusMode && "pt-24 lg:pt-4"
-        )}
-      >
-        <div className="flex-1 overflow-y-auto pb-12 bg-gray-50 dark:bg-gray-900">{children}</div>
+        )}>
+        <div className="flex-1 overflow-y-auto pb-12 bg-gray-50 dark:bg-gray-900">
+          {children}
+        </div>
       </main>
 
       {/* Modals */}
@@ -926,6 +929,7 @@ export default function DashboardLayout({
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }
