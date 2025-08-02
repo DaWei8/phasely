@@ -82,7 +82,7 @@ export default function TodayWidget() {
       setLoading(true);
       setError(null);
 
-      console.log('Fetching calendars...');
+       //console.log('Fetching calendars...');
 
       // First, fetch all active calendars
       const { data: calendars, error: calendarsError } = await supabase
@@ -95,7 +95,7 @@ export default function TodayWidget() {
         `)
         .eq('status', 'active'); // Changed from false to 'active'
 
-      console.log('Calendars response:', { calendars, calendarsError });
+       //console.log('Calendars response:', { calendars, calendarsError });
 
       if (calendarsError) {
         console.error('Calendars error:', calendarsError);
@@ -103,7 +103,7 @@ export default function TodayWidget() {
       }
 
       if (!calendars || calendars.length === 0) {
-        console.log('No active calendars found');
+         //console.log('No active calendars found');
         setTasks([]);
         return;
       }
@@ -114,7 +114,7 @@ export default function TodayWidget() {
 
       // Get calendar IDs
       const calendarIds = calendars.map(cal => cal.id);
-      console.log('Calendar IDs:', calendarIds);
+       //console.log('Calendar IDs:', calendarIds);
 
       // Fetch incomplete tasks from all active calendars
       const { data: tasksData, error: tasksError } = await supabase
@@ -133,7 +133,7 @@ export default function TodayWidget() {
         .eq('is_completed', false) // This correctly filters for incomplete tasks
         .order('phase_number', { ascending: true });
 
-      console.log('Tasks response:', { tasksData, tasksError });
+       //console.log('Tasks response:', { tasksData, tasksError });
 
       if (tasksError) {
         console.error('Tasks error:', tasksError);
@@ -141,7 +141,7 @@ export default function TodayWidget() {
       }
 
       if (tasksData) {
-        console.log('Processing tasks:', tasksData.length);
+         //console.log('Processing tasks:', tasksData.length);
 
         // Add calendar info to tasks
         const tasksWithCalendar = tasksData.map(task => ({
@@ -151,7 +151,7 @@ export default function TodayWidget() {
 
         const sortedTasks = sortTasksByPriority(tasksWithCalendar);
         const topTasks = sortedTasks.slice(0, 3); // Get top 3 tasks
-        console.log('Final tasks:', topTasks);
+         //console.log('Final tasks:', topTasks);
         setTasks(topTasks);
       }
     } catch (err) {

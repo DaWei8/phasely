@@ -778,7 +778,7 @@ export default function SettingsPage() {
           .upsert({ id: userId })
           .select()
           .single();
-        console.log("profile not found", pError)
+         //console.log("profile not found", pError)
       }
       setProfile(p as Profile);
 
@@ -794,7 +794,7 @@ export default function SettingsPage() {
           .upsert({ user_id: user.id })
           .select()
           .single());
-        console.log("notifications not found", nError)
+         //console.log("notifications not found", nError)
       }
       setNotificationPreferences(n as NotificationPreferences);
       setLoading({ profile: true, notifications: true, password: true });

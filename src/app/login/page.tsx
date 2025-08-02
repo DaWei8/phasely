@@ -15,7 +15,7 @@ export default function AuthPage() {
     useEffect(() => {
         const { data: authListener } = supabase.auth.onAuthStateChange(
             async (event, session) => {
-                console.log('Auth event:', event, 'Session:', session)
+                 //console.log('Auth event:', event, 'Session:', session)
 
                 if (event === "SIGNED_IN") {
                     router.push("/dashboard")

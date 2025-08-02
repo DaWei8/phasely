@@ -51,7 +51,7 @@ export default function AICalendarSection({ onCancel }: { onCancel?: () => void 
       setGenerating(true)
       const data = await generateAICalendar(prompt, calendarSettings)
       setCalendarData(data)
-      console.log("data received from api", data)
+       //console.log("data received from api", data)
       saveToHistory()
       toast.success('Calendar generated successfully!')
       handleReload()

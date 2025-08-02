@@ -22,10 +22,6 @@ export const metadata: Metadata = {
   description: 'Create personalized learning schedules with AI assistance',
   keywords: 'learning, AI, calendar, education, planning, schedule',
   authors: [{ name: 'Phasely Team' }],
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  }
 }
 
 export default function RootLayout({
@@ -42,7 +38,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="font-funnel max-w-screen bg-gray-50 dark:bg-gray-900 dark:text-white text-gray-800 min-h-screen antialiased">
+      <body className="font-funnel max-w-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:bg-gradient-to-br dark:from-gray-900 dark:via-slate-900 dark:to-gray-900 min-h-screen antialiased">
         {children}
         <GoogleApiScript />
         <Toaster

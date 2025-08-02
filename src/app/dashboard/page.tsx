@@ -22,7 +22,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        console.log("Fetching user profile...");
+         //console.log("Fetching user profile...");
         const { data: { user }, error: userError } = await supabase.auth.getUser();
 
         if (userError) {
@@ -31,11 +31,11 @@ export default function DashboardPage() {
         }
 
         if (!user) {
-          console.log("No user found");
+           //console.log("No user found");
           return;
         }
 
-        console.log("User ID:", user.id);
+         //console.log("User ID:", user.id);
 
         /* ---- Get Name ---- */
         const { data: profile, error: profileError } = await supabase
@@ -50,10 +50,10 @@ export default function DashboardPage() {
         }
 
         if (profile && profile.display_name) {
-          console.log("Display name found:", profile.display_name);
+           //console.log("Display name found:", profile.display_name);
           setName(profile.display_name);
         } else {
-          console.log("No display name found in profile");
+           //console.log("No display name found in profile");
         }
       } catch (error) {
         console.error("Unexpected error:", error);

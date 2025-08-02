@@ -23,9 +23,9 @@ export async function generateAICalendar(
       const endDay = Math.min((i + 1) * chunkSize, settings.duration)
       const chunkDuration = endDay - startDay + 1
 
-      console.log(`Processing chunk ${i + 1}/${numChunks}: days ${startDay}-${endDay}`);
+       //console.log(`Processing chunk ${i + 1}/${numChunks}: days ${startDay}-${endDay}`);
 
-      console.log("Sending request to Next.js API route...");
+       //console.log("Sending request to Next.js API route...");
 
       const response = await fetch(`${API_BASE}/api/generate-plan`, {
         method: 'POST',
@@ -45,7 +45,7 @@ export async function generateAICalendar(
       }
 
       const data = await response.json()
-      console.log("Received response from API:", data)
+       //console.log("Received response from API:", data)
 
       
       // Handle the response structure from Next.js API
@@ -82,7 +82,7 @@ export async function generateAICalendar(
       completed: false
     }))
 
-    console.log(`Successfully processed ${calendarData.length} calendar items`)
+     //console.log(`Successfully processed ${calendarData.length} calendar items`)
     return calendarData
 
   } catch (error) {
@@ -95,7 +95,7 @@ export async function loadHistory(): Promise<HistoryItem[]> {
   const API_BASE = process.env.NEXT_PUBLIC_SITE_URL
   
   try {
-    console.log("Loading history from Next.js API...")
+     //console.log("Loading history from Next.js API...")
     
     const response = await fetch(`${API_BASE}/api/history`, {
       method: 'GET',
@@ -111,7 +111,7 @@ export async function loadHistory(): Promise<HistoryItem[]> {
     }
     
     const data = await response.json()
-    console.log("Received history data:", data)
+     //console.log("Received history data:", data)
     
     if (!data || data.length === 0) {
       return []
@@ -167,7 +167,7 @@ export async function deleteHistoryItem(id: number): Promise<void> {
       throw new Error(`Failed to delete history item (status ${response.status}): ${errText}`)
     }
 
-    console.log(`Successfully deleted history item ${id}`)
+     //console.log(`Successfully deleted history item ${id}`)
 
   } catch (error) {
     console.error('Error deleting history item:', error)

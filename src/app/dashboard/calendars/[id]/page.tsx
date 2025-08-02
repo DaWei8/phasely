@@ -128,7 +128,7 @@ export default function CalendarDetailPage() {
 
   const handleCompleteDay = async (dayId: string, isCompleted: boolean) => {
     const supabase = await createClient();
-    console.log("this should be the calendar item id: ", dayId)
+     //console.log("this should be the calendar item id: ", dayId)
 
     try {
       const { error } = await supabase
