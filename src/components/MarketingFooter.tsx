@@ -6,9 +6,9 @@ import Image from 'next/image'
 
 export default function MarketingFooter() {
   return (
-    <footer className="bg-gray-900  flex flex-col dark:bg-gray-950 w-full min-h-screen text-white p-6 pt-36">
+    <footer className="bg-gray-900  flex flex-col dark:bg-gray-950 w-full min-h-fit text-white p-6 pt-36">
       <div className="container h-fit mx-auto">
-        <div className="grid md:grid-cols-4 gap-8 mb-5">
+        <div className="grid md:grid-cols-4 gap-8 mb-20">
           {/* Brand Section */}
           <div className="md:col-span-2 gap-4">
             <motion.h1

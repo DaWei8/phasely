@@ -30,7 +30,7 @@ export default function FeaturesSection() {
       description: "Describe your learning goals and let our AI create a personalized study schedule that fits your lifestyle and pace.",
       highlight: "Smart AI",
       benefits: ["Personalized schedules", "Adaptive learning paths", "Goal-oriented planning"],
-      gradient: "from-blue-700/20 to-blue-600/20 dark:from-blue-700 dark:to-blue-600",
+      gradient: "from-blue-700 to-blue-600 dark:from-blue-700 dark:to-blue-600",
       image: "/assets/create-calendar.png"
     },
     {
@@ -39,7 +39,7 @@ export default function FeaturesSection() {
       description: "Organize, edit, and optimize your learning schedules with intuitive drag-and-drop functionality.",
       highlight: "Drag & Drop",
       benefits: ["Intuitive interface", "Real-time sync", "Flexible scheduling"],
-      gradient: "from-blue-700/20 to-blue-600/20 dark:from-blue-700 dark:to-blue-600",
+      gradient: "from-blue-700 to-blue-600 dark:from-blue-700 dark:to-blue-600",
       image: "/assets/manage-calendar.png"
     },
     {
@@ -48,7 +48,7 @@ export default function FeaturesSection() {
       description: "Build lasting learning habits with streak tracking, milestone celebrations, and behavioral insights.",
       highlight: "Streak System",
       benefits: ["Habit building", "Progress tracking", "Milestone rewards"],
-      gradient: "from-blue-700/20 to-blue-600/20 dark:from-blue-700 dark:to-blue-600",
+      gradient: "from-blue-700 to-blue-600 dark:from-blue-700 dark:to-blue-600",
       image: "/assets/habit.png"
     },
     {
@@ -57,7 +57,7 @@ export default function FeaturesSection() {
       description: "Visualize your learning journey with detailed progress reports, completion rates, and achievement metrics.",
       highlight: "Data Insights",
       benefits: ["Visual analytics", "Performance metrics", "Achievement tracking"],
-      gradient: "from-blue-700/20 to-blue-600/20 dark:from-blue-700 dark:to-blue-600",
+      gradient: "from-blue-700 to-blue-600 dark:from-blue-700 dark:to-blue-600",
       image: "/assets/progress.png"
     },
     {
@@ -66,7 +66,7 @@ export default function FeaturesSection() {
       description: "Stay on track with smart reminders and motivational messages delivered directly to your Telegram.",
       highlight: "Smart Alerts",
       benefits: ["Instant notifications", "Motivational messages", "Custom reminders"],
-      gradient: "from-blue-700/20 to-blue-600/20 dark:from-blue-700 dark:to-blue-600",
+      gradient: "from-blue-700 to-blue-600 dark:from-blue-700 dark:to-blue-600",
       image: "/assets/notification.png"
     },
     {
@@ -75,7 +75,7 @@ export default function FeaturesSection() {
       description: "Seamlessly sync your learning schedule with Google Calendar for unified time management.",
       highlight: "Seamless Sync",
       benefits: ["Google integration", "Unified calendar", "Cross-platform sync"],
-      gradient: "from-blue-700/20 to-blue-600/20 dark:from-blue-700 dark:to-blue-600",
+      gradient: "from-blue-700 to-blue-600 dark:from-blue-700 dark:to-blue-600",
       image: "/assets/google-calendar.png"
     }
   ]
