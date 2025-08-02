@@ -170,7 +170,7 @@ export default function MarketingNav() {
             <Link 
               href={"/dashboard"}
               onClick={closeMenu}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium py-2"
+              className=" flex items-center justify-center py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium "
             >
               Sign In
             </Link>
@@ -178,7 +178,7 @@ export default function MarketingNav() {
             <motion.a
               href={"/dashboard"}
               onClick={closeMenu}
-              className="block w-full text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="block w-full text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-6 py-4 rounded-lg font-medium transition-colors"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

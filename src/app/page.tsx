@@ -18,13 +18,14 @@ export default function MarketingHomepage() {
 
   return (
     <motion.div
-      className="min-h-screen relative bg-blue-50 dark:bg-gray-900 transition-colors duration-500"
+      className="min-h-screen overflow-visible relative bg-blue-50 dark:bg-gray-900 transition-colors duration-500"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
       <MarketingNav />
       <motion.div
+      className='overflow-visible'
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, staggerChildren: 0.2 }}
